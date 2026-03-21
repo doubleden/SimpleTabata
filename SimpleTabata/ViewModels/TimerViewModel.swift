@@ -232,7 +232,7 @@ final class TimerViewModel {
         currentSetIndex = 0
         phase = .prepare
         currentPhaseRemainingSeconds = prepareSeconds
-        advanceThroughZeroDurations()
+        advanceThroughZeroDurations(playTransitionSound: false)
         guard phase != .begin else { return }
         subscribeToTicks()
     }
@@ -250,11 +250,13 @@ final class TimerViewModel {
         phase = .pause
         timerCancellable?.cancel()
         timerCancellable = nil
+        AudioService.shared.stopSound()
     }
     
     func resetTimer() {
         timerCancellable?.cancel()
         timerCancellable = nil
+        AudioService.shared.stopSound()
         pendingPhaseAdvance = false
         phase = .begin
         currentSetIndex = 0
@@ -285,6 +287,10 @@ final class TimerViewModel {
         
         guard currentPhaseRemainingSeconds > 0 else { return }
         
+        if (1...3).contains(currentPhaseRemainingSeconds) {
+            AudioService.shared.playBeep()
+        }
+        
         currentPhaseRemainingSeconds -= 1
         remainingTotalSeconds = max(0, remainingTotalSeconds - 1)
         
@@ -294,27 +300,30 @@ final class TimerViewModel {
     }
     
     /// Skips phases with 0 s duration (e.g. no prepare / no rest).
-    private func advanceThroughZeroDurations() {
+    private func advanceThroughZeroDurations(playTransitionSound: Bool = true) {
         while phase != .begin && phase != .pause && currentPhaseRemainingSeconds == 0 {
-            advancePhase()
+            advancePhase(playTransitionSound: playTransitionSound)
             if phase == .begin { return }
         }
     }
     
-    private func advancePhase() {
+    private func advancePhase(playTransitionSound: Bool = true) {
         switch phase {
         case .prepare:
             phase = .work
             currentSetIndex = 1
             currentPhaseRemainingSeconds = workSeconds
+            if playTransitionSound { AudioService.shared.playStart() }
             
         case .work:
             if currentSetIndex < set {
                 phase = .rest
                 currentPhaseRemainingSeconds = restSeconds
+                if playTransitionSound { AudioService.shared.playStart() }
             } else if currentCycleIndex < cycle {
                 phase = .cycleRest
                 currentPhaseRemainingSeconds = cycleRestSeconds
+                if playTransitionSound { AudioService.shared.playStart() }
             } else {
                 finishWorkout()
             }
@@ -323,12 +332,14 @@ final class TimerViewModel {
             currentSetIndex += 1
             phase = .work
             currentPhaseRemainingSeconds = workSeconds
+            if playTransitionSound { AudioService.shared.playStart() }
             
         case .cycleRest:
             currentCycleIndex += 1
             phase = .work
             currentSetIndex = 1
             currentPhaseRemainingSeconds = workSeconds
+            if playTransitionSound { AudioService.shared.playStart() }
             
         case .begin, .pause:
             break
@@ -338,6 +349,7 @@ final class TimerViewModel {
     private func finishWorkout() {
         timerCancellable?.cancel()
         timerCancellable = nil
+        AudioService.shared.stopSound()
         pendingPhaseAdvance = false
         phase = .begin
         currentSetIndex = 0

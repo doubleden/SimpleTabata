@@ -290,7 +290,7 @@ struct TimerSettingsView: View {
             VStack(spacing: 0) {
                 countExpandableRow(
                     section: .sets,
-                    title: "Sets per cycle",
+                    title: "Sets",
                     detail: "Work + rest rounds in one cycle",
                     value: $timerVM.set,
                     range: 1...99

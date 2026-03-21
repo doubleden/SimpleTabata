@@ -23,7 +23,9 @@
 		059545CA2F6F03F400D871C3 /* FavoriteTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545C92F6F03F400D871C3 /* FavoriteTimerView.swift */; };
 		059545CC2F6F087400D871C3 /* HapticService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545CB2F6F087400D871C3 /* HapticService.swift */; };
 		059545CE2F6EF00200D871C3 /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545CF2F6EF00200D871C3 /* AppData.swift */; };
+		059545CF2F6F0DE800D871C3 /* start.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 059545CE2F6F0DE800D871C3 /* start.mp3 */; };
 		059545D02F6EF00200D871C3 /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545D12F6EF00200D871C3 /* StorageService.swift */; };
+		059545D12F6F0E0400D871C3 /* beep.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 059545D02F6F0E0400D871C3 /* beep.mp3 */; };
 		059545D82F6F100100D871C3 /* WorkoutHistoryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545D92F6F100100D871C3 /* WorkoutHistoryEntry.swift */; };
 		059545DA2F6F100100D871C3 /* WorkoutHistoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545DB2F6F100100D871C3 /* WorkoutHistoryService.swift */; };
 		059545DC2F6F100100D871C3 /* SaveFavoriteParametersSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545DD2F6F100100D871C3 /* SaveFavoriteParametersSheet.swift */; };
@@ -46,7 +48,9 @@
 		059545C72F6EEB4C00D871C3 /* TimeActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeActionButton.swift; sourceTree = "<group>"; };
 		059545C92F6F03F400D871C3 /* FavoriteTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteTimerView.swift; sourceTree = "<group>"; };
 		059545CB2F6F087400D871C3 /* HapticService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticService.swift; sourceTree = "<group>"; };
+		059545CE2F6F0DE800D871C3 /* start.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = start.mp3; sourceTree = "<group>"; };
 		059545CF2F6EF00200D871C3 /* AppData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
+		059545D02F6F0E0400D871C3 /* beep.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = beep.mp3; sourceTree = "<group>"; };
 		059545D12F6EF00200D871C3 /* StorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
 		059545D92F6F100100D871C3 /* WorkoutHistoryEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutHistoryEntry.swift; sourceTree = "<group>"; };
 		059545DB2F6F100100D871C3 /* WorkoutHistoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutHistoryService.swift; sourceTree = "<group>"; };
@@ -83,6 +87,7 @@
 		059545AA2F6ED78F00D871C3 /* SimpleTabata */ = {
 			isa = PBXGroup;
 			children = (
+				059545CD2F6F0D9D00D871C3 /* Sounds */,
 				059545A92F6ED78F00D871C3 /* SimpleTabataApp.swift */,
 				059545C22F6EE98E00D871C3 /* Services */,
 				059545B72F6ED8CD00D871C3 /* Models */,
@@ -147,6 +152,15 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		059545CD2F6F0D9D00D871C3 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				059545CE2F6F0DE800D871C3 /* start.mp3 */,
+				059545D02F6F0E0400D871C3 /* beep.mp3 */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -209,6 +223,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				059545AD2F6ED78F00D871C3 /* Assets.xcassets in Resources */,
+				059545CF2F6F0DE800D871C3 /* start.mp3 in Resources */,
+				059545D12F6F0E0400D871C3 /* beep.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

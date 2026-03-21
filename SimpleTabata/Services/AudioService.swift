@@ -28,6 +28,14 @@ final class AudioService {
         }
     }
 
+    func playBeep() {
+        playAlarm(title: "beep")
+    }
+
+    func playStart() {
+        playAlarm(title: "start")
+    }
+
     func stopSound() {
         audioPlayer?.stop()
         audioPlayer = nil
