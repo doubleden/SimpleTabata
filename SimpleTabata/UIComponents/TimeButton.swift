@@ -12,7 +12,11 @@ struct TimeButton: View {
     let color: Color
     let action: () -> Void
     var body: some View {
-        Button(action: action) {
+        Button(action: {
+            withAnimation {
+                action()
+            }
+        }) {
             Text(title)
                 .font(.largeTitle.bold())
                 .shadow(radius: 2)

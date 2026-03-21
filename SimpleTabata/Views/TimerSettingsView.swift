@@ -63,26 +63,21 @@ struct TimerSettingsView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button(action: { dismiss() }) {
-                        Image(systemName: "xmark.circle.fill")
-                            .symbolRenderingMode(.hierarchical)
+                        Image(systemName: "xmark")
                             .foregroundStyle(.secondary)
                     }
                     .accessibilityLabel("Close")
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Done") {
-                        timerVM.applyConfigurationFromSettings()
                         dismiss()
                     }
                     .fontWeight(.semibold)
                 }
             }
-            .onChange(of: timerVM.prepareSeconds) { _ in timerVM.applyConfigurationFromSettings() }
-            .onChange(of: timerVM.workSeconds) { _ in timerVM.applyConfigurationFromSettings() }
-            .onChange(of: timerVM.restSeconds) { _ in timerVM.applyConfigurationFromSettings() }
-            .onChange(of: timerVM.cycleRestSeconds) { _ in timerVM.applyConfigurationFromSettings() }
-            .onChange(of: timerVM.set) { _ in timerVM.applyConfigurationFromSettings() }
-            .onChange(of: timerVM.cycle) { _ in timerVM.applyConfigurationFromSettings() }
+            .onDisappear {
+                timerVM.applyConfigurationFromSettings()
+            }
         }
     }
     
@@ -93,6 +88,7 @@ struct TimerSettingsView: View {
                 .foregroundStyle(.secondary)
             Text(totalWorkoutLabel)
                 .font(.system(size: 40, weight: .bold, design: .rounded))
+                .monospacedDigit()
                 .foregroundStyle(
                     LinearGradient(
                         colors: [.orange, .pink],
@@ -100,6 +96,8 @@ struct TimerSettingsView: View {
                         endPoint: .trailing
                     )
                 )
+                .contentTransition(.identity)
+                .animation(nil, value: totalWorkoutLabel)
                 .minimumScaleFactor(0.6)
                 .lineLimit(1)
             Text("Total time updates live as you change intervals, sets, and cycles.")

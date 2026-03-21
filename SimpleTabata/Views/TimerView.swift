@@ -30,14 +30,14 @@ struct TimerView: View {
                 Spacer()
                 switch timerVM.phase {
                 case .begin:
-                    TimerOffButtonSectionView(startAction: {})
+                    TimerOffButtonSectionView(startAction: timerVM.startTimer)
                 case .pause:
                     TimerPauseButtonSectionView(
-                        continueAction: {},
-                        resetAction: {}
+                        continueAction: timerVM.resumeTimer,
+                        resetAction: timerVM.resetTimer
                     )
                 default:
-                    TimerOnButtonSectionView(pauseAction: {})
+                    TimerOnButtonSectionView(pauseAction: timerVM.pauseTimer)
                 }
             }
         }
@@ -134,7 +134,7 @@ fileprivate struct TimerPauseButtonSectionView: View {
 fileprivate struct TimerOnButtonSectionView: View {
     let pauseAction: () -> Void
     var body: some View {
-        TimeButton(title: "Puase", color: .orange, action: pauseAction)
+        TimeButton(title: "Pause", color: .orange, action: pauseAction)
     }
 }
 

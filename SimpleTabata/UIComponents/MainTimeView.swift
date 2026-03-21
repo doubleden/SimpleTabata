@@ -25,9 +25,12 @@ struct MainTimeView: View {
     var body: some View {
         Text(time)
             .font(.system(size: 130, weight: .bold, design: .rounded))
+            .monospacedDigit()
             .foregroundStyle(textColor)
             .minimumScaleFactor(0.6)
-            .padding()
+            .multilineTextAlignment(.center)
+            .contentTransition(.identity)
+            .animation(nil, value: time)
     }
 }
 

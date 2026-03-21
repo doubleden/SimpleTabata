@@ -5,12 +5,18 @@
 //  Created by Denis Denisov on 21/3/26.
 //
 
+import Combine
 import Foundation
 import Observation
 
 @Observable
 final class TimerViewModel {
     var phase = Phase.begin
+    
+    /// Phase before user tapped Pause (restored on resume).
+    private var phaseBeforePause: Phase = .prepare
+    
+    private var timerCancellable: AnyCancellable?
     
     // MARK: - Configuration (settings)
     
@@ -82,16 +88,121 @@ final class TimerViewModel {
         currentCycleIndex = 0
     }
     
+    deinit {
+        timerCancellable?.cancel()
+    }
+    
+    /// Starts the workout from the «Ready» screen.
     func startTimer() {
-        
+        guard phase == .begin else { return }
+        remainingTotalSeconds = totalWorkoutDurationSeconds
+        currentCycleIndex = 1
+        currentSetIndex = 0
+        phase = .prepare
+        currentPhaseRemainingSeconds = prepareSeconds
+        advanceThroughZeroDurations()
+        guard phase != .begin else { return }
+        subscribeToTicks()
+    }
+    
+    /// Continues after Pause.
+    func resumeTimer() {
+        guard phase == .pause else { return }
+        phase = phaseBeforePause
+        subscribeToTicks()
     }
     
     func pauseTimer() {
-        
+        guard phase != .begin, phase != .pause else { return }
+        phaseBeforePause = phase
+        phase = .pause
+        timerCancellable?.cancel()
+        timerCancellable = nil
     }
     
     func resetTimer() {
+        timerCancellable?.cancel()
+        timerCancellable = nil
+        phase = .begin
+        currentSetIndex = 0
+        currentCycleIndex = 0
+        currentPhaseRemainingSeconds = prepareSeconds
+        remainingTotalSeconds = totalWorkoutDurationSeconds
+    }
+    
+    private func subscribeToTicks() {
+        timerCancellable?.cancel()
+        timerCancellable = Timer.publish(every: 1, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                self?.tick()
+            }
+    }
+    
+    private func tick() {
+        guard phase != .pause, phase != .begin else { return }
         
+        if currentPhaseRemainingSeconds > 0 {
+            currentPhaseRemainingSeconds -= 1
+            remainingTotalSeconds = max(0, remainingTotalSeconds - 1)
+        }
+        
+        guard currentPhaseRemainingSeconds == 0 else { return }
+        
+        advancePhase()
+        advanceThroughZeroDurations()
+    }
+    
+    /// Skips phases with 0 s duration (e.g. no prepare / no rest).
+    private func advanceThroughZeroDurations() {
+        while phase != .begin && phase != .pause && currentPhaseRemainingSeconds == 0 {
+            advancePhase()
+            if phase == .begin { return }
+        }
+    }
+    
+    private func advancePhase() {
+        switch phase {
+        case .prepare:
+            phase = .work
+            currentSetIndex = 1
+            currentPhaseRemainingSeconds = workSeconds
+            
+        case .work:
+            if currentSetIndex < set {
+                phase = .rest
+                currentPhaseRemainingSeconds = restSeconds
+            } else if currentCycleIndex < cycle {
+                phase = .cycleRest
+                currentPhaseRemainingSeconds = cycleRestSeconds
+            } else {
+                finishWorkout()
+            }
+            
+        case .rest:
+            currentSetIndex += 1
+            phase = .work
+            currentPhaseRemainingSeconds = workSeconds
+            
+        case .cycleRest:
+            currentCycleIndex += 1
+            phase = .work
+            currentSetIndex = 1
+            currentPhaseRemainingSeconds = workSeconds
+            
+        case .begin, .pause:
+            break
+        }
+    }
+    
+    private func finishWorkout() {
+        timerCancellable?.cancel()
+        timerCancellable = nil
+        phase = .begin
+        currentSetIndex = 0
+        currentCycleIndex = 0
+        currentPhaseRemainingSeconds = prepareSeconds
+        remainingTotalSeconds = totalWorkoutDurationSeconds
     }
     
     func formattedTime(_ seconds: Int) -> String {

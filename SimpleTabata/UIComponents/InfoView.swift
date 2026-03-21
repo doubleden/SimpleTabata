@@ -20,6 +20,9 @@ struct InfoView: View {
                 Text(time)
                     .multilineTextAlignment(.trailing)
                     .font(.largeTitle.bold())
+                    .monospacedDigit()
+                    .contentTransition(.identity)
+                    .animation(nil, value: time)
                     .minimumScaleFactor(0.6)
         }
     }
