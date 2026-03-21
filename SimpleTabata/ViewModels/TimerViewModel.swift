@@ -51,7 +51,7 @@ final class TimerViewModel {
     /// Remaining time in the current phase (seconds).
     var currentPhaseRemainingSeconds: Int = 0
     
-    /// Total workout time remaining (seconds); decreases with the timer.
+    /// Total workout time remaining (seconds); sum of phase durations left — does not tick down during transition pauses at 00:00.
     var remainingTotalSeconds: Int = 0
     
     /// Current set within the cycle (1…`set`), or 0 before start.
@@ -279,7 +279,6 @@ final class TimerViewModel {
         
         if pendingPhaseAdvance {
             pendingPhaseAdvance = false
-            remainingTotalSeconds = max(0, remainingTotalSeconds - 1)
             advancePhase()
             advanceThroughZeroDurations()
             return
@@ -369,8 +368,8 @@ final class TimerViewModel {
         return String(format: "%02d:%02d", m, r)
     }
     
-    /// Full workout length: phase durations + one second per phase transition (full second on `00:00` before switching).
-    static func computeTotalWorkoutSeconds(
+    /// Sum of interval durations (prepare, all work/rest in each cycle, cycle rests between cycles). Same value used for estimated total and ticking `remainingTotalSeconds` (transitions at 00:00 are not added).
+    static func computePhaseDurationsSum(
         prepare: Int,
         work: Int,
         rest: Int,
@@ -381,9 +380,25 @@ final class TimerViewModel {
         let s = max(1, sets)
         let c = max(1, cycles)
         let workRestInCycle = s * work + max(0, s - 1) * rest
-        let phaseSum = prepare + c * workRestInCycle + max(0, c - 1) * cycleRest
-        /// One tick per transition: prepare→work, work↔rest, last work→cycleRest/done, cycleRest→work.
-        let transitionCount = 2 * s * c
-        return phaseSum + transitionCount
+        return prepare + c * workRestInCycle + max(0, c - 1) * cycleRest
+    }
+    
+    /// Full workout length for UI and `remainingTotalSeconds` — phase durations only (no extra seconds for transitions).
+    static func computeTotalWorkoutSeconds(
+        prepare: Int,
+        work: Int,
+        rest: Int,
+        cycleRest: Int,
+        sets: Int,
+        cycles: Int
+    ) -> Int {
+        computePhaseDurationsSum(
+            prepare: prepare,
+            work: work,
+            rest: rest,
+            cycleRest: cycleRest,
+            sets: sets,
+            cycles: cycles
+        )
     }
 }

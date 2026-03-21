@@ -208,7 +208,7 @@ struct TimerSettingsView: View {
                 .animation(nil, value: totalWorkoutLabel)
                 .minimumScaleFactor(0.6)
                 .lineLimit(1)
-            Text("Total time updates live as you change intervals, sets, and cycles.")
+            Text("Sum of all interval durations. Updates live as you change settings.")
                 .font(.footnote)
                 .foregroundStyle(.tertiary)
                 .minimumScaleFactor(0.6)
