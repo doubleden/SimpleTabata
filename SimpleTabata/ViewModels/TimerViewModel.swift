@@ -81,11 +81,46 @@ final class TimerViewModel {
     }
     
     var isShowSettings = false
-    var isShowHistory = false
+    var isShowFavoriteTimer = false
+    
+    /// Saved favorites (newest first).
+    var workoutHistory: [WorkoutHistoryEntry] = []
     
     init() {
         loadConfigurationFromStorage()
+        loadWorkoutHistory()
         syncIdleUIWithConfiguration()
+    }
+    
+    private func loadWorkoutHistory() {
+        workoutHistory = WorkoutHistoryService.shared.load()
+    }
+    
+    /// Appends a history item from the current plan, then caller should call `resetTimer()`.
+    func addWorkoutToHistory(name: String) {
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        let plan = AppData(
+            prepareSeconds: prepareSeconds,
+            workSeconds: workSeconds,
+            restSeconds: restSeconds,
+            cycleRestSeconds: cycleRestSeconds,
+            setsPerCycle: set,
+            cycles: cycle
+        )
+        let entry = WorkoutHistoryEntry(
+            id: UUID(),
+            savedAt: Date(),
+            name: trimmed,
+            plan: plan
+        )
+        workoutHistory.insert(entry, at: 0)
+        WorkoutHistoryService.shared.save(items: workoutHistory)
+    }
+    
+    func deleteWorkoutHistory(at offsets: IndexSet) {
+        workoutHistory.remove(atOffsets: offsets)
+        WorkoutHistoryService.shared.save(items: workoutHistory)
     }
     
     /// Loads saved workout plan from `StorageService` (first launch uses defaults inside `AppData`).
@@ -123,8 +158,8 @@ final class TimerViewModel {
         isShowSettings.toggle()
     }
     
-    func showHistory() {
-        isShowHistory.toggle()
+    func showFavoriteTimer() {
+        isShowFavoriteTimer.toggle()
     }
     
     func makeSettingsSnapshot() -> WorkoutSettingsSnapshot {
@@ -163,6 +198,24 @@ final class TimerViewModel {
         currentPhaseRemainingSeconds = prepareSeconds
         currentSetIndex = 0
         currentCycleIndex = 0
+    }
+    
+    /// Applies a saved plan as the current timer configuration. Only succeeds on the Ready screen (`phase == .begin`).
+    @discardableResult
+    func applyPlanFromHistory(_ plan: AppData) -> Bool {
+        guard phase == .begin else { return false }
+        prepareSeconds = plan.prepareSeconds
+        workSeconds = plan.workSeconds
+        restSeconds = plan.restSeconds
+        cycleRestSeconds = plan.cycleRestSeconds
+        set = plan.setsPerCycle
+        cycle = plan.cycles
+        remainingTotalSeconds = totalWorkoutDurationSeconds
+        currentPhaseRemainingSeconds = prepareSeconds
+        currentSetIndex = 0
+        currentCycleIndex = 0
+        persistConfigurationToStorage()
+        return true
     }
     
     deinit {

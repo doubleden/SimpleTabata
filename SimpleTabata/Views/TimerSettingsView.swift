@@ -19,6 +19,8 @@ struct TimerSettingsView: View {
     @State private var openingSnapshot: WorkoutSettingsSnapshot?
     @State private var showResetAlert = false
     @State private var expandedSection: SettingsExpandedSection = .none
+    @State private var showSaveFavoriteSheet = false
+    @State private var showSavedBanner = false
     
     private var totalWorkoutLabel: String {
         timerVM.formattedTime(timerVM.totalWorkoutDurationSeconds)
@@ -66,6 +68,8 @@ struct TimerSettingsView: View {
                     }
                     
                     countsCard
+                    
+                    saveToFavoritesCard
                 }
                 .padding(.horizontal, 16)
                 .padding(.bottom, 24)
@@ -120,6 +124,54 @@ struct TimerSettingsView: View {
                 }
                 timerVM.applyConfigurationFromSettings()
                 timerVM.persistConfigurationToStorage()
+            }
+            .sheet(isPresented: $showSaveFavoriteSheet) {
+                SaveFavoriteParametersSheet(
+                    onCancel: { showSaveFavoriteSheet = false },
+                    onSave: { name in
+                        showSaveFavoriteSheet = false
+                        timerVM.addWorkoutToHistory(name: name)
+                        presentSavedBanner()
+                    }
+                )
+            }
+            .overlay(alignment: .bottom) {
+                if showSavedBanner {
+                    savedBannerContent
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
+            }
+            .animation(.spring(duration: 0.35), value: showSavedBanner)
+        }
+    }
+    
+    private var savedBannerContent: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "checkmark.circle.fill")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.green)
+            Text("Parameters saved")
+                .font(.subheadline.weight(.semibold))
+                .minimumScaleFactor(0.6)
+        }
+        .foregroundStyle(.primary)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .background {
+            Capsule()
+                .fill(.ultraThinMaterial)
+                .shadow(color: .black.opacity(0.12), radius: 6, y: 2)
+        }
+        .padding(.bottom, 20)
+    }
+    
+    private func presentSavedBanner() {
+        withAnimation(.spring(duration: 0.35)) {
+            showSavedBanner = true
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.2) {
+            withAnimation(.easeOut(duration: 0.28)) {
+                showSavedBanner = false
             }
         }
     }
@@ -248,6 +300,43 @@ struct TimerSettingsView: View {
                     range: 1...50
                 )
             }
+        }
+        .padding(16)
+        .background {
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(Color(UIColor.secondarySystemGroupedBackground))
+        }
+    }
+    
+    private var saveToFavoritesCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Label("Favorites", systemImage: "heart.fill")
+                .font(.headline)
+                .foregroundStyle(.pink)
+            Text("Save the current parameters under a name to reuse them from Favorite timers.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .minimumScaleFactor(0.6)
+            Button {
+                showSaveFavoriteSheet = true
+            } label: {
+                HStack {
+                    Text("Save parameters to favorites")
+                        .font(.body.weight(.semibold))
+                        .minimumScaleFactor(0.6)
+                    Spacer()
+                    Image(systemName: "square.and.arrow.down.on.square")
+                        .font(.body.weight(.medium))
+                }
+                .foregroundStyle(.white)
+                .padding(14)
+                .frame(maxWidth: .infinity)
+                .background(
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .fill(Color.accentColor)
+                )
+            }
+            .buttonStyle(.plain)
         }
         .padding(16)
         .background {

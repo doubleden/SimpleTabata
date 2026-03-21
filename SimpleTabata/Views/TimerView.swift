@@ -70,8 +70,8 @@ struct TimerView: View {
             }
             
             ToolbarItem(placement: .topBarLeading) {
-                Button(action: timerVM.showHistory) {
-                    Image(systemName: "clock.arrow.circlepath")
+                Button(action: timerVM.showFavoriteTimer) {
+                    Image(systemName: "heart.fill")
                         .foregroundColor(.white)
                 }
                 .disabled(isTimerRunning)
@@ -81,8 +81,8 @@ struct TimerView: View {
         .sheet(isPresented: $timerVM.isShowSettings) {
             TimerSettingsView(timerVM: timerVM)
         }
-        .sheet(isPresented: $timerVM.isShowHistory) {
-            TimerHistoryView(timerVM: timerVM)
+        .sheet(isPresented: $timerVM.isShowFavoriteTimer) {
+            FavoriteTimerView(timerVM: timerVM)
         }
         .onChange(of: scenePhase) { _, newPhase in
             if newPhase == .background {
