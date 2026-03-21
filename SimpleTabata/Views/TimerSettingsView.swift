@@ -107,6 +107,7 @@ struct TimerSettingsView: View {
                     timerVM.resetTimer()
                     timerVM.applyConfigurationFromSettings()
                     openingSnapshot = timerVM.makeSettingsSnapshot()
+                    timerVM.persistConfigurationToStorage()
                 }
             } message: {
                 Text("Changing the workout plan will reset the current timer. Are you sure?")
@@ -118,6 +119,7 @@ struct TimerSettingsView: View {
                     timerVM.restoreSettings(snap)
                 }
                 timerVM.applyConfigurationFromSettings()
+                timerVM.persistConfigurationToStorage()
             }
         }
     }

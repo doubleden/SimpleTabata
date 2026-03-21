@@ -83,8 +83,39 @@ final class TimerViewModel {
     var isShowSettings = false
     
     init() {
+        loadConfigurationFromStorage()
+        syncIdleUIWithConfiguration()
+    }
+    
+    /// Loads saved workout plan from `StorageService` (first launch uses defaults inside `AppData`).
+    private func loadConfigurationFromStorage() {
+        let data = StorageService.shared.read()
+        prepareSeconds = data.prepareSeconds
+        workSeconds = data.workSeconds
+        restSeconds = data.restSeconds
+        cycleRestSeconds = data.cycleRestSeconds
+        set = data.setsPerCycle
+        cycle = data.cycles
+    }
+    
+    /// Writes the current plan to `UserDefaults` (same storage as `AppStorage("storage")`).
+    func persistConfigurationToStorage() {
+        let data = AppData(
+            prepareSeconds: prepareSeconds,
+            workSeconds: workSeconds,
+            restSeconds: restSeconds,
+            cycleRestSeconds: cycleRestSeconds,
+            setsPerCycle: set,
+            cycles: cycle
+        )
+        StorageService.shared.save(storage: data)
+    }
+    
+    private func syncIdleUIWithConfiguration() {
         currentPhaseRemainingSeconds = prepareSeconds
         remainingTotalSeconds = totalWorkoutDurationSeconds
+        currentSetIndex = 0
+        currentCycleIndex = 0
     }
     
     func showSettings() {

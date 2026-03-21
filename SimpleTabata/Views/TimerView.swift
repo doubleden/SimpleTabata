@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TimerView: View {
     @State private var timerVM = TimerViewModel()
+    @Environment(\.scenePhase) private var scenePhase
     
     /// Settings are only available on «Ready» or while paused — not during an active interval.
     private var isTimerRunning: Bool {
@@ -70,6 +71,11 @@ struct TimerView: View {
         }
         .sheet(isPresented: $timerVM.isShowSettings) {
             TimerSettingsView(timerVM: timerVM)
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .background {
+                timerVM.persistConfigurationToStorage()
+            }
         }
     }
 }

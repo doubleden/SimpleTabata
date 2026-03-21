@@ -20,6 +20,8 @@
 		059545C42F6EE99700D871C3 /* TimeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545C32F6EE99700D871C3 /* TimeService.swift */; };
 		059545C62F6EE99D00D871C3 /* AudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545C52F6EE99D00D871C3 /* AudioService.swift */; };
 		059545C82F6EEB4C00D871C3 /* TimeActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545C72F6EEB4C00D871C3 /* TimeActionButton.swift */; };
+		059545CE2F6EF00200D871C3 /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545CF2F6EF00200D871C3 /* AppData.swift */; };
+		059545D02F6EF00200D871C3 /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545D12F6EF00200D871C3 /* StorageService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +39,8 @@
 		059545C32F6EE99700D871C3 /* TimeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeService.swift; sourceTree = "<group>"; };
 		059545C52F6EE99D00D871C3 /* AudioService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioService.swift; sourceTree = "<group>"; };
 		059545C72F6EEB4C00D871C3 /* TimeActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeActionButton.swift; sourceTree = "<group>"; };
+		059545CF2F6EF00200D871C3 /* AppData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
+		059545D12F6EF00200D871C3 /* StorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +115,7 @@
 		059545B72F6ED8CD00D871C3 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				059545CF2F6EF00200D871C3 /* AppData.swift */,
 				059545C02F6EE81400D871C3 /* Phase.swift */,
 				059545C72F6EEB4C00D871C3 /* TimeActionButton.swift */,
 			);
@@ -120,6 +125,7 @@
 		059545C22F6EE98E00D871C3 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				059545D12F6EF00200D871C3 /* StorageService.swift */,
 				059545C32F6EE99700D871C3 /* TimeService.swift */,
 				059545C52F6EE99D00D871C3 /* AudioService.swift */,
 			);
@@ -210,6 +216,8 @@
 				059545BD2F6EDDFC00D871C3 /* InfoView.swift in Sources */,
 				059545C82F6EEB4C00D871C3 /* TimeActionButton.swift in Sources */,
 				059545C12F6EE81400D871C3 /* Phase.swift in Sources */,
+				059545CE2F6EF00200D871C3 /* AppData.swift in Sources */,
+				059545D02F6EF00200D871C3 /* StorageService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
