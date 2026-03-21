@@ -1,0 +1,99 @@
+{
+  "" : {
+    "diagnostics" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/SimpleTabata-primary.dia",
+    "emit-module-dependencies" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/SimpleTabata-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/SimpleTabata-primary-emit-module.dia",
+    "pch" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/SimpleTabata-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/SimpleTabata-primary.swiftdeps"
+  },
+  "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/SimpleTabata/SimpleTabataApp.swift" : {
+    "const-values" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/SimpleTabataApp.swiftconstvalues",
+    "dependencies" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/SimpleTabataApp.d",
+    "diagnostics" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/SimpleTabataApp.dia",
+    "index-unit-output-path" : "/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/SimpleTabataApp.o",
+    "llvm-bc" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/SimpleTabataApp.bc",
+    "object" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/SimpleTabataApp.o",
+    "swift-dependencies" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/SimpleTabataApp.swiftdeps",
+    "swiftmodule" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/SimpleTabataApp~partial.swiftmodule"
+  },
+  "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/SimpleTabata/UIComponents/SettingRow.swift" : {
+    "const-values" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/SettingRow.swiftconstvalues",
+    "dependencies" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/SettingRow.d",
+    "diagnostics" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/SettingRow.dia",
+    "index-unit-output-path" : "/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/SettingRow.o",
+    "llvm-bc" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/SettingRow.bc",
+    "object" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/SettingRow.o",
+    "swift-dependencies" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/SettingRow.swiftdeps",
+    "swiftmodule" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/SettingRow~partial.swiftmodule"
+  },
+  "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/SimpleTabata/UIComponents/StatView.swift" : {
+    "const-values" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/StatView.swiftconstvalues",
+    "dependencies" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/StatView.d",
+    "diagnostics" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/StatView.dia",
+    "index-unit-output-path" : "/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/StatView.o",
+    "llvm-bc" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/StatView.bc",
+    "object" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/StatView.o",
+    "swift-dependencies" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/StatView.swiftdeps",
+    "swiftmodule" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/StatView~partial.swiftmodule"
+  },
+  "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/SimpleTabata/UIComponents/TabataActionButton.swift" : {
+    "const-values" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TabataActionButton.swiftconstvalues",
+    "dependencies" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TabataActionButton.d",
+    "diagnostics" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TabataActionButton.dia",
+    "index-unit-output-path" : "/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TabataActionButton.o",
+    "llvm-bc" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TabataActionButton.bc",
+    "object" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TabataActionButton.o",
+    "swift-dependencies" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TabataActionButton.swiftdeps",
+    "swiftmodule" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TabataActionButton~partial.swiftmodule"
+  },
+  "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/SimpleTabata/UIComponents/TabataColors.swift" : {
+    "const-values" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TabataColors.swiftconstvalues",
+    "dependencies" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TabataColors.d",
+    "diagnostics" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TabataColors.dia",
+    "index-unit-output-path" : "/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TabataColors.o",
+    "llvm-bc" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TabataColors.bc",
+    "object" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TabataColors.o",
+    "swift-dependencies" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TabataColors.swiftdeps",
+    "swiftmodule" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TabataColors~partial.swiftmodule"
+  },
+  "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/SimpleTabata/ViewModels/TimerViewModel.swift" : {
+    "const-values" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TimerViewModel.swiftconstvalues",
+    "dependencies" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TimerViewModel.d",
+    "diagnostics" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TimerViewModel.dia",
+    "index-unit-output-path" : "/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TimerViewModel.o",
+    "llvm-bc" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TimerViewModel.bc",
+    "object" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TimerViewModel.o",
+    "swift-dependencies" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TimerViewModel.swiftdeps",
+    "swiftmodule" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TimerViewModel~partial.swiftmodule"
+  },
+  "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/SimpleTabata/Views/TimerSettingsView.swift" : {
+    "const-values" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TimerSettingsView.swiftconstvalues",
+    "dependencies" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TimerSettingsView.d",
+    "diagnostics" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TimerSettingsView.dia",
+    "index-unit-output-path" : "/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TimerSettingsView.o",
+    "llvm-bc" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TimerSettingsView.bc",
+    "object" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TimerSettingsView.o",
+    "swift-dependencies" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TimerSettingsView.swiftdeps",
+    "swiftmodule" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TimerSettingsView~partial.swiftmodule"
+  },
+  "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/SimpleTabata/Views/TimerView.swift" : {
+    "const-values" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TimerView.swiftconstvalues",
+    "dependencies" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TimerView.d",
+    "diagnostics" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TimerView.dia",
+    "index-unit-output-path" : "/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TimerView.o",
+    "llvm-bc" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TimerView.bc",
+    "object" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TimerView.o",
+    "swift-dependencies" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TimerView.swiftdeps",
+    "swiftmodule" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/TimerView~partial.swiftmodule"
+  },
+  "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/build/SimpleTabata.build/Debug-iphonesimulator/SimpleTabata.build/Objects-normal/x86_64/GeneratedAssetSymbols~partial.swiftmodule"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "source": "/Users/denisdenisov/Developer/iOS_Pojects/SimpleTabata/SimpleTabata/Views/TimerView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Tabata Settings",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 93
+        }
+      }
+    ]
+  },
+  "version": 1
+}

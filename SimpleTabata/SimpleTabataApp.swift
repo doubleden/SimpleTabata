@@ -11,7 +11,9 @@ import SwiftUI
 struct SimpleTabataApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationStack {
+                TimerView()
+            }
         }
     }
 }

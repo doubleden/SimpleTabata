@@ -8,11 +8,21 @@
 import SwiftUI
 
 struct InfoView: View {
+    let title: String
+    let time: String
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack(alignment: .trailing) {
+            Text(title)
+                .font(.title3.bold())
+
+                Text(time)
+                    .multilineTextAlignment(.trailing)
+                    .font(.largeTitle.bold())
+        }
     }
 }
 
 #Preview {
-    InfoView()
+    InfoView(title: "Set", time: "04")
 }

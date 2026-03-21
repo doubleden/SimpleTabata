@@ -6,17 +6,32 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		059545AC2F6ED78F00D871C3 /* SimpleTabataApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545A92F6ED78F00D871C3 /* SimpleTabataApp.swift */; };
+		059545AD2F6ED78F00D871C3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 059545A72F6ED78F00D871C3 /* Assets.xcassets */; };
+		059545B22F6ED7CB00D871C3 /* TimerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545B12F6ED7CB00D871C3 /* TimerViewModel.swift */; };
+		059545B42F6ED7F000D871C3 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545B32F6ED7F000D871C3 /* TimerView.swift */; };
+		059545B62F6ED7FD00D871C3 /* TimerSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545B52F6ED7FD00D871C3 /* TimerSettingsView.swift */; };
+		059545B92F6EDBB400D871C3 /* MainTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545B82F6EDBB400D871C3 /* MainTimeView.swift */; };
+		059545BB2F6EDCC800D871C3 /* PhaseTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545BA2F6EDCC800D871C3 /* PhaseTitleView.swift */; };
+		059545BD2F6EDDFC00D871C3 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545BC2F6EDDFC00D871C3 /* InfoView.swift */; };
+		059545BF2F6EE1A700D871C3 /* TimeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545BE2F6EE1A700D871C3 /* TimeButton.swift */; };
+		059545C12F6EE81400D871C3 /* Phase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545C02F6EE81400D871C3 /* Phase.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		059545992F6ED77A00D871C3 /* SimpleTabata.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleTabata.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		059545A72F6ED78F00D871C3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		059545A92F6ED78F00D871C3 /* SimpleTabataApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTabataApp.swift; sourceTree = "<group>"; };
+		059545B12F6ED7CB00D871C3 /* TimerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewModel.swift; sourceTree = "<group>"; };
+		059545B32F6ED7F000D871C3 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
+		059545B52F6ED7FD00D871C3 /* TimerSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerSettingsView.swift; sourceTree = "<group>"; };
+		059545B82F6EDBB400D871C3 /* MainTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTimeView.swift; sourceTree = "<group>"; };
+		059545BA2F6EDCC800D871C3 /* PhaseTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhaseTitleView.swift; sourceTree = "<group>"; };
+		059545BC2F6EDDFC00D871C3 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
+		059545BE2F6EE1A700D871C3 /* TimeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeButton.swift; sourceTree = "<group>"; };
+		059545C02F6EE81400D871C3 /* Phase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		0595459B2F6ED77A00D871C3 /* SimpleTabata */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = SimpleTabata;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		059545962F6ED77A00D871C3 /* Frameworks */ = {
@@ -32,7 +47,7 @@
 		059545902F6ED77A00D871C3 = {
 			isa = PBXGroup;
 			children = (
-				0595459B2F6ED77A00D871C3 /* SimpleTabata */,
+				059545AA2F6ED78F00D871C3 /* SimpleTabata */,
 				0595459A2F6ED77A00D871C3 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -43,6 +58,55 @@
 				059545992F6ED77A00D871C3 /* SimpleTabata.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		059545AA2F6ED78F00D871C3 /* SimpleTabata */ = {
+			isa = PBXGroup;
+			children = (
+				059545A92F6ED78F00D871C3 /* SimpleTabataApp.swift */,
+				059545B72F6ED8CD00D871C3 /* Models */,
+				059545B02F6ED7B900D871C3 /* ViewModels */,
+				059545AF2F6ED7AF00D871C3 /* Views */,
+				059545AE2F6ED7A100D871C3 /* UIComponents */,
+				059545A72F6ED78F00D871C3 /* Assets.xcassets */,
+			);
+			path = SimpleTabata;
+			sourceTree = "<group>";
+		};
+		059545AE2F6ED7A100D871C3 /* UIComponents */ = {
+			isa = PBXGroup;
+			children = (
+				059545B82F6EDBB400D871C3 /* MainTimeView.swift */,
+				059545BA2F6EDCC800D871C3 /* PhaseTitleView.swift */,
+				059545BC2F6EDDFC00D871C3 /* InfoView.swift */,
+				059545BE2F6EE1A700D871C3 /* TimeButton.swift */,
+			);
+			path = UIComponents;
+			sourceTree = "<group>";
+		};
+		059545AF2F6ED7AF00D871C3 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				059545B32F6ED7F000D871C3 /* TimerView.swift */,
+				059545B52F6ED7FD00D871C3 /* TimerSettingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		059545B02F6ED7B900D871C3 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				059545B12F6ED7CB00D871C3 /* TimerViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		059545B72F6ED8CD00D871C3 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				059545C02F6EE81400D871C3 /* Phase.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -59,9 +123,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				0595459B2F6ED77A00D871C3 /* SimpleTabata */,
 			);
 			name = SimpleTabata;
 			packageProductDependencies = (
@@ -109,6 +170,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				059545AD2F6ED78F00D871C3 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +181,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				059545B22F6ED7CB00D871C3 /* TimerViewModel.swift in Sources */,
+				059545BB2F6EDCC800D871C3 /* PhaseTitleView.swift in Sources */,
+				059545B62F6ED7FD00D871C3 /* TimerSettingsView.swift in Sources */,
+				059545B42F6ED7F000D871C3 /* TimerView.swift in Sources */,
+				059545B92F6EDBB400D871C3 /* MainTimeView.swift in Sources */,
+				059545AC2F6ED78F00D871C3 /* SimpleTabataApp.swift in Sources */,
+				059545BF2F6EE1A700D871C3 /* TimeButton.swift in Sources */,
+				059545BD2F6EDDFC00D871C3 /* InfoView.swift in Sources */,
+				059545C12F6EE81400D871C3 /* Phase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,12 +340,16 @@
 				PRODUCT_BUNDLE_IDENTIFIER = DenisDenisov.SimpleTabata;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -301,12 +376,16 @@
 				PRODUCT_BUNDLE_IDENTIFIER = DenisDenisov.SimpleTabata;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

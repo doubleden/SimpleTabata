@@ -8,11 +8,17 @@
 import SwiftUI
 
 struct MainTimeView: View {
+    let time: String
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Text(time)
+            .font(.system(size: 130, weight: .bold, design: .rounded))
+            .foregroundStyle(Color.white)
+            .minimumScaleFactor(0.8)
+            .padding()
     }
 }
 
 #Preview {
-    MainTimeView()
+    MainTimeView(time: "00:00")
 }

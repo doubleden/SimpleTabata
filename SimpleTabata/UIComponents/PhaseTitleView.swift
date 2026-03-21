@@ -8,11 +8,18 @@
 import SwiftUI
 
 struct PhaseTitleView: View {
+    let phase: String
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Text(phase)
+            .padding()
+            .font(.largeTitle.italic())
+            .foregroundStyle(Color.white)
+            .minimumScaleFactor(0.8)
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
 #Preview {
-    PhaseTitleView()
+    PhaseTitleView(phase: "Work")
+        .background(Color.gray)
 }

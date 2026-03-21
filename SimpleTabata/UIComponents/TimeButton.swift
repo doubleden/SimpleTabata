@@ -8,11 +8,23 @@
 import SwiftUI
 
 struct TimeButton: View {
+    let title: String
+    let color: Color
+    let action: () -> Void
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Button(action: action) {
+            Text(title)
+                .font(.largeTitle.bold())
+                .shadow(radius: 2)
+                .padding()
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(color.opacity(0.8))
+        }
     }
 }
 
 #Preview {
-    TimeButton()
+    TimeButton(title: "Start", color: .green, action: {})
+        .frame(width: 200, height: 200)
 }
