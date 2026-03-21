@@ -15,10 +15,12 @@ struct InfoView: View {
         VStack(alignment: .trailing) {
             Text(title)
                 .font(.title3.bold())
+                .minimumScaleFactor(0.6)
 
                 Text(time)
                     .multilineTextAlignment(.trailing)
                     .font(.largeTitle.bold())
+                    .minimumScaleFactor(0.6)
         }
     }
 }

@@ -26,7 +26,7 @@ struct MainTimeView: View {
         Text(time)
             .font(.system(size: 130, weight: .bold, design: .rounded))
             .foregroundStyle(textColor)
-            .minimumScaleFactor(0.8)
+            .minimumScaleFactor(0.6)
             .padding()
     }
 }

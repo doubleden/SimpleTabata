@@ -18,8 +18,10 @@ struct TimerView: View {
                     MainTimeView(time: timerVM.currentTime, phase: timerVM.phase)
                     
                     InfoSectionView(
-                        set: timerVM.set,
-                        cycle: timerVM.cycle,
+                        currentSet: timerVM.currentSetIndex,
+                        totalSets: timerVM.set,
+                        currentCycle: timerVM.currentCycleIndex,
+                        totalCycles: timerVM.cycle,
                         totalTimeLeft: timerVM.totalTime
                     )
                 }
@@ -64,15 +66,27 @@ struct TimerView: View {
 
 // MARK: - SubViews
 fileprivate struct InfoSectionView: View {
-    let set: Int
-    let cycle: Int
+    let currentSet: Int
+    let totalSets: Int
+    let currentCycle: Int
+    let totalCycles: Int
     let totalTimeLeft: String
+    
+    private var setCaption: String {
+        if currentSet == 0 { return "\(totalSets)" }
+        return "\(currentSet)/\(totalSets)"
+    }
+    
+    private var cycleCaption: String {
+        if currentCycle == 0 { return "\(totalCycles)" }
+        return "\(currentCycle)/\(totalCycles)"
+    }
     
     var body: some View {
         HStack(spacing: 50) {
-            InfoView(title: "Set", time: set.formatted())
-            if cycle != 0 {
-                InfoView(title: "Cycle", time: cycle.formatted())
+            InfoView(title: "Set", time: setCaption)
+            if totalCycles > 1 {
+                InfoView(title: "Cycle", time: cycleCaption)
             }
             InfoView(title: "Total time", time: totalTimeLeft)
         }
