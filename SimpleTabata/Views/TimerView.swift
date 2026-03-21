@@ -20,23 +20,23 @@ struct TimerView: View {
     }
     
     var body: some View {
-        ZStack {
-            VStack(spacing: 30) {
-                VStack(spacing: 10) {
-                    PhaseTitleView(phase: timerVM.phase.title)
-                    MainTimeView(time: timerVM.currentTime, phase: timerVM.phase)
-                    
-                    InfoSectionView(
-                        currentSet: timerVM.currentSetIndex,
-                        totalSets: timerVM.set,
-                        currentCycle: timerVM.currentCycleIndex,
-                        totalCycles: timerVM.cycle,
-                        totalTimeLeft: timerVM.totalTime
-                    )
-                }
-                .padding()
+        VStack {
+            VStack(spacing: 10) {
+                PhaseTitleView(phase: timerVM.phase.title)
+                MainTimeView(time: timerVM.currentTime, phase: timerVM.phase)
                 
-                Spacer()
+                InfoSectionView(
+                    currentSet: timerVM.currentSetIndex,
+                    totalSets: timerVM.set,
+                    currentCycle: timerVM.currentCycleIndex,
+                    totalCycles: timerVM.cycle,
+                    totalTimeLeft: timerVM.totalTime
+                )
+            }
+            .padding()
+            
+            Spacer()
+            ZStack {
                 switch timerVM.phase {
                 case .begin:
                     TimerOffButtonSectionView(startAction: timerVM.startTimer)
@@ -49,6 +49,7 @@ struct TimerView: View {
                     TimerOnButtonSectionView(pauseAction: timerVM.pauseTimer)
                 }
             }
+            .frame(height: UIScreen.main.bounds.size.height * 0.4)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background {
@@ -169,6 +170,21 @@ fileprivate struct TimerOnButtonSectionView: View {
     let pauseAction: () -> Void
     var body: some View {
         TimeButton(systemImage: "pause", color: .orange, action: pauseAction)
+            .overlay(
+                GeometryReader { geo in
+                    ZStack {
+                        Rectangle()
+                            .fill(.gray)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 4)
+                            .shadow(radius: 3)
+                            .position(
+                                x: geo.size.width * 0.5,
+                                y: geo.size.height * 0.0
+                            )
+                    }
+                }
+            )
     }
 }
 
@@ -176,6 +192,21 @@ fileprivate struct TimerOffButtonSectionView: View {
     let startAction: () -> Void
     var body: some View {
         TimeButton(systemImage: "play", color: .green, action: startAction)
+            .overlay(
+                GeometryReader { geo in
+                    ZStack {
+                        Rectangle()
+                            .fill(.gray)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 4)
+                            .shadow(radius: 3)
+                            .position(
+                                x: geo.size.width * 0.5,
+                                y: geo.size.height * 0.0
+                            )
+                    }
+                }
+            )
     }
 }
 
