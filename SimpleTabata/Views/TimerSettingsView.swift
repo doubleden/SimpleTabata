@@ -22,6 +22,7 @@ struct TimerSettingsView: View {
                         dismiss()
                     }) {
                         Image(systemName: "xmark")
+                            .foregroundColor(.white)
                     }
                 }
             }

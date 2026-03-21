@@ -13,6 +13,7 @@ struct SimpleTabataApp: App {
         WindowGroup {
             NavigationStack {
                 TimerView()
+                    .preferredColorScheme(.dark)
             }
         }
     }

@@ -12,7 +12,7 @@ struct TimerView: View {
     
     var body: some View {
         ZStack {
-            VStack(spacing: 10) {
+            VStack(spacing: 30) {
                 VStack(spacing: 10) {
                     PhaseTitleView(phase: timerVM.phase.title)
                     MainTimeView(time: timerVM.currentTime, phase: timerVM.phase)
@@ -52,6 +52,7 @@ struct TimerView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: timerVM.showSettings) {
                     Image(systemName: "gear")
+                        .foregroundColor(.white)
                 }
             }
         }

@@ -21,4 +21,18 @@ final class TimerViewModel {
     func showSettings() {
         isShowSettings.toggle()
     }
+    
+    func startTimer() {
+        
+    }
+    
+    func pauseTimer() {
+        
+    }
+    
+    func resetTimer() {
+        
+    }
+    
+    
 }
