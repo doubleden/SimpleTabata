@@ -11,6 +11,9 @@ struct TimerSettingsView: View {
     @Bindable var timerVM: TimerViewModel
     @Environment(\.dismiss) private var dismiss
     
+    @State private var openingSnapshot: WorkoutSettingsSnapshot?
+    @State private var showResetAlert = false
+    
     private var totalWorkoutLabel: String {
         timerVM.formattedTime(timerVM.totalWorkoutDurationSeconds)
     }
@@ -75,10 +78,46 @@ struct TimerSettingsView: View {
                     .fontWeight(.semibold)
                 }
             }
+            .onAppear {
+                openingSnapshot = timerVM.makeSettingsSnapshot()
+            }
+            .onChange(of: timerVM.prepareSeconds) { _, _ in onSettingsFieldChanged() }
+            .onChange(of: timerVM.workSeconds) { _, _ in onSettingsFieldChanged() }
+            .onChange(of: timerVM.restSeconds) { _, _ in onSettingsFieldChanged() }
+            .onChange(of: timerVM.cycleRestSeconds) { _, _ in onSettingsFieldChanged() }
+            .onChange(of: timerVM.set) { _, _ in onSettingsFieldChanged() }
+            .onChange(of: timerVM.cycle) { _, _ in onSettingsFieldChanged() }
+            .alert("Reset timer?", isPresented: $showResetAlert) {
+                Button("Cancel", role: .cancel) {
+                    if let snap = openingSnapshot {
+                        timerVM.restoreSettings(snap)
+                    }
+                }
+                Button("Reset", role: .destructive) {
+                    timerVM.resetTimer()
+                    timerVM.applyConfigurationFromSettings()
+                    openingSnapshot = timerVM.makeSettingsSnapshot()
+                }
+            } message: {
+                Text("Changing the workout plan will reset the current timer. Are you sure?")
+            }
             .onDisappear {
+                if timerVM.phase == .pause,
+                   let snap = openingSnapshot,
+                   timerVM.settingsDiffer(from: snap) {
+                    timerVM.restoreSettings(snap)
+                }
                 timerVM.applyConfigurationFromSettings()
             }
         }
+    }
+    
+    private func onSettingsFieldChanged() {
+        guard timerVM.phase == .pause, let snap = openingSnapshot else {
+            showResetAlert = false
+            return
+        }
+        showResetAlert = timerVM.settingsDiffer(from: snap)
     }
     
     private var totalSummaryCard: some View {

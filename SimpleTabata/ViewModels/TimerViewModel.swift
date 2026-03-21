@@ -9,6 +9,15 @@ import Combine
 import Foundation
 import Observation
 
+struct WorkoutSettingsSnapshot: Equatable {
+    var prepareSeconds: Int
+    var workSeconds: Int
+    var restSeconds: Int
+    var cycleRestSeconds: Int
+    var set: Int
+    var cycle: Int
+}
+
 @Observable
 final class TimerViewModel {
     var phase = Phase.begin
@@ -80,6 +89,35 @@ final class TimerViewModel {
     
     func showSettings() {
         isShowSettings.toggle()
+    }
+    
+    func makeSettingsSnapshot() -> WorkoutSettingsSnapshot {
+        WorkoutSettingsSnapshot(
+            prepareSeconds: prepareSeconds,
+            workSeconds: workSeconds,
+            restSeconds: restSeconds,
+            cycleRestSeconds: cycleRestSeconds,
+            set: set,
+            cycle: cycle
+        )
+    }
+    
+    func restoreSettings(_ snapshot: WorkoutSettingsSnapshot) {
+        prepareSeconds = snapshot.prepareSeconds
+        workSeconds = snapshot.workSeconds
+        restSeconds = snapshot.restSeconds
+        cycleRestSeconds = snapshot.cycleRestSeconds
+        set = snapshot.set
+        cycle = snapshot.cycle
+    }
+    
+    func settingsDiffer(from snapshot: WorkoutSettingsSnapshot) -> Bool {
+        prepareSeconds != snapshot.prepareSeconds
+            || workSeconds != snapshot.workSeconds
+            || restSeconds != snapshot.restSeconds
+            || cycleRestSeconds != snapshot.cycleRestSeconds
+            || set != snapshot.set
+            || cycle != snapshot.cycle
     }
     
     /// Call after changing durations or set/cycle counts so totals and idle display stay in sync.

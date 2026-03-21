@@ -10,6 +10,14 @@ import SwiftUI
 struct TimerView: View {
     @State private var timerVM = TimerViewModel()
     
+    /// Settings are only available on «Ready» or while paused — not during an active interval.
+    private var isTimerRunning: Bool {
+        switch timerVM.phase {
+        case .begin, .pause: return false
+        case .prepare, .work, .rest, .cycleRest: return true
+        }
+    }
+    
     var body: some View {
         ZStack {
             VStack(spacing: 30) {
@@ -56,6 +64,8 @@ struct TimerView: View {
                     Image(systemName: "gear")
                         .foregroundColor(.white)
                 }
+                .disabled(isTimerRunning)
+                .opacity(isTimerRunning ? 0.35 : 1)
             }
         }
         .sheet(isPresented: $timerVM.isShowSettings) {
