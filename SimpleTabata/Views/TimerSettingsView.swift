@@ -7,12 +7,18 @@
 
 import SwiftUI
 
+private enum SettingsExpandedSection: Equatable {
+    case none
+    case prepare, work, rest, cycleRest, sets, cycles
+}
+
 struct TimerSettingsView: View {
     @Bindable var timerVM: TimerViewModel
     @Environment(\.dismiss) private var dismiss
     
     @State private var openingSnapshot: WorkoutSettingsSnapshot?
     @State private var showResetAlert = false
+    @State private var expandedSection: SettingsExpandedSection = .none
     
     private var totalWorkoutLabel: String {
         timerVM.formattedTime(timerVM.totalWorkoutDurationSeconds)
@@ -26,6 +32,7 @@ struct TimerSettingsView: View {
                     
                     Group {
                         durationCard(
+                            section: .prepare,
                             title: "Prepare",
                             subtitle: "Warm-up before work intervals",
                             systemImage: "figure.cooldown",
@@ -33,6 +40,7 @@ struct TimerSettingsView: View {
                             binding: $timerVM.prepareSeconds
                         )
                         durationCard(
+                            section: .work,
                             title: "Work",
                             subtitle: "High-intensity interval",
                             systemImage: "flame.fill",
@@ -40,6 +48,7 @@ struct TimerSettingsView: View {
                             binding: $timerVM.workSeconds
                         )
                         durationCard(
+                            section: .rest,
                             title: "Rest",
                             subtitle: "Recovery between work rounds",
                             systemImage: "leaf.fill",
@@ -47,6 +56,7 @@ struct TimerSettingsView: View {
                             binding: $timerVM.restSeconds
                         )
                         durationCard(
+                            section: .cycleRest,
                             title: "Cycle rest",
                             subtitle: "Break between full cycles",
                             systemImage: "pause.circle.fill",
@@ -120,6 +130,13 @@ struct TimerSettingsView: View {
         showResetAlert = timerVM.settingsDiffer(from: snap)
     }
     
+    private func toggleSection(_ section: SettingsExpandedSection) {
+        guard section != .none else { return }
+        withAnimation(.easeInOut(duration: 0.22)) {
+            expandedSection = expandedSection == section ? .none : section
+        }
+    }
+    
     private var totalSummaryCard: some View {
         VStack(alignment: .leading, spacing: 8) {
             Label("Estimated total", systemImage: "clock.fill")
@@ -151,36 +168,54 @@ struct TimerSettingsView: View {
     }
     
     private func durationCard(
+        section: SettingsExpandedSection,
         title: String,
         subtitle: String,
         systemImage: String,
         tint: Color,
         binding: Binding<Int>
     ) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(spacing: 12) {
-                Image(systemName: systemImage)
-                    .font(.title2)
-                    .foregroundStyle(tint)
-                    .frame(width: 36, height: 36)
-                    .background(tint.opacity(0.15), in: Circle())
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(title)
-                        .font(.headline)
-                    Text(subtitle)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+        let isExpanded = expandedSection == section
+        return VStack(alignment: .leading, spacing: 0) {
+            Button {
+                toggleSection(section)
+            } label: {
+                HStack(spacing: 12) {
+                    Image(systemName: systemImage)
+                        .font(.title2)
+                        .foregroundStyle(tint)
+                        .frame(width: 36, height: 36)
+                        .background(tint.opacity(0.15), in: Circle())
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(title)
+                            .font(.headline)
+                            .foregroundStyle(.primary)
+                        Text(subtitle)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .minimumScaleFactor(0.6)
+                            .multilineTextAlignment(.leading)
+                    }
+                    Spacer(minLength: 8)
+                    Text(timerVM.formattedTime(binding.wrappedValue))
+                        .font(.title3.monospacedDigit().weight(.semibold))
+                        .foregroundStyle(tint)
                         .minimumScaleFactor(0.6)
+                    Image(systemName: "chevron.down")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.tertiary)
+                        .rotationEffect(.degrees(isExpanded ? 180 : 0))
                 }
-                Spacer(minLength: 0)
-                Text(timerVM.formattedTime(binding.wrappedValue))
-                    .font(.title3.monospacedDigit().weight(.semibold))
-                    .foregroundStyle(tint)
-                    .minimumScaleFactor(0.6)
+                .contentShape(Rectangle())
             }
+            .buttonStyle(.plain)
             
-            DurationWheelPicker(totalSeconds: binding)
-                .frame(height: 160)
+            if isExpanded {
+                DurationWheelPicker(totalSeconds: binding)
+                    .frame(height: 160)
+                    .padding(.top, 12)
+                    .transition(.opacity.combined(with: .move(edge: .top)))
+            }
         }
         .padding(16)
         .background {
@@ -190,19 +225,21 @@ struct TimerSettingsView: View {
     }
     
     private var countsCard: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 12) {
             Label("Rounds & cycles", systemImage: "repeat")
                 .font(.headline)
             
             VStack(spacing: 0) {
-                stepperRow(
+                countExpandableRow(
+                    section: .sets,
                     title: "Sets per cycle",
                     detail: "Work + rest rounds in one cycle",
                     value: $timerVM.set,
                     range: 1...99
                 )
                 Divider().padding(.leading, 4)
-                stepperRow(
+                countExpandableRow(
+                    section: .cycles,
                     title: "Cycles",
                     detail: "How many full cycles to run",
                     value: $timerVM.cycle,
@@ -217,32 +254,57 @@ struct TimerSettingsView: View {
         }
     }
     
-    private func stepperRow(
+    private func countExpandableRow(
+        section: SettingsExpandedSection,
         title: String,
         detail: String,
         value: Binding<Int>,
         range: ClosedRange<Int>
     ) -> some View {
-        HStack(alignment: .center, spacing: 12) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title)
-                    .font(.subheadline.weight(.medium))
-                Text(detail)
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                    .minimumScaleFactor(0.6)
-            }
-            Spacer(minLength: 8)
-            Picker(title, selection: value) {
-                ForEach(Array(range), id: \.self) { n in
-                    Text("\(n)").tag(n)
+        let isExpanded = expandedSection == section
+        return VStack(alignment: .leading, spacing: 0) {
+            Button {
+                toggleSection(section)
+            } label: {
+                HStack(alignment: .center, spacing: 12) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(title)
+                            .font(.subheadline.weight(.medium))
+                            .foregroundStyle(.primary)
+                        Text(detail)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                            .minimumScaleFactor(0.6)
+                            .multilineTextAlignment(.leading)
+                    }
+                    Spacer(minLength: 8)
+                    Text("\(value.wrappedValue)")
+                        .font(.title3.monospacedDigit().weight(.semibold))
+                        .foregroundStyle(.primary)
+                    Image(systemName: "chevron.down")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.tertiary)
+                        .rotationEffect(.degrees(isExpanded ? 180 : 0))
                 }
+                .contentShape(Rectangle())
             }
-            .pickerStyle(.wheel)
-            .frame(width: 100, height: 120)
-            .clipped()
+            .buttonStyle(.plain)
+            .padding(.vertical, 8)
+            
+            if isExpanded {
+                Picker(title, selection: value) {
+                    ForEach(Array(range), id: \.self) { n in
+                        Text("\(n)").tag(n)
+                    }
+                }
+                .pickerStyle(.wheel)
+                .frame(maxWidth: .infinity)
+                .frame(height: 120)
+                .clipped()
+                .padding(.bottom, 4)
+                .transition(.opacity.combined(with: .move(edge: .top)))
+            }
         }
-        .padding(.vertical, 8)
     }
 }
 
