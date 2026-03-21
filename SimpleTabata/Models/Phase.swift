@@ -5,9 +5,10 @@
 //  Created by Denis Denisov on 21/3/26.
 //
 
-import SwiftUI
+import Foundation
 
 enum Phase {
+    case begin
     case prepare
     case work
     case rest
@@ -16,6 +17,7 @@ enum Phase {
     
     var title: String {
         switch self {
+        case .begin: "Ready?"
         case .prepare: "Prepare"
         case .work: "Work"
         case .rest: "Rest"

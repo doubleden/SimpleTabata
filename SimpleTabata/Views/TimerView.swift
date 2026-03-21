@@ -8,23 +8,35 @@
 import SwiftUI
 
 struct TimerView: View {
+    @State private var timerVM = TimerViewModel()
+    
     var body: some View {
         ZStack {
             VStack(spacing: 10) {
                 VStack(spacing: 10) {
-                    PhaseTitleView(phase: "Exercise")
-                    MainTimeView(time: "00:00")
+                    PhaseTitleView(phase: timerVM.phase.title)
+                    MainTimeView(time: timerVM.currentTime, phase: timerVM.phase)
                     
                     InfoSectionView(
-                        set: 4,
-                        cycle: 5,
-                        totalTimeLeft: "15:34"
+                        set: timerVM.set,
+                        cycle: timerVM.cycle,
+                        totalTimeLeft: timerVM.totalTime
                     )
                 }
                 .padding()
                 
                 Spacer()
-                ButtonSectionView()
+                switch timerVM.phase {
+                case .begin:
+                    TimerOffButtonSectionView(startAction: {})
+                case .pause:
+                    TimerPauseButtonSectionView(
+                        continueAction: {},
+                        resetAction: {}
+                    )
+                default:
+                    TimerOnButtonSectionView(pauseAction: {})
+                }
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -38,10 +50,13 @@ struct TimerView: View {
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button(action: {}) {
+                Button(action: timerVM.showSettings) {
                     Image(systemName: "gear")
                 }
             }
+        }
+        .sheet(isPresented: $timerVM.isShowSettings) {
+            TimerSettingsView(timerVM: timerVM)
         }
     }
 }
@@ -64,11 +79,14 @@ fileprivate struct InfoSectionView: View {
     }
 }
 
-fileprivate struct ButtonSectionView: View {
+fileprivate struct TimerPauseButtonSectionView: View {
+    let continueAction: () -> Void
+    let resetAction: () -> Void
+    
     var body: some View {
         HStack(spacing: 0) {
-            TimeButton(title: "Start", color: .green, action: {})
-            TimeButton(title: "Stop", color: .red, action: {})
+            TimeButton(title: "Start", color: .green, action: continueAction)
+            TimeButton(title: "Reset", color: .gray, action: resetAction)
         }
         .overlay(
             GeometryReader { geo in
@@ -98,6 +116,19 @@ fileprivate struct ButtonSectionView: View {
     }
 }
 
+fileprivate struct TimerOnButtonSectionView: View {
+    let pauseAction: () -> Void
+    var body: some View {
+        TimeButton(title: "Puase", color: .orange, action: pauseAction)
+    }
+}
+
+fileprivate struct TimerOffButtonSectionView: View {
+    let startAction: () -> Void
+    var body: some View {
+        TimeButton(title: "Start", color: .green, action: startAction)
+    }
+}
 
 #Preview {
     NavigationStack {

@@ -8,13 +8,28 @@
 import SwiftUI
 
 struct TimerSettingsView: View {
+    @Bindable var timerVM: TimerViewModel
+    @Environment(\.dismiss) var dismiss
+    
     var body: some View {
-        VStack {
-            
+        NavigationStack {
+            VStack {
+                
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Image(systemName: "xmark")
+                    }
+                }
+            }
         }
     }
 }
 
 #Preview {
-    TimerSettingsView()
+    
+    TimerSettingsView(timerVM: TimerViewModel())
 }

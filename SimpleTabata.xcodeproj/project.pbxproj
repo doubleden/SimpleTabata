@@ -17,6 +17,9 @@
 		059545BD2F6EDDFC00D871C3 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545BC2F6EDDFC00D871C3 /* InfoView.swift */; };
 		059545BF2F6EE1A700D871C3 /* TimeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545BE2F6EE1A700D871C3 /* TimeButton.swift */; };
 		059545C12F6EE81400D871C3 /* Phase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545C02F6EE81400D871C3 /* Phase.swift */; };
+		059545C42F6EE99700D871C3 /* TimeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545C32F6EE99700D871C3 /* TimeService.swift */; };
+		059545C62F6EE99D00D871C3 /* AudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545C52F6EE99D00D871C3 /* AudioService.swift */; };
+		059545C82F6EEB4C00D871C3 /* TimeActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545C72F6EEB4C00D871C3 /* TimeActionButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +34,9 @@
 		059545BC2F6EDDFC00D871C3 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		059545BE2F6EE1A700D871C3 /* TimeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeButton.swift; sourceTree = "<group>"; };
 		059545C02F6EE81400D871C3 /* Phase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase.swift; sourceTree = "<group>"; };
+		059545C32F6EE99700D871C3 /* TimeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeService.swift; sourceTree = "<group>"; };
+		059545C52F6EE99D00D871C3 /* AudioService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioService.swift; sourceTree = "<group>"; };
+		059545C72F6EEB4C00D871C3 /* TimeActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeActionButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +70,7 @@
 			isa = PBXGroup;
 			children = (
 				059545A92F6ED78F00D871C3 /* SimpleTabataApp.swift */,
+				059545C22F6EE98E00D871C3 /* Services */,
 				059545B72F6ED8CD00D871C3 /* Models */,
 				059545B02F6ED7B900D871C3 /* ViewModels */,
 				059545AF2F6ED7AF00D871C3 /* Views */,
@@ -105,8 +112,18 @@
 			isa = PBXGroup;
 			children = (
 				059545C02F6EE81400D871C3 /* Phase.swift */,
+				059545C72F6EEB4C00D871C3 /* TimeActionButton.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		059545C22F6EE98E00D871C3 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				059545C32F6EE99700D871C3 /* TimeService.swift */,
+				059545C52F6EE99D00D871C3 /* AudioService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -187,8 +204,11 @@
 				059545B42F6ED7F000D871C3 /* TimerView.swift in Sources */,
 				059545B92F6EDBB400D871C3 /* MainTimeView.swift in Sources */,
 				059545AC2F6ED78F00D871C3 /* SimpleTabataApp.swift in Sources */,
+				059545C42F6EE99700D871C3 /* TimeService.swift in Sources */,
 				059545BF2F6EE1A700D871C3 /* TimeButton.swift in Sources */,
+				059545C62F6EE99D00D871C3 /* AudioService.swift in Sources */,
 				059545BD2F6EDDFC00D871C3 /* InfoView.swift in Sources */,
+				059545C82F6EEB4C00D871C3 /* TimeActionButton.swift in Sources */,
 				059545C12F6EE81400D871C3 /* Phase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
