@@ -17,6 +17,7 @@ struct TimeButton: View {
     var body: some View {
         Button(action: {
             withAnimation {
+                HapticService.shared.impact()
                 action()
             }
         }) {

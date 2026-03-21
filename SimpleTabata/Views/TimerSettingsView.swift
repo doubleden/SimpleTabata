@@ -79,7 +79,10 @@ struct TimerSettingsView: View {
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button(action: { dismiss() }) {
+                    Button(action: {
+                        HapticService.shared.impact()
+                        dismiss()
+                    }) {
                         Image(systemName: "xmark")
                             .foregroundStyle(.secondary)
                     }
@@ -87,6 +90,7 @@ struct TimerSettingsView: View {
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Done") {
+                        HapticService.shared.impact()
                         dismiss()
                     }
                     .fontWeight(.semibold)
@@ -318,6 +322,7 @@ struct TimerSettingsView: View {
                 .foregroundStyle(.secondary)
                 .minimumScaleFactor(0.6)
             Button {
+                HapticService.shared.impact()
                 showSaveFavoriteSheet = true
             } label: {
                 HStack {

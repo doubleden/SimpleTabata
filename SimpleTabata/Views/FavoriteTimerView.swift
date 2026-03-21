@@ -36,6 +36,7 @@ struct FavoriteTimerView: View {
                     List {
                         ForEach(timerVM.workoutHistory) { entry in
                             Button {
+                                HapticService.shared.impact()
                                 if timerVM.applyPlanFromHistory(entry.plan) {
                                     dismiss()
                                 } else {
@@ -56,7 +57,10 @@ struct FavoriteTimerView: View {
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button(action: { dismiss() }) {
+                    Button(action: {
+                        HapticService.shared.impact()
+                        dismiss()
+                    }) {
                         Image(systemName: "xmark")
                             .foregroundStyle(.secondary)
                     }

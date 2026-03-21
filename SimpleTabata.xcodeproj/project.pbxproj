@@ -21,6 +21,7 @@
 		059545C62F6EE99D00D871C3 /* AudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545C52F6EE99D00D871C3 /* AudioService.swift */; };
 		059545C82F6EEB4C00D871C3 /* TimeActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545C72F6EEB4C00D871C3 /* TimeActionButton.swift */; };
 		059545CA2F6F03F400D871C3 /* FavoriteTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545C92F6F03F400D871C3 /* FavoriteTimerView.swift */; };
+		059545CC2F6F087400D871C3 /* HapticService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545CB2F6F087400D871C3 /* HapticService.swift */; };
 		059545CE2F6EF00200D871C3 /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545CF2F6EF00200D871C3 /* AppData.swift */; };
 		059545D02F6EF00200D871C3 /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545D12F6EF00200D871C3 /* StorageService.swift */; };
 		059545D82F6F100100D871C3 /* WorkoutHistoryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545D92F6F100100D871C3 /* WorkoutHistoryEntry.swift */; };
@@ -44,6 +45,7 @@
 		059545C52F6EE99D00D871C3 /* AudioService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioService.swift; sourceTree = "<group>"; };
 		059545C72F6EEB4C00D871C3 /* TimeActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeActionButton.swift; sourceTree = "<group>"; };
 		059545C92F6F03F400D871C3 /* FavoriteTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteTimerView.swift; sourceTree = "<group>"; };
+		059545CB2F6F087400D871C3 /* HapticService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticService.swift; sourceTree = "<group>"; };
 		059545CF2F6EF00200D871C3 /* AppData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
 		059545D12F6EF00200D871C3 /* StorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
 		059545D92F6F100100D871C3 /* WorkoutHistoryEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutHistoryEntry.swift; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 				059545DB2F6F100100D871C3 /* WorkoutHistoryService.swift */,
 				059545C32F6EE99700D871C3 /* TimeService.swift */,
 				059545C52F6EE99D00D871C3 /* AudioService.swift */,
+				059545CB2F6F087400D871C3 /* HapticService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -234,6 +237,7 @@
 				059545D82F6F100100D871C3 /* WorkoutHistoryEntry.swift in Sources */,
 				059545DA2F6F100100D871C3 /* WorkoutHistoryService.swift in Sources */,
 				059545DC2F6F100100D871C3 /* SaveFavoriteParametersSheet.swift in Sources */,
+				059545CC2F6F087400D871C3 /* HapticService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

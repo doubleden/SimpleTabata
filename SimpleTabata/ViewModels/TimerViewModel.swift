@@ -119,6 +119,7 @@ final class TimerViewModel {
     }
     
     func deleteWorkoutHistory(at offsets: IndexSet) {
+        HapticService.shared.impact()
         workoutHistory.remove(atOffsets: offsets)
         WorkoutHistoryService.shared.save(items: workoutHistory)
     }

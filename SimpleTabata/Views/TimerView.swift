@@ -61,7 +61,10 @@ struct TimerView: View {
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button(action: timerVM.showSettings) {
+                Button(action: {
+                    HapticService.shared.impact()
+                    timerVM.showSettings()
+                }) {
                     Image(systemName: "gear")
                         .foregroundColor(.white)
                 }
@@ -70,7 +73,10 @@ struct TimerView: View {
             }
             
             ToolbarItem(placement: .topBarLeading) {
-                Button(action: timerVM.showFavoriteTimer) {
+                Button(action: {
+                    HapticService.shared.impact()
+                    timerVM.showFavoriteTimer()
+                }) {
                     Image(systemName: "heart.fill")
                         .foregroundColor(.white)
                 }

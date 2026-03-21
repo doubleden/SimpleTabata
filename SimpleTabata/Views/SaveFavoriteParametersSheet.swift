@@ -31,11 +31,13 @@ struct SaveFavoriteParametersSheet: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
+                        HapticService.shared.impact()
                         onCancel()
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
+                        HapticService.shared.impact()
                         onSave(name)
                     }
                     .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
