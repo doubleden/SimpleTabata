@@ -68,9 +68,21 @@ struct TimerView: View {
                 .disabled(isTimerRunning)
                 .opacity(isTimerRunning ? 0.35 : 1)
             }
+            
+            ToolbarItem(placement: .topBarLeading) {
+                Button(action: timerVM.showHistory) {
+                    Image(systemName: "clock.arrow.circlepath")
+                        .foregroundColor(.white)
+                }
+                .disabled(isTimerRunning)
+                .opacity(isTimerRunning ? 0.35 : 1)
+            }
         }
         .sheet(isPresented: $timerVM.isShowSettings) {
             TimerSettingsView(timerVM: timerVM)
+        }
+        .sheet(isPresented: $timerVM.isShowHistory) {
+            TimerHistoryView(timerVM: timerVM)
         }
         .onChange(of: scenePhase) { _, newPhase in
             if newPhase == .background {

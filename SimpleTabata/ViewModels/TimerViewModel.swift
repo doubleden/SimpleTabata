@@ -81,6 +81,7 @@ final class TimerViewModel {
     }
     
     var isShowSettings = false
+    var isShowHistory = false
     
     init() {
         loadConfigurationFromStorage()
@@ -120,6 +121,10 @@ final class TimerViewModel {
     
     func showSettings() {
         isShowSettings.toggle()
+    }
+    
+    func showHistory() {
+        isShowHistory.toggle()
     }
     
     func makeSettingsSnapshot() -> WorkoutSettingsSnapshot {
