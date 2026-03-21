@@ -128,13 +128,7 @@ struct TimerSettingsView: View {
             Text(totalWorkoutLabel)
                 .font(.system(size: 40, weight: .bold, design: .rounded))
                 .monospacedDigit()
-                .foregroundStyle(
-                    LinearGradient(
-                        colors: [.orange, .pink],
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
-                )
+                .foregroundStyle(.white)
                 .contentTransition(.identity)
                 .animation(nil, value: totalWorkoutLabel)
                 .minimumScaleFactor(0.6)
