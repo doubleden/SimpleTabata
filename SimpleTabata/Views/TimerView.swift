@@ -100,8 +100,8 @@ fileprivate struct TimerPauseButtonSectionView: View {
     
     var body: some View {
         HStack(spacing: 0) {
-            TimeButton(title: "Start", color: .green, action: continueAction)
-            TimeButton(title: "Reset", color: .gray, action: resetAction)
+            TimeButton(systemImage: "play", color: .green, action: continueAction)
+            TimeButton(systemImage: "stop", color: .gray, action: resetAction)
         }
         .overlay(
             GeometryReader { geo in
@@ -134,14 +134,14 @@ fileprivate struct TimerPauseButtonSectionView: View {
 fileprivate struct TimerOnButtonSectionView: View {
     let pauseAction: () -> Void
     var body: some View {
-        TimeButton(title: "Pause", color: .orange, action: pauseAction)
+        TimeButton(systemImage: "pause", color: .orange, action: pauseAction)
     }
 }
 
 fileprivate struct TimerOffButtonSectionView: View {
     let startAction: () -> Void
     var body: some View {
-        TimeButton(title: "Start", color: .green, action: startAction)
+        TimeButton(systemImage: "play", color: .green, action: startAction)
     }
 }
 

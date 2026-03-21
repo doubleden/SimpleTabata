@@ -18,6 +18,9 @@ final class TimerViewModel {
     
     private var timerCancellable: AnyCancellable?
     
+    /// After counting down to 0 we show `00:00` for one tick, then advance (`tick()` runs once per second).
+    private var pendingPhaseAdvance = false
+    
     // MARK: - Configuration (settings)
     
     /// Prepare phase duration (seconds).
@@ -95,6 +98,7 @@ final class TimerViewModel {
     /// Starts the workout from the «Ready» screen.
     func startTimer() {
         guard phase == .begin else { return }
+        pendingPhaseAdvance = false
         remainingTotalSeconds = totalWorkoutDurationSeconds
         currentCycleIndex = 1
         currentSetIndex = 0
@@ -123,6 +127,7 @@ final class TimerViewModel {
     func resetTimer() {
         timerCancellable?.cancel()
         timerCancellable = nil
+        pendingPhaseAdvance = false
         phase = .begin
         currentSetIndex = 0
         currentCycleIndex = 0
@@ -142,15 +147,22 @@ final class TimerViewModel {
     private func tick() {
         guard phase != .pause, phase != .begin else { return }
         
-        if currentPhaseRemainingSeconds > 0 {
-            currentPhaseRemainingSeconds -= 1
+        if pendingPhaseAdvance {
+            pendingPhaseAdvance = false
             remainingTotalSeconds = max(0, remainingTotalSeconds - 1)
+            advancePhase()
+            advanceThroughZeroDurations()
+            return
         }
         
-        guard currentPhaseRemainingSeconds == 0 else { return }
+        guard currentPhaseRemainingSeconds > 0 else { return }
         
-        advancePhase()
-        advanceThroughZeroDurations()
+        currentPhaseRemainingSeconds -= 1
+        remainingTotalSeconds = max(0, remainingTotalSeconds - 1)
+        
+        if currentPhaseRemainingSeconds == 0 {
+            pendingPhaseAdvance = true
+        }
     }
     
     /// Skips phases with 0 s duration (e.g. no prepare / no rest).
@@ -198,6 +210,7 @@ final class TimerViewModel {
     private func finishWorkout() {
         timerCancellable?.cancel()
         timerCancellable = nil
+        pendingPhaseAdvance = false
         phase = .begin
         currentSetIndex = 0
         currentCycleIndex = 0
@@ -216,7 +229,7 @@ final class TimerViewModel {
         return String(format: "%02d:%02d", m, r)
     }
     
-    /// Full workout length: `prepare` once at the start; each cycle is `sets`×work + rests; `cycleRest` between cycles.
+    /// Full workout length: phase durations + one second per phase transition (full second on `00:00` before switching).
     static func computeTotalWorkoutSeconds(
         prepare: Int,
         work: Int,
@@ -228,6 +241,9 @@ final class TimerViewModel {
         let s = max(1, sets)
         let c = max(1, cycles)
         let workRestInCycle = s * work + max(0, s - 1) * rest
-        return prepare + c * workRestInCycle + max(0, c - 1) * cycleRest
+        let phaseSum = prepare + c * workRestInCycle + max(0, c - 1) * cycleRest
+        /// One tick per transition: prepare→work, work↔rest, last work→cycleRest/done, cycleRest→work.
+        let transitionCount = 2 * s * c
+        return phaseSum + transitionCount
     }
 }

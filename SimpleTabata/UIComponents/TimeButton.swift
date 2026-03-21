@@ -8,17 +8,20 @@
 import SwiftUI
 
 struct TimeButton: View {
-    let title: String
+    let systemImage: String
     let color: Color
     let action: () -> Void
+    
+    let screen = UIScreen.main.bounds.size
+    
     var body: some View {
         Button(action: {
             withAnimation {
                 action()
             }
         }) {
-            Text(title)
-                .font(.largeTitle.bold())
+            Image(systemName: systemImage)
+                .font(.system(size: screen.width * 0.3))
                 .shadow(radius: 2)
                 .padding()
                 .foregroundStyle(.white)
@@ -29,6 +32,6 @@ struct TimeButton: View {
 }
 
 #Preview {
-    TimeButton(title: "Start", color: .green, action: {})
+    TimeButton(systemImage: "play", color: .green, action: {})
         .frame(width: 200, height: 200)
 }

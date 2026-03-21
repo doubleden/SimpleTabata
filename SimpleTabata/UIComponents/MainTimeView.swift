@@ -18,7 +18,7 @@ struct MainTimeView: View {
         case .work: .red
         case .rest: .green
         case .pause: .orange
-        case .cycleRest: .green
+        case .cycleRest: .cyan
         }
     }
     
