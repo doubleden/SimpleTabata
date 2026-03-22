@@ -17,7 +17,6 @@
 		059545BD2F6EDDFC00D871C3 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545BC2F6EDDFC00D871C3 /* InfoView.swift */; };
 		059545BF2F6EE1A700D871C3 /* TimeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545BE2F6EE1A700D871C3 /* TimeButton.swift */; };
 		059545C12F6EE81400D871C3 /* Phase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545C02F6EE81400D871C3 /* Phase.swift */; };
-		059545EA2F6F300100D871C3 /* PhaseAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545EB2F6F300100D871C3 /* PhaseAppearance.swift */; };
 		059545C42F6EE99700D871C3 /* TimeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545C32F6EE99700D871C3 /* TimeService.swift */; };
 		059545C62F6EE99D00D871C3 /* AudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545C52F6EE99D00D871C3 /* AudioService.swift */; };
 		059545C82F6EEB4C00D871C3 /* TimeActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545C72F6EEB4C00D871C3 /* TimeActionButton.swift */; };
@@ -31,6 +30,7 @@
 		059545D82F6F100100D871C3 /* WorkoutHistoryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545D92F6F100100D871C3 /* WorkoutHistoryEntry.swift */; };
 		059545DA2F6F100100D871C3 /* WorkoutHistoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545DB2F6F100100D871C3 /* WorkoutHistoryService.swift */; };
 		059545DC2F6F100100D871C3 /* SaveFavoriteParametersSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545DD2F6F100100D871C3 /* SaveFavoriteParametersSheet.swift */; };
+		059545EA2F6F300100D871C3 /* PhaseAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545EB2F6F300100D871C3 /* PhaseAppearance.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,7 +45,6 @@
 		059545BC2F6EDDFC00D871C3 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		059545BE2F6EE1A700D871C3 /* TimeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeButton.swift; sourceTree = "<group>"; };
 		059545C02F6EE81400D871C3 /* Phase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase.swift; sourceTree = "<group>"; };
-		059545EB2F6F300100D871C3 /* PhaseAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhaseAppearance.swift; sourceTree = "<group>"; };
 		059545C32F6EE99700D871C3 /* TimeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeService.swift; sourceTree = "<group>"; };
 		059545C52F6EE99D00D871C3 /* AudioService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioService.swift; sourceTree = "<group>"; };
 		059545C72F6EEB4C00D871C3 /* TimeActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeActionButton.swift; sourceTree = "<group>"; };
@@ -59,6 +58,7 @@
 		059545D92F6F100100D871C3 /* WorkoutHistoryEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutHistoryEntry.swift; sourceTree = "<group>"; };
 		059545DB2F6F100100D871C3 /* WorkoutHistoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutHistoryService.swift; sourceTree = "<group>"; };
 		059545DD2F6F100100D871C3 /* SaveFavoriteParametersSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveFavoriteParametersSheet.swift; sourceTree = "<group>"; };
+		059545EB2F6F300100D871C3 /* PhaseAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhaseAppearance.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -412,7 +412,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = DenisDenisov.SimpleTabata;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -452,7 +452,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = DenisDenisov.SimpleTabata;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
