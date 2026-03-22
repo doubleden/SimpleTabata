@@ -49,7 +49,7 @@ struct TimerView: View {
                     TimerOnButtonSectionView(pauseAction: timerVM.pauseTimer)
                 }
             }
-            .frame(height: UIScreen.main.bounds.size.height * 0.4)
+            .frame(height: UIScreen.main.bounds.size.height * 0.3)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background {
@@ -93,6 +93,9 @@ struct TimerView: View {
         }
         .onChange(of: scenePhase) { _, newPhase in
             if newPhase == .background {
+                if isTimerRunning {
+                    timerVM.pauseTimer()
+                }
                 timerVM.persistConfigurationToStorage()
             }
         }
