@@ -10,6 +10,7 @@ import SwiftUI
 struct MainTimeView: View {
     let time: String
     let phase: Phase
+    var fontSize = 130.0
     
     private var textColor: Color {
         switch phase {
@@ -25,7 +26,7 @@ struct MainTimeView: View {
     
     var body: some View {
         Text(time)
-            .font(.system(size: 130, weight: .bold, design: .rounded))
+            .font(.system(size: fontSize, weight: .bold, design: .rounded))
             .monospacedDigit()
             .foregroundStyle(textColor)
             .minimumScaleFactor(0.6)

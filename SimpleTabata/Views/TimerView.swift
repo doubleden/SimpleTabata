@@ -22,38 +22,13 @@ struct TimerView: View {
     }
     
     var body: some View {
-        VStack {
-            VStack(spacing: 10) {
-                PhaseTitleView(phase: timerVM.phase.title)
-                MainTimeView(time: timerVM.currentTime, phase: timerVM.phase)
-                
-                InfoSectionView(
-                    currentSet: timerVM.currentSetIndex,
-                    totalSets: timerVM.set,
-                    currentCycle: timerVM.currentCycleIndex,
-                    totalCycles: timerVM.cycle,
-                    totalTimeLeft: timerVM.totalTime
-                )
+        GeometryReader { geometry in
+            if geometry.size.width > geometry.size.height {
+                HorizontalView(timerVM: timerVM, geometry: geometry)
+            } else {
+                VerticalView(timerVM: timerVM, geometry: geometry)
             }
-            .padding()
-            
-            Spacer()
-            ZStack {
-                switch timerVM.phase {
-                case .begin:
-                    TimerOffButtonSectionView(startAction: timerVM.startTimer)
-                case .pause:
-                    TimerPauseButtonSectionView(
-                        continueAction: timerVM.resumeTimer,
-                        resetAction: timerVM.resetTimer
-                    )
-                default:
-                    TimerOnButtonSectionView(pauseAction: timerVM.pauseTimer)
-                }
-            }
-            .frame(height: UIScreen.main.bounds.size.height * 0.3)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background {
             LinearGradient(
                 colors: [Color.black, Color.gray],
@@ -116,6 +91,131 @@ struct TimerView: View {
     }
 }
 
+// MARK: - Geometry Views
+fileprivate struct VerticalView: View {
+    @Bindable var timerVM: TimerViewModel
+    let geometry: GeometryProxy
+    
+    var body: some View {
+        VStack {
+            VStack(spacing: 10) {
+                PhaseTitleView(phase: timerVM.phase.title)
+                MainTimeView(time: timerVM.currentTime, phase: timerVM.phase)
+                
+                InfoSectionView(
+                    currentSet: timerVM.currentSetIndex,
+                    totalSets: timerVM.set,
+                    currentCycle: timerVM.currentCycleIndex,
+                    totalCycles: timerVM.cycle,
+                    totalTimeLeft: timerVM.totalTime
+                )
+            }
+            .padding()
+            
+            Spacer()
+            ZStack {
+                switch timerVM.phase {
+                case .begin:
+                    TimerOffButtonSectionView(startAction: timerVM.startTimer)
+                case .pause:
+                    TimerPauseButtonSectionView(
+                        continueAction: timerVM.resumeTimer,
+                        resetAction: timerVM.resetTimer
+                    )
+                default:
+                    TimerOnButtonSectionView(pauseAction: timerVM.pauseTimer)
+                }
+            }
+            .frame(height: geometry.size.height * 0.3)
+        }
+    }
+}
+
+fileprivate struct HorizontalView: View {
+    @Bindable var timerVM: TimerViewModel
+    let geometry: GeometryProxy
+    
+    var body: some View {
+        HStack {
+            VStack(spacing: 0) {
+                HStack {
+                    Text(timerVM.phase.title)
+                        .padding()
+                        .font(.largeTitle.italic())
+                        .foregroundStyle(Color.white)
+                        .minimumScaleFactor(0.8)
+                    Spacer()
+                    InfoSectionView(
+                        currentSet: timerVM.currentSetIndex,
+                        totalSets: timerVM.set,
+                        currentCycle: timerVM.currentCycleIndex,
+                        totalCycles: timerVM.cycle,
+                        totalTimeLeft: timerVM.totalTime
+                    )
+                }
+                Spacer()
+            }
+            .padding(.top, 40)
+            .overlay(
+                GeometryReader { geo in
+                    MainTimeView(time: timerVM.currentTime, phase: timerVM.phase, fontSize: geo.size.height * 0.6)
+                        .position(x: geo.size.width * 0.5, y: geo.size.height * 0.6)
+                    
+                }
+            )
+            
+            
+            Spacer()
+            ZStack {
+                switch timerVM.phase {
+                case .begin:
+                    TimeButton(systemImage: "play", color: .green, action: timerVM.startTimer)
+                        .overlay(
+                            GeometryReader { geo in
+                                ZStack {
+                                    Rectangle()
+                                        .fill(.gray)
+                                        .frame(height: geo.size.height * 1.3)
+                                        .frame(width: 4)
+                                        .shadow(radius: 3)
+                                        .position(
+                                            x: geo.size.width * 0,
+                                            y: geo.size.height * 0.6
+                                        )
+                                }
+                            }
+                        )
+                case .pause:
+                    TimerPauseButtonSectionHorizontalView(
+                        continueAction: timerVM.resumeTimer,
+                        resetAction: timerVM.resetTimer
+                    )
+                default:
+                    TimeButton(systemImage: "pause", color: .orange, action: timerVM.pauseTimer)
+                        .overlay(
+                            GeometryReader { geo in
+                                ZStack {
+                                    Rectangle()
+                                        .fill(.gray)
+                                        .frame(height: geo.size.height * 1.3)
+                                        .frame(width: 4)
+                                        .shadow(radius: 3)
+                                        .position(
+                                            x: geo.size.width * 0,
+                                            y: geo.size.height * 0.6
+                                        )
+                                }
+                            }
+                        )
+                }
+            }
+            .frame(width: geometry.size.height * 0.45)
+        }
+        .padding()
+        .ignoresSafeArea()
+    }
+}
+
 // MARK: - SubViews
 fileprivate struct InfoSectionView: View {
     let currentSet: Int
@@ -175,6 +275,43 @@ fileprivate struct TimerPauseButtonSectionView: View {
                         .shadow(radius: 3)
                         .position(
                             x: geo.size.width * 0.5,
+                            y: geo.size.height * 0.6
+                        )
+                }
+            }
+        )
+    }
+}
+
+fileprivate struct TimerPauseButtonSectionHorizontalView: View {
+    let continueAction: () -> Void
+    let resetAction: () -> Void
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            TimeButton(systemImage: "play", color: .green, action: continueAction)
+            TimeButton(systemImage: "stop", color: .gray, action: resetAction)
+        }
+        .overlay(
+            GeometryReader { geo in
+                ZStack {
+                    Rectangle()
+                        .fill(.gray)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 4)
+                        .shadow(radius: 3)
+                        .position(
+                            x: geo.size.width * 0.5,
+                            y: geo.size.height * 0.5
+                        )
+                    
+                    Rectangle()
+                        .fill(.gray)
+                        .frame(height: geo.size.height * 1.3)
+                        .frame(width: 4)
+                        .shadow(radius: 3)
+                        .position(
+                            x: geo.size.width * 0,
                             y: geo.size.height * 0.6
                         )
                 }
