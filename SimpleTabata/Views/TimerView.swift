@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import StoreKit
 
 struct TimerView: View {
     @State private var timerVM = TimerViewModel()
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.requestReview) var requestReview
     
     /// Settings are only available on «Ready» or while paused — not during an active interval.
     private var isTimerRunning: Bool {
@@ -79,6 +81,18 @@ struct TimerView: View {
                     timerVM.showFavoriteTimer()
                 }) {
                     Image(systemName: "heart.fill")
+                        .foregroundColor(.white)
+                }
+                .disabled(isTimerRunning)
+                .opacity(isTimerRunning ? 0.35 : 1)
+            }
+            
+            ToolbarItem(placement: .topBarLeading) {
+                Button(action: {
+                    HapticService.shared.impact()
+                    requestReview()
+                }) {
+                    Image(systemName: "hand.thumbsup")
                         .foregroundColor(.white)
                 }
                 .disabled(isTimerRunning)
