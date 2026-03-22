@@ -83,6 +83,7 @@ private struct FavoriteWorkoutRow: View {
         let total = TimerViewModel.computeTotalWorkoutSeconds(
             prepare: entry.plan.prepareSeconds,
             work: entry.plan.workSeconds,
+            workToRestTransition: entry.plan.workToRestTransitionSeconds,
             rest: entry.plan.restSeconds,
             cycleRest: entry.plan.cycleRestSeconds,
             sets: entry.plan.setsPerCycle,

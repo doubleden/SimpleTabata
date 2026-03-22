@@ -15,7 +15,7 @@ struct TimerView: View {
     private var isTimerRunning: Bool {
         switch timerVM.phase {
         case .begin, .pause: return false
-        case .prepare, .work, .rest, .cycleRest: return true
+        case .prepare, .work, .workToRestTransition, .rest, .cycleRest: return true
         }
     }
     

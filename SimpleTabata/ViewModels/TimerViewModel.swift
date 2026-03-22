@@ -12,6 +12,7 @@ import Observation
 struct WorkoutSettingsSnapshot: Equatable {
     var prepareSeconds: Int
     var workSeconds: Int
+    var workToRestTransitionSeconds: Int
     var restSeconds: Int
     var cycleRestSeconds: Int
     var set: Int
@@ -36,6 +37,8 @@ final class TimerViewModel {
     var prepareSeconds: Int = 10
     /// Work duration (seconds).
     var workSeconds: Int = 20
+    /// Move / setup time between work and the next rest (seconds); skipped when duration is 0.
+    var workToRestTransitionSeconds: Int = 0
     /// Rest duration (seconds).
     var restSeconds: Int = 10
     /// Pause between cycles (seconds).
@@ -73,6 +76,7 @@ final class TimerViewModel {
         Self.computeTotalWorkoutSeconds(
             prepare: prepareSeconds,
             work: workSeconds,
+            workToRestTransition: workToRestTransitionSeconds,
             rest: restSeconds,
             cycleRest: cycleRestSeconds,
             sets: set,
@@ -106,7 +110,8 @@ final class TimerViewModel {
             restSeconds: restSeconds,
             cycleRestSeconds: cycleRestSeconds,
             setsPerCycle: set,
-            cycles: cycle
+            cycles: cycle,
+            workToRestTransitionSeconds: workToRestTransitionSeconds
         )
         let entry = WorkoutHistoryEntry(
             id: UUID(),
@@ -129,6 +134,7 @@ final class TimerViewModel {
         let data = StorageService.shared.read()
         prepareSeconds = data.prepareSeconds
         workSeconds = data.workSeconds
+        workToRestTransitionSeconds = data.workToRestTransitionSeconds
         restSeconds = data.restSeconds
         cycleRestSeconds = data.cycleRestSeconds
         set = data.setsPerCycle
@@ -143,7 +149,8 @@ final class TimerViewModel {
             restSeconds: restSeconds,
             cycleRestSeconds: cycleRestSeconds,
             setsPerCycle: set,
-            cycles: cycle
+            cycles: cycle,
+            workToRestTransitionSeconds: workToRestTransitionSeconds
         )
         StorageService.shared.save(storage: data)
     }
@@ -167,6 +174,7 @@ final class TimerViewModel {
         WorkoutSettingsSnapshot(
             prepareSeconds: prepareSeconds,
             workSeconds: workSeconds,
+            workToRestTransitionSeconds: workToRestTransitionSeconds,
             restSeconds: restSeconds,
             cycleRestSeconds: cycleRestSeconds,
             set: set,
@@ -177,6 +185,7 @@ final class TimerViewModel {
     func restoreSettings(_ snapshot: WorkoutSettingsSnapshot) {
         prepareSeconds = snapshot.prepareSeconds
         workSeconds = snapshot.workSeconds
+        workToRestTransitionSeconds = snapshot.workToRestTransitionSeconds
         restSeconds = snapshot.restSeconds
         cycleRestSeconds = snapshot.cycleRestSeconds
         set = snapshot.set
@@ -186,6 +195,7 @@ final class TimerViewModel {
     func settingsDiffer(from snapshot: WorkoutSettingsSnapshot) -> Bool {
         prepareSeconds != snapshot.prepareSeconds
             || workSeconds != snapshot.workSeconds
+            || workToRestTransitionSeconds != snapshot.workToRestTransitionSeconds
             || restSeconds != snapshot.restSeconds
             || cycleRestSeconds != snapshot.cycleRestSeconds
             || set != snapshot.set
@@ -207,6 +217,7 @@ final class TimerViewModel {
         guard phase == .begin else { return false }
         prepareSeconds = plan.prepareSeconds
         workSeconds = plan.workSeconds
+        workToRestTransitionSeconds = plan.workToRestTransitionSeconds
         restSeconds = plan.restSeconds
         cycleRestSeconds = plan.cycleRestSeconds
         set = plan.setsPerCycle
@@ -316,8 +327,8 @@ final class TimerViewModel {
             
         case .work:
             if currentSetIndex < set {
-                phase = .rest
-                currentPhaseRemainingSeconds = restSeconds
+                phase = .workToRestTransition
+                currentPhaseRemainingSeconds = workToRestTransitionSeconds
                 if playTransitionSound { AudioService.shared.playStart() }
             } else if currentCycleIndex < cycle {
                 phase = .cycleRest
@@ -326,6 +337,11 @@ final class TimerViewModel {
             } else {
                 finishWorkout()
             }
+            
+        case .workToRestTransition:
+            phase = .rest
+            currentPhaseRemainingSeconds = restSeconds
+            if playTransitionSound { AudioService.shared.playStart() }
             
         case .rest:
             currentSetIndex += 1
@@ -372,6 +388,7 @@ final class TimerViewModel {
     static func computePhaseDurationsSum(
         prepare: Int,
         work: Int,
+        workToRestTransition: Int,
         rest: Int,
         cycleRest: Int,
         sets: Int,
@@ -379,7 +396,9 @@ final class TimerViewModel {
     ) -> Int {
         let s = max(1, sets)
         let c = max(1, cycles)
-        let workRestInCycle = s * work + max(0, s - 1) * rest
+        let t = max(0, workToRestTransition)
+        let betweenPairs = max(0, s - 1) * (t + rest)
+        let workRestInCycle = s * work + betweenPairs
         return prepare + c * workRestInCycle + max(0, c - 1) * cycleRest
     }
     
@@ -387,6 +406,7 @@ final class TimerViewModel {
     static func computeTotalWorkoutSeconds(
         prepare: Int,
         work: Int,
+        workToRestTransition: Int,
         rest: Int,
         cycleRest: Int,
         sets: Int,
@@ -395,6 +415,7 @@ final class TimerViewModel {
         computePhaseDurationsSum(
             prepare: prepare,
             work: work,
+            workToRestTransition: workToRestTransition,
             rest: rest,
             cycleRest: cycleRest,
             sets: sets,

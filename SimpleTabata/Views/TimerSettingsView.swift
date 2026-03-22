@@ -9,12 +9,13 @@ import SwiftUI
 
 private enum SettingsExpandedSection: Equatable {
     case none
-    case prepare, work, rest, cycleRest, sets, cycles
+    case prepare, work, workToRestTransition, rest, cycleRest, sets, cycles
 }
 
 struct TimerSettingsView: View {
     @Bindable var timerVM: TimerViewModel
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) private var colorScheme
     
     @State private var openingSnapshot: WorkoutSettingsSnapshot?
     @State private var showResetAlert = false
@@ -48,6 +49,14 @@ struct TimerSettingsView: View {
                             systemImage: "flame.fill",
                             tint: .red,
                             binding: $timerVM.workSeconds
+                        )
+                        durationCard(
+                            section: .workToRestTransition,
+                            title: "Transition",
+                            subtitle: "Time to move before rest (between work rounds)",
+                            systemImage: "figure.walk",
+                            tint: colorScheme == .dark ? .white : Color(white: 0.38),
+                            binding: $timerVM.workToRestTransitionSeconds
                         )
                         durationCard(
                             section: .rest,
@@ -101,6 +110,7 @@ struct TimerSettingsView: View {
             }
             .onChange(of: timerVM.prepareSeconds) { _, _ in onSettingsFieldChanged() }
             .onChange(of: timerVM.workSeconds) { _, _ in onSettingsFieldChanged() }
+            .onChange(of: timerVM.workToRestTransitionSeconds) { _, _ in onSettingsFieldChanged() }
             .onChange(of: timerVM.restSeconds) { _, _ in onSettingsFieldChanged() }
             .onChange(of: timerVM.cycleRestSeconds) { _, _ in onSettingsFieldChanged() }
             .onChange(of: timerVM.set) { _, _ in onSettingsFieldChanged() }

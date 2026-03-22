@@ -14,6 +14,18 @@ struct AppData: Codable, Equatable {
     var cycleRestSeconds: Int
     var setsPerCycle: Int
     var cycles: Int
+    /// Optional move / setup time between work and the following rest (per work→rest pair within a cycle).
+    var workToRestTransitionSeconds: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case prepareSeconds
+        case workSeconds
+        case restSeconds
+        case cycleRestSeconds
+        case setsPerCycle
+        case cycles
+        case workToRestTransitionSeconds
+    }
     
     init(
         prepareSeconds: Int = 10,
@@ -21,7 +33,8 @@ struct AppData: Codable, Equatable {
         restSeconds: Int = 10,
         cycleRestSeconds: Int = 60,
         setsPerCycle: Int = 8,
-        cycles: Int = 1
+        cycles: Int = 1,
+        workToRestTransitionSeconds: Int = 0
     ) {
         self.prepareSeconds = prepareSeconds
         self.workSeconds = workSeconds
@@ -29,5 +42,28 @@ struct AppData: Codable, Equatable {
         self.cycleRestSeconds = cycleRestSeconds
         self.setsPerCycle = setsPerCycle
         self.cycles = cycles
+        self.workToRestTransitionSeconds = workToRestTransitionSeconds
+    }
+    
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        prepareSeconds = try c.decodeIfPresent(Int.self, forKey: .prepareSeconds) ?? 10
+        workSeconds = try c.decodeIfPresent(Int.self, forKey: .workSeconds) ?? 20
+        restSeconds = try c.decodeIfPresent(Int.self, forKey: .restSeconds) ?? 10
+        cycleRestSeconds = try c.decodeIfPresent(Int.self, forKey: .cycleRestSeconds) ?? 60
+        setsPerCycle = try c.decodeIfPresent(Int.self, forKey: .setsPerCycle) ?? 8
+        cycles = try c.decodeIfPresent(Int.self, forKey: .cycles) ?? 1
+        workToRestTransitionSeconds = try c.decodeIfPresent(Int.self, forKey: .workToRestTransitionSeconds) ?? 0
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var c = encoder.container(keyedBy: CodingKeys.self)
+        try c.encode(prepareSeconds, forKey: .prepareSeconds)
+        try c.encode(workSeconds, forKey: .workSeconds)
+        try c.encode(restSeconds, forKey: .restSeconds)
+        try c.encode(cycleRestSeconds, forKey: .cycleRestSeconds)
+        try c.encode(setsPerCycle, forKey: .setsPerCycle)
+        try c.encode(cycles, forKey: .cycles)
+        try c.encode(workToRestTransitionSeconds, forKey: .workToRestTransitionSeconds)
     }
 }
