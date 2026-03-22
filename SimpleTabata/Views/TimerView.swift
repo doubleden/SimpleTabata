@@ -30,12 +30,7 @@ struct TimerView: View {
             }
         }
         .background {
-            LinearGradient(
-                colors: [Color.black, Color.gray],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .ignoresSafeArea()
+            Color.black
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -289,8 +284,8 @@ fileprivate struct TimerPauseButtonSectionHorizontalView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            TimeButton(systemImage: "play", color: .green, action: continueAction)
             TimeButton(systemImage: "stop", color: .gray, action: resetAction)
+            TimeButton(systemImage: "play", color: .green, action: continueAction)
         }
         .overlay(
             GeometryReader { geo in

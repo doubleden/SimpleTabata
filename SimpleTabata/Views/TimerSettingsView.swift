@@ -47,7 +47,7 @@ struct TimerSettingsView: View {
                             title: "Work",
                             subtitle: "High-intensity interval",
                             systemImage: "flame.fill",
-                            tint: .red,
+                            tint: .green,
                             binding: $timerVM.workSeconds
                         )
                         durationCard(
@@ -63,7 +63,7 @@ struct TimerSettingsView: View {
                             title: "Rest",
                             subtitle: "Recovery between work rounds",
                             systemImage: "leaf.fill",
-                            tint: .green,
+                            tint: .blue,
                             binding: $timerVM.restSeconds
                         )
                         durationCard(

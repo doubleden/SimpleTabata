@@ -16,9 +16,9 @@ struct MainTimeView: View {
         switch phase {
         case .begin: .white
         case .prepare: .yellow
-        case .work: .red
+        case .work: .green
         case .workToRestTransition: .white
-        case .rest: .green
+        case .rest: .blue
         case .pause: .orange
         case .cycleRest: .cyan
         }
@@ -33,9 +33,10 @@ struct MainTimeView: View {
             .multilineTextAlignment(.center)
             .contentTransition(.identity)
             .animation(nil, value: time)
+            .shadow(color: .white, radius: 1)
     }
 }
 
 #Preview {
-    MainTimeView(time: "00:00", phase: .begin)
+    MainTimeView(time: "00:00", phase: .cycleRest)
 }
