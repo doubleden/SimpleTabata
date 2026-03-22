@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 private enum SettingsExpandedSection: Equatable {
     case none
@@ -15,7 +16,6 @@ private enum SettingsExpandedSection: Equatable {
 struct TimerSettingsView: View {
     @Bindable var timerVM: TimerViewModel
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.colorScheme) private var colorScheme
     
     @State private var openingSnapshot: WorkoutSettingsSnapshot?
     @State private var showResetAlert = false
@@ -29,82 +29,24 @@ struct TimerSettingsView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 20) {
-                    totalSummaryCard
-                    
-                    Group {
-                        durationCard(
-                            section: .prepare,
-                            title: "Prepare",
-                            subtitle: "Warm-up before work intervals",
-                            systemImage: "figure.cooldown",
-                            tint: .yellow,
-                            binding: $timerVM.prepareSeconds
-                        )
-                        durationCard(
-                            section: .work,
-                            title: "Work",
-                            subtitle: "High-intensity interval",
-                            systemImage: "flame.fill",
-                            tint: .green,
-                            binding: $timerVM.workSeconds
-                        )
-                        durationCard(
-                            section: .workToRestTransition,
-                            title: "Transition",
-                            subtitle: "Time to move before rest (between work rounds)",
-                            systemImage: "figure.walk",
-                            tint: colorScheme == .dark ? .white : Color(white: 0.38),
-                            binding: $timerVM.workToRestTransitionSeconds
-                        )
-                        durationCard(
-                            section: .rest,
-                            title: "Rest",
-                            subtitle: "Recovery between work rounds",
-                            systemImage: "leaf.fill",
-                            tint: .blue,
-                            binding: $timerVM.restSeconds
-                        )
-                        durationCard(
-                            section: .cycleRest,
-                            title: "Cycle rest",
-                            subtitle: "Break between full cycles",
-                            systemImage: "pause.circle.fill",
-                            tint: .cyan,
-                            binding: $timerVM.cycleRestSeconds
-                        )
-                    }
-                    
-                    countsCard
-                    
-                    saveToFavoritesCard
-                }
-                .padding(.horizontal, 16)
-                .padding(.bottom, 24)
-            }
+            settingsRoot
+        }
+    }
+    
+    private var settingsRoot: some View {
+        settingsWithSheets
+    }
+    
+    private var settingsChrome: some View {
+        workoutPlanScroll
             .background(Color(UIColor.systemGroupedBackground))
             .navigationTitle("Workout plan")
             .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button(action: {
-                        HapticService.shared.impact()
-                        dismiss()
-                    }) {
-                        Image(systemName: "xmark")
-                            .foregroundStyle(.secondary)
-                    }
-                    .accessibilityLabel("Close")
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") {
-                        HapticService.shared.impact()
-                        dismiss()
-                    }
-                    .fontWeight(.semibold)
-                }
-            }
+            .toolbar { settingsToolbar }
+    }
+    
+    private var settingsWithObservers: some View {
+        settingsChrome
             .onAppear {
                 openingSnapshot = timerVM.makeSettingsSnapshot()
             }
@@ -115,6 +57,13 @@ struct TimerSettingsView: View {
             .onChange(of: timerVM.cycleRestSeconds) { _, _ in onSettingsFieldChanged() }
             .onChange(of: timerVM.set) { _, _ in onSettingsFieldChanged() }
             .onChange(of: timerVM.cycle) { _, _ in onSettingsFieldChanged() }
+            .onChange(of: timerVM.phaseColors) { _, _ in
+                timerVM.persistConfigurationToStorage()
+            }
+    }
+    
+    private var settingsWithAlert: some View {
+        settingsWithObservers
             .alert("Reset timer?", isPresented: $showResetAlert) {
                 Button("Cancel", role: .cancel) {
                     if let snap = openingSnapshot {
@@ -139,6 +88,10 @@ struct TimerSettingsView: View {
                 timerVM.applyConfigurationFromSettings()
                 timerVM.persistConfigurationToStorage()
             }
+    }
+    
+    private var settingsWithSheets: some View {
+        settingsWithAlert
             .sheet(isPresented: $showSaveFavoriteSheet) {
                 SaveFavoriteParametersSheet(
                     onCancel: { showSaveFavoriteSheet = false },
@@ -156,7 +109,86 @@ struct TimerSettingsView: View {
                 }
             }
             .animation(.spring(duration: 0.35), value: showSavedBanner)
+    }
+    
+    @ToolbarContentBuilder
+    private var settingsToolbar: some ToolbarContent {
+        ToolbarItem(placement: .topBarLeading) {
+            Button(action: {
+                HapticService.shared.impact()
+                dismiss()
+            }) {
+                Image(systemName: "xmark")
+                    .foregroundStyle(.secondary)
+            }
+            .accessibilityLabel("Close")
         }
+        ToolbarItem(placement: .topBarTrailing) {
+            Button("Done") {
+                HapticService.shared.impact()
+                dismiss()
+            }
+            .fontWeight(.semibold)
+        }
+    }
+    
+    @ViewBuilder
+    private var workoutPlanScroll: some View {
+        ScrollView {
+            VStack(spacing: 20) {
+                totalSummaryCard
+                durationCardsGroup
+                phaseColorsCard
+                countsCard
+                saveToFavoritesCard
+            }
+            .padding(.horizontal, 16)
+            .padding(.bottom, 24)
+        }
+    }
+    
+    @ViewBuilder
+    private var durationCardsGroup: some View {
+        durationCard(
+            section: .prepare,
+            title: "Prepare",
+            subtitle: "Warm-up before work intervals",
+            systemImage: "figure.cooldown",
+            tint: timerVM.intervalCardTint(for: .prepare),
+            binding: $timerVM.prepareSeconds
+        )
+        durationCard(
+            section: .work,
+            title: "Work",
+            subtitle: "High-intensity interval",
+            systemImage: "flame.fill",
+            tint: timerVM.intervalCardTint(for: .work),
+            binding: $timerVM.workSeconds
+        )
+        durationCard(
+            section: .workToRestTransition,
+            title: "Transition",
+            subtitle: "Time to move before rest (between work rounds)",
+            systemImage: "figure.walk",
+            tint: timerVM.intervalCardTint(for: .workToRestTransition),
+            binding: $timerVM.workToRestTransitionSeconds
+        )
+        durationCard(
+            section: .rest,
+            title: "Rest",
+            subtitle: "Recovery between work rounds",
+            systemImage: "leaf.fill",
+            tint: timerVM.intervalCardTint(for: .rest),
+            binding: $timerVM.restSeconds
+        )
+        durationCard(
+            section: .cycleRest,
+            title: "Cycle rest",
+            subtitle: "Break between full cycles",
+            systemImage: "pause.circle.fill",
+            tint: timerVM.intervalCardTint(for: .cycleRest),
+            binding: $timerVM.cycleRestSeconds
+        )
     }
     
     private var savedBannerContent: some View {
@@ -202,6 +234,37 @@ struct TimerSettingsView: View {
         guard section != .none else { return }
         withAnimation(.easeInOut(duration: 0.22)) {
             expandedSection = expandedSection == section ? .none : section
+        }
+    }
+    
+    private var phaseColorsCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Label("Timer colors", systemImage: "paintpalette.fill")
+                .font(.headline)
+            Text("Colors for the large countdown on the main timer screen.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .minimumScaleFactor(0.6)
+            
+            VStack(alignment: .leading, spacing: 12) {
+                ForEach(TimerPhaseColorKey.allCases) { key in
+                    HStack {
+                        Text(key.settingsTitle)
+                            .font(.subheadline)
+                            .foregroundStyle(.primary)
+                            .minimumScaleFactor(0.6)
+                        Spacer(minLength: 12)
+                        ColorPicker("", selection: timerVM.colorPickerBinding(for: key), supportsOpacity: true)
+                            .labelsHidden()
+                            .accessibilityLabel(key.settingsTitle)
+                    }
+                }
+            }
+        }
+        .padding(16)
+        .background {
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(Color(UIColor.secondarySystemGroupedBackground))
         }
     }
     
@@ -287,8 +350,16 @@ struct TimerSettingsView: View {
         }
         .padding(16)
         .background {
+            ZStack {
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .fill(Color(UIColor.secondarySystemGroupedBackground))
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .fill(tint.opacity(0.14))
+            }
+        }
+        .overlay {
             RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(Color(UIColor.secondarySystemGroupedBackground))
+                .strokeBorder(tint.opacity(0.32), lineWidth: 1)
         }
     }
     
@@ -454,6 +525,25 @@ private struct DurationWheelPicker: View {
                 }
             }
             .pickerStyle(.wheel)
+        }
+    }
+}
+
+extension TimerViewModel {
+    fileprivate func intervalCardTint(for section: SettingsExpandedSection) -> Color {
+        switch section {
+        case .none, .sets, .cycles:
+            Color.accentColor
+        case .prepare:
+            phaseColors.prepare.swiftUIColor
+        case .work:
+            phaseColors.work.swiftUIColor
+        case .workToRestTransition:
+            phaseColors.workToRestTransition.swiftUIColor
+        case .rest:
+            phaseColors.rest.swiftUIColor
+        case .cycleRest:
+            phaseColors.cycleRest.swiftUIColor
         }
     }
 }

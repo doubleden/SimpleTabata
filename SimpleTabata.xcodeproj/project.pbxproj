@@ -17,6 +17,7 @@
 		059545BD2F6EDDFC00D871C3 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545BC2F6EDDFC00D871C3 /* InfoView.swift */; };
 		059545BF2F6EE1A700D871C3 /* TimeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545BE2F6EE1A700D871C3 /* TimeButton.swift */; };
 		059545C12F6EE81400D871C3 /* Phase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545C02F6EE81400D871C3 /* Phase.swift */; };
+		059545EA2F6F300100D871C3 /* PhaseAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545EB2F6F300100D871C3 /* PhaseAppearance.swift */; };
 		059545C42F6EE99700D871C3 /* TimeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545C32F6EE99700D871C3 /* TimeService.swift */; };
 		059545C62F6EE99D00D871C3 /* AudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545C52F6EE99D00D871C3 /* AudioService.swift */; };
 		059545C82F6EEB4C00D871C3 /* TimeActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545C72F6EEB4C00D871C3 /* TimeActionButton.swift */; };
@@ -44,6 +45,7 @@
 		059545BC2F6EDDFC00D871C3 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		059545BE2F6EE1A700D871C3 /* TimeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeButton.swift; sourceTree = "<group>"; };
 		059545C02F6EE81400D871C3 /* Phase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase.swift; sourceTree = "<group>"; };
+		059545EB2F6F300100D871C3 /* PhaseAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhaseAppearance.swift; sourceTree = "<group>"; };
 		059545C32F6EE99700D871C3 /* TimeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeService.swift; sourceTree = "<group>"; };
 		059545C52F6EE99D00D871C3 /* AudioService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioService.swift; sourceTree = "<group>"; };
 		059545C72F6EEB4C00D871C3 /* TimeActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeActionButton.swift; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 			children = (
 				059545CF2F6EF00200D871C3 /* AppData.swift */,
 				059545C02F6EE81400D871C3 /* Phase.swift */,
+				059545EB2F6F300100D871C3 /* PhaseAppearance.swift */,
 				059545C72F6EEB4C00D871C3 /* TimeActionButton.swift */,
 				059545D92F6F100100D871C3 /* WorkoutHistoryEntry.swift */,
 			);
@@ -252,6 +255,7 @@
 				059545C82F6EEB4C00D871C3 /* TimeActionButton.swift in Sources */,
 				059545CA2F6F03F400D871C3 /* FavoriteTimerView.swift in Sources */,
 				059545C12F6EE81400D871C3 /* Phase.swift in Sources */,
+				059545EA2F6F300100D871C3 /* PhaseAppearance.swift in Sources */,
 				059545CE2F6EF00200D871C3 /* AppData.swift in Sources */,
 				059545D02F6EF00200D871C3 /* StorageService.swift in Sources */,
 				059545D82F6F100100D871C3 /* WorkoutHistoryEntry.swift in Sources */,

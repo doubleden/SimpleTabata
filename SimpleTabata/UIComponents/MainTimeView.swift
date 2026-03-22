@@ -9,20 +9,8 @@ import SwiftUI
 
 struct MainTimeView: View {
     let time: String
-    let phase: Phase
+    let textColor: Color
     var fontSize = 130.0
-    
-    private var textColor: Color {
-        switch phase {
-        case .begin: .white
-        case .prepare: .yellow
-        case .work: .green
-        case .workToRestTransition: .white
-        case .rest: .blue
-        case .pause: .orange
-        case .cycleRest: .cyan
-        }
-    }
     
     var body: some View {
         Text(time)
@@ -38,5 +26,5 @@ struct MainTimeView: View {
 }
 
 #Preview {
-    MainTimeView(time: "00:00", phase: .cycleRest)
+    MainTimeView(time: "00:00", textColor: .cyan)
 }

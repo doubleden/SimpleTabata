@@ -95,7 +95,10 @@ fileprivate struct VerticalView: View {
         VStack {
             VStack(spacing: 10) {
                 PhaseTitleView(phase: timerVM.phase.title)
-                MainTimeView(time: timerVM.currentTime, phase: timerVM.phase)
+                MainTimeView(
+                    time: timerVM.currentTime,
+                    textColor: timerVM.timerTextColor(for: timerVM.phase)
+                )
                 
                 InfoSectionView(
                     currentSet: timerVM.currentSetIndex,
@@ -153,7 +156,11 @@ fileprivate struct HorizontalView: View {
             .padding(.top, 40)
             .overlay(
                 GeometryReader { geo in
-                    MainTimeView(time: timerVM.currentTime, phase: timerVM.phase, fontSize: geo.size.height * 0.6)
+                    MainTimeView(
+                        time: timerVM.currentTime,
+                        textColor: timerVM.timerTextColor(for: timerVM.phase),
+                        fontSize: geo.size.height * 0.6
+                    )
                         .position(x: geo.size.width * 0.5, y: geo.size.height * 0.6)
                     
                 }

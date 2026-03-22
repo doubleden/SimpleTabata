@@ -16,6 +16,8 @@ struct AppData: Codable, Equatable {
     var cycles: Int
     /// Optional move / setup time between work and the following rest (per work→rest pair within a cycle).
     var workToRestTransitionSeconds: Int
+    /// Custom colors for the main timer digits per phase.
+    var phaseColors: TimerPhaseColors
     
     enum CodingKeys: String, CodingKey {
         case prepareSeconds
@@ -25,6 +27,7 @@ struct AppData: Codable, Equatable {
         case setsPerCycle
         case cycles
         case workToRestTransitionSeconds
+        case phaseColors
     }
     
     init(
@@ -34,7 +37,8 @@ struct AppData: Codable, Equatable {
         cycleRestSeconds: Int = 60,
         setsPerCycle: Int = 8,
         cycles: Int = 1,
-        workToRestTransitionSeconds: Int = 0
+        workToRestTransitionSeconds: Int = 0,
+        phaseColors: TimerPhaseColors = .appDefault
     ) {
         self.prepareSeconds = prepareSeconds
         self.workSeconds = workSeconds
@@ -43,6 +47,7 @@ struct AppData: Codable, Equatable {
         self.setsPerCycle = setsPerCycle
         self.cycles = cycles
         self.workToRestTransitionSeconds = workToRestTransitionSeconds
+        self.phaseColors = phaseColors
     }
     
     init(from decoder: Decoder) throws {
@@ -54,6 +59,7 @@ struct AppData: Codable, Equatable {
         setsPerCycle = try c.decodeIfPresent(Int.self, forKey: .setsPerCycle) ?? 8
         cycles = try c.decodeIfPresent(Int.self, forKey: .cycles) ?? 1
         workToRestTransitionSeconds = try c.decodeIfPresent(Int.self, forKey: .workToRestTransitionSeconds) ?? 0
+        phaseColors = try c.decodeIfPresent(TimerPhaseColors.self, forKey: .phaseColors) ?? .appDefault
     }
     
     func encode(to encoder: Encoder) throws {
@@ -65,5 +71,6 @@ struct AppData: Codable, Equatable {
         try c.encode(setsPerCycle, forKey: .setsPerCycle)
         try c.encode(cycles, forKey: .cycles)
         try c.encode(workToRestTransitionSeconds, forKey: .workToRestTransitionSeconds)
+        try c.encode(phaseColors, forKey: .phaseColors)
     }
 }

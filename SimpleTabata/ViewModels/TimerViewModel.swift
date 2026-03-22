@@ -8,6 +8,7 @@
 import Combine
 import Foundation
 import Observation
+import SwiftUI
 
 struct WorkoutSettingsSnapshot: Equatable {
     var prepareSeconds: Int
@@ -17,6 +18,7 @@ struct WorkoutSettingsSnapshot: Equatable {
     var cycleRestSeconds: Int
     var set: Int
     var cycle: Int
+    var phaseColors: TimerPhaseColors
 }
 
 @Observable
@@ -48,6 +50,9 @@ final class TimerViewModel {
     var set: Int = 8
     /// Number of workout cycles.
     var cycle: Int = 1
+    
+    /// Custom colors for the main countdown (per phase).
+    var phaseColors: TimerPhaseColors = .appDefault
     
     // MARK: - Progress (main timer)
     
@@ -111,7 +116,8 @@ final class TimerViewModel {
             cycleRestSeconds: cycleRestSeconds,
             setsPerCycle: set,
             cycles: cycle,
-            workToRestTransitionSeconds: workToRestTransitionSeconds
+            workToRestTransitionSeconds: workToRestTransitionSeconds,
+            phaseColors: phaseColors
         )
         let entry = WorkoutHistoryEntry(
             id: UUID(),
@@ -139,6 +145,7 @@ final class TimerViewModel {
         cycleRestSeconds = data.cycleRestSeconds
         set = data.setsPerCycle
         cycle = data.cycles
+        phaseColors = data.phaseColors
     }
     
     /// Writes the current plan to `UserDefaults` (same storage as `AppStorage("storage")`).
@@ -150,7 +157,8 @@ final class TimerViewModel {
             cycleRestSeconds: cycleRestSeconds,
             setsPerCycle: set,
             cycles: cycle,
-            workToRestTransitionSeconds: workToRestTransitionSeconds
+            workToRestTransitionSeconds: workToRestTransitionSeconds,
+            phaseColors: phaseColors
         )
         StorageService.shared.save(storage: data)
     }
@@ -178,7 +186,8 @@ final class TimerViewModel {
             restSeconds: restSeconds,
             cycleRestSeconds: cycleRestSeconds,
             set: set,
-            cycle: cycle
+            cycle: cycle,
+            phaseColors: phaseColors
         )
     }
     
@@ -190,6 +199,7 @@ final class TimerViewModel {
         cycleRestSeconds = snapshot.cycleRestSeconds
         set = snapshot.set
         cycle = snapshot.cycle
+        phaseColors = snapshot.phaseColors
     }
     
     func settingsDiffer(from snapshot: WorkoutSettingsSnapshot) -> Bool {
@@ -222,6 +232,7 @@ final class TimerViewModel {
         cycleRestSeconds = plan.cycleRestSeconds
         set = plan.setsPerCycle
         cycle = plan.cycles
+        phaseColors = plan.phaseColors
         remainingTotalSeconds = totalWorkoutDurationSeconds
         currentPhaseRemainingSeconds = prepareSeconds
         currentSetIndex = 0
@@ -421,5 +432,54 @@ final class TimerViewModel {
             sets: sets,
             cycles: cycles
         )
+    }
+}
+
+extension TimerViewModel {
+    func timerTextColor(for phase: Phase) -> Color {
+        switch phase {
+        case .begin: phaseColors.begin.swiftUIColor
+        case .prepare: phaseColors.prepare.swiftUIColor
+        case .work: phaseColors.work.swiftUIColor
+        case .workToRestTransition: phaseColors.workToRestTransition.swiftUIColor
+        case .rest: phaseColors.rest.swiftUIColor
+        case .pause: phaseColors.pause.swiftUIColor
+        case .cycleRest: phaseColors.cycleRest.swiftUIColor
+        }
+    }
+    
+    func colorPickerBinding(for key: TimerPhaseColorKey) -> Binding<Color> {
+        switch key {
+        case .prepare:
+            Binding(
+                get: { self.phaseColors.prepare.swiftUIColor },
+                set: { v in var pc = self.phaseColors; pc.prepare = PhaseColorComponents(v); self.phaseColors = pc }
+            )
+        case .work:
+            Binding(
+                get: { self.phaseColors.work.swiftUIColor },
+                set: { v in var pc = self.phaseColors; pc.work = PhaseColorComponents(v); self.phaseColors = pc }
+            )
+        case .workToRestTransition:
+            Binding(
+                get: { self.phaseColors.workToRestTransition.swiftUIColor },
+                set: { v in var pc = self.phaseColors; pc.workToRestTransition = PhaseColorComponents(v); self.phaseColors = pc }
+            )
+        case .rest:
+            Binding(
+                get: { self.phaseColors.rest.swiftUIColor },
+                set: { v in var pc = self.phaseColors; pc.rest = PhaseColorComponents(v); self.phaseColors = pc }
+            )
+        case .pause:
+            Binding(
+                get: { self.phaseColors.pause.swiftUIColor },
+                set: { v in var pc = self.phaseColors; pc.pause = PhaseColorComponents(v); self.phaseColors = pc }
+            )
+        case .cycleRest:
+            Binding(
+                get: { self.phaseColors.cycleRest.swiftUIColor },
+                set: { v in var pc = self.phaseColors; pc.cycleRest = PhaseColorComponents(v); self.phaseColors = pc }
+            )
+        }
     }
 }
