@@ -289,7 +289,7 @@ final class TimerViewModel {
     
     private func subscribeToTicks() {
         timerCancellable?.cancel()
-        timerCancellable = Timer.publish(every: 1, on: .main, in: .common)
+        timerCancellable = Timer.publish(every: 1, tolerance: 0, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
                 self?.tick()
