@@ -22,6 +22,16 @@ struct TimerSettingsView: View {
     @State private var expandedSection: SettingsExpandedSection = .none
     @State private var showSaveFavoriteSheet = false
     @State private var showSavedBanner = false
+    @State private var lastPrepareSeconds: Int = 10
+    @State private var lastTransitionSeconds: Int = 5
+    @State private var lastCycleRestSeconds: Int = 30
+    @State private var lastCooldownSeconds: Int = 30
+    
+    private var isPrepareEnabled: Bool { timerVM.prepareSeconds > 0 }
+    private var isTransitionEnabled: Bool { timerVM.workToRestTransitionSeconds > 0 }
+    private var isCycleRestEnabled: Bool { timerVM.cycleRestSeconds > 0 }
+    private var isCooldownEnabled: Bool { timerVM.cooldownSeconds > 0 }
+    private var hasDisabledPhases: Bool { !isPrepareEnabled || !isTransitionEnabled || !isCycleRestEnabled || !isCooldownEnabled }
     
     private var totalWorkoutLabel: String {
         timerVM.formattedTime(timerVM.totalWorkoutDurationSeconds)
@@ -49,6 +59,12 @@ struct TimerSettingsView: View {
         settingsChrome
             .onAppear {
                 openingSnapshot = timerVM.makeSettingsSnapshot()
+                if timerVM.prepareSeconds > 0 { lastPrepareSeconds = timerVM.prepareSeconds }
+                if timerVM.workToRestTransitionSeconds > 0 { lastTransitionSeconds = timerVM.workToRestTransitionSeconds }
+                if timerVM.cycleRestSeconds > 0 { lastCycleRestSeconds = timerVM.cycleRestSeconds }
+                if timerVM.cooldownSeconds > 0 { lastCooldownSeconds = timerVM.cooldownSeconds }
+                if timerVM.workSeconds < 1 { timerVM.workSeconds = 1 }
+                if timerVM.restSeconds < 1 { timerVM.restSeconds = 1 }
             }
             .onChange(of: timerVM.prepareSeconds) { _, _ in onSettingsFieldChanged() }
             .onChange(of: timerVM.workSeconds) { _, _ in onSettingsFieldChanged() }
@@ -135,65 +151,82 @@ struct TimerSettingsView: View {
         ScrollView {
             VStack(spacing: 20) {
                 totalSummaryCard
-                durationCardsGroup
+                
+                if isPrepareEnabled {
+                    durationCard(
+                        section: .prepare,
+                        title: "Prepare",
+                        subtitle: "Warm-up before work intervals",
+                        systemImage: "figure.cooldown",
+                        tint: timerVM.intervalCardTint(for: .prepare),
+                        binding: $timerVM.prepareSeconds,
+                        onToggle: togglePrepare
+                    )
+                }
+                
+                durationCard(
+                    section: .work,
+                    title: "Work",
+                    subtitle: "High-intensity interval",
+                    systemImage: "flame.fill",
+                    tint: timerVM.intervalCardTint(for: .work),
+                    binding: $timerVM.workSeconds
+                )
+                if isTransitionEnabled {
+                    durationCard(
+                        section: .workToRestTransition,
+                        title: "Transition",
+                        subtitle: "Time to move before rest (between work rounds)",
+                        systemImage: "figure.walk",
+                        tint: timerVM.intervalCardTint(for: .workToRestTransition),
+                        binding: $timerVM.workToRestTransitionSeconds,
+                        onToggle: toggleTransition
+                    )
+                }
+                durationCard(
+                    section: .rest,
+                    title: "Rest",
+                    subtitle: "Recovery between work rounds",
+                    systemImage: "leaf.fill",
+                    tint: timerVM.intervalCardTint(for: .rest),
+                    binding: $timerVM.restSeconds
+                )
+                
+                if isCycleRestEnabled {
+                    durationCard(
+                        section: .cycleRest,
+                        title: "Cycle rest",
+                        subtitle: "Break between full cycles",
+                        systemImage: "pause.circle.fill",
+                        tint: timerVM.intervalCardTint(for: .cycleRest),
+                        binding: $timerVM.cycleRestSeconds,
+                        onToggle: toggleCycleRest
+                    )
+                }
+                
+                if isCooldownEnabled {
+                    durationCard(
+                        section: .cooldown,
+                        title: "Cooldown",
+                        subtitle: "Final recovery after all cycles",
+                        systemImage: "wind",
+                        tint: timerVM.intervalCardTint(for: .cooldown),
+                        binding: $timerVM.cooldownSeconds,
+                        onToggle: toggleCooldown
+                    )
+                }
+                
                 countsCard
+                
+                if hasDisabledPhases {
+                    disabledPhasesCard
+                }
+                
                 saveToFavoritesCard
             }
             .padding(.horizontal, 16)
             .padding(.bottom, 24)
         }
-    }
-    
-    @ViewBuilder
-    private var durationCardsGroup: some View {
-        durationCard(
-            section: .prepare,
-            title: "Prepare",
-            subtitle: "Warm-up before work intervals",
-            systemImage: "figure.cooldown",
-            tint: timerVM.intervalCardTint(for: .prepare),
-            binding: $timerVM.prepareSeconds
-        )
-        durationCard(
-            section: .work,
-            title: "Work",
-            subtitle: "High-intensity interval",
-            systemImage: "flame.fill",
-            tint: timerVM.intervalCardTint(for: .work),
-            binding: $timerVM.workSeconds
-        )
-        durationCard(
-            section: .workToRestTransition,
-            title: "Transition",
-            subtitle: "Time to move before rest (between work rounds)",
-            systemImage: "figure.walk",
-            tint: timerVM.intervalCardTint(for: .workToRestTransition),
-            binding: $timerVM.workToRestTransitionSeconds
-        )
-        durationCard(
-            section: .rest,
-            title: "Rest",
-            subtitle: "Recovery between work rounds",
-            systemImage: "leaf.fill",
-            tint: timerVM.intervalCardTint(for: .rest),
-            binding: $timerVM.restSeconds
-        )
-        durationCard(
-            section: .cycleRest,
-            title: "Cycle rest",
-            subtitle: "Break between full cycles",
-            systemImage: "pause.circle.fill",
-            tint: timerVM.intervalCardTint(for: .cycleRest),
-            binding: $timerVM.cycleRestSeconds
-        )
-        durationCard(
-            section: .cooldown,
-            title: "Cooldown",
-            subtitle: "Final recovery after all cycles",
-            systemImage: "wind",
-            tint: timerVM.intervalCardTint(for: .cooldown),
-            binding: $timerVM.cooldownSeconds
-        )
     }
     
     private var savedBannerContent: some View {
@@ -242,6 +275,129 @@ struct TimerSettingsView: View {
         }
     }
     
+    // MARK: - Optional phase toggles
+    
+    private func togglePrepare() {
+        withAnimation(.easeInOut(duration: 0.3)) {
+            if isPrepareEnabled {
+                lastPrepareSeconds = timerVM.prepareSeconds
+                timerVM.prepareSeconds = 0
+                if expandedSection == .prepare { expandedSection = .none }
+            } else {
+                timerVM.prepareSeconds = max(1, lastPrepareSeconds)
+            }
+        }
+    }
+    
+    private func toggleTransition() {
+        withAnimation(.easeInOut(duration: 0.3)) {
+            if isTransitionEnabled {
+                lastTransitionSeconds = timerVM.workToRestTransitionSeconds
+                timerVM.workToRestTransitionSeconds = 0
+                if expandedSection == .workToRestTransition { expandedSection = .none }
+            } else {
+                timerVM.workToRestTransitionSeconds = max(1, lastTransitionSeconds)
+            }
+        }
+    }
+    
+    private func toggleCycleRest() {
+        withAnimation(.easeInOut(duration: 0.3)) {
+            if isCycleRestEnabled {
+                lastCycleRestSeconds = timerVM.cycleRestSeconds
+                timerVM.cycleRestSeconds = 0
+                if expandedSection == .cycleRest { expandedSection = .none }
+            } else {
+                timerVM.cycleRestSeconds = max(1, lastCycleRestSeconds)
+            }
+        }
+    }
+    
+    private func toggleCooldown() {
+        withAnimation(.easeInOut(duration: 0.3)) {
+            if isCooldownEnabled {
+                lastCooldownSeconds = timerVM.cooldownSeconds
+                timerVM.cooldownSeconds = 0
+                if expandedSection == .cooldown { expandedSection = .none }
+            } else {
+                timerVM.cooldownSeconds = max(1, lastCooldownSeconds)
+            }
+        }
+    }
+    
+    // MARK: - Disabled phases section
+    
+    private var disabledPhasesCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Label("Additional phases", systemImage: "plus.circle")
+                .font(.headline)
+                .foregroundStyle(.secondary)
+            
+            VStack(spacing: 0) {
+                disabledPhasesContent
+            }
+        }
+        .padding(16)
+        .background {
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(Color(UIColor.secondarySystemGroupedBackground))
+        }
+    }
+    
+    @ViewBuilder
+    private var disabledPhasesContent: some View {
+        let items: [(id: String, title: String, subtitle: String, icon: String, action: () -> Void)] = {
+            var arr: [(String, String, String, String, () -> Void)] = []
+            if !isPrepareEnabled { arr.append(("prepare", "Prepare", "Warm-up before work", "figure.cooldown", togglePrepare)) }
+            if !isTransitionEnabled { arr.append(("transition", "Transition", "Move between work and rest", "figure.walk", toggleTransition)) }
+            if !isCycleRestEnabled { arr.append(("cycleRest", "Cycle rest", "Break between cycles", "pause.circle.fill", toggleCycleRest)) }
+            if !isCooldownEnabled { arr.append(("cooldown", "Cooldown", "Recovery after workout", "wind", toggleCooldown)) }
+            return arr
+        }()
+        
+        ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
+            if index > 0 {
+                Divider().padding(.leading, 40)
+            }
+            disabledPhaseRow(
+                title: item.title,
+                subtitle: item.subtitle,
+                systemImage: item.icon,
+                onToggle: item.action
+            )
+        }
+    }
+    
+    private func disabledPhaseRow(
+        title: String,
+        subtitle: String,
+        systemImage: String,
+        onToggle: @escaping () -> Void
+    ) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: systemImage)
+                .font(.title3)
+                .foregroundStyle(.secondary)
+                .frame(width: 28, height: 28)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(title)
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.secondary)
+                Text(subtitle)
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+                    .minimumScaleFactor(0.6)
+            }
+            Spacer()
+            Toggle("", isOn: Binding(
+                get: { false },
+                set: { _ in onToggle() }
+            ))
+            .labelsHidden()
+        }
+        .padding(.vertical, 6)
+    }
+    
     private var totalSummaryCard: some View {
         VStack(alignment: .leading, spacing: 8) {
             Label("Estimated total", systemImage: "clock.fill")
@@ -278,30 +434,41 @@ struct TimerSettingsView: View {
         subtitle: String,
         systemImage: String,
         tint: Color,
-        binding: Binding<Int>
+        binding: Binding<Int>,
+        onToggle: (() -> Void)? = nil
     ) -> some View {
         let isExpanded = expandedSection == section
         return VStack(alignment: .leading, spacing: 0) {
+            HStack(spacing: 12) {
+                Image(systemName: systemImage)
+                    .font(.title2)
+                    .foregroundStyle(tint)
+                    .frame(width: 36, height: 36)
+                    .background(tint.opacity(0.15), in: Circle())
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .font(.headline)
+                        .foregroundStyle(.primary)
+                    Text(subtitle)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .minimumScaleFactor(0.6)
+                        .multilineTextAlignment(.leading)
+                }
+                Spacer(minLength: 8)
+                if let onToggle {
+                    Toggle("", isOn: Binding(
+                        get: { binding.wrappedValue > 0 },
+                        set: { _ in onToggle() }
+                    ))
+                    .labelsHidden()
+                }
+            }
+            
             Button {
                 toggleSection(section)
             } label: {
-                HStack(spacing: 12) {
-                    Image(systemName: systemImage)
-                        .font(.title2)
-                        .foregroundStyle(tint)
-                        .frame(width: 36, height: 36)
-                        .background(tint.opacity(0.15), in: Circle())
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(title)
-                            .font(.headline)
-                            .foregroundStyle(.primary)
-                        Text(subtitle)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .minimumScaleFactor(0.6)
-                            .multilineTextAlignment(.leading)
-                    }
-                    Spacer(minLength: 8)
+                HStack {
                     Text(timerVM.formattedTime(binding.wrappedValue))
                         .font(.title3.monospacedDigit().weight(.semibold))
                         .foregroundStyle(tint)
@@ -310,13 +477,16 @@ struct TimerSettingsView: View {
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(.tertiary)
                         .rotationEffect(.degrees(isExpanded ? 180 : 0))
+                    Spacer()
                 }
+                .padding(.horizontal)
+                .padding(.top, 6)
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
             
             if isExpanded {
-                DurationWheelPicker(totalSeconds: binding)
+                DurationWheelPicker(totalSeconds: binding, minimum: 1)
                     .frame(height: 160)
                     .padding(.top, 12)
                     .transition(.opacity.combined(with: .move(edge: .top)))
@@ -463,6 +633,7 @@ struct TimerSettingsView: View {
 
 private struct DurationWheelPicker: View {
     @Binding var totalSeconds: Int
+    var minimum: Int = 0
     
     private var minutes: Int {
         max(0, totalSeconds) / 60
@@ -472,13 +643,19 @@ private struct DurationWheelPicker: View {
         max(0, totalSeconds) % 60
     }
     
+    private var minSeconds: Int {
+        minutes == 0 && minimum > 0 ? minimum : 0
+    }
+    
     var body: some View {
         HStack(spacing: 0) {
             Picker("Minutes", selection: Binding(
                 get: { minutes },
                 set: { newMin in
                     let s = seconds
-                    totalSeconds = min(3599, max(0, newMin * 60 + s))
+                    let floor = newMin == 0 && minimum > 0 ? minimum : 0
+                    let clamped = max(floor, s)
+                    totalSeconds = min(3599, newMin * 60 + clamped)
                 }
             )) {
                 ForEach(0..<60, id: \.self) { m in
@@ -491,14 +668,17 @@ private struct DurationWheelPicker: View {
                 get: { seconds },
                 set: { newSec in
                     let m = minutes
-                    totalSeconds = min(3599, max(0, m * 60 + newSec))
+                    totalSeconds = min(3599, max(minimum, m * 60 + newSec))
                 }
             )) {
-                ForEach(0..<60, id: \.self) { s in
+                ForEach(minSeconds..<60, id: \.self) { s in
                     Text(String(format: "%02d sec", s)).tag(s)
                 }
             }
             .pickerStyle(.wheel)
+        }
+        .onAppear {
+            if totalSeconds < minimum { totalSeconds = minimum }
         }
     }
 }
