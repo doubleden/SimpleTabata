@@ -58,9 +58,6 @@ struct TimerSettingsView: View {
             .onChange(of: timerVM.cooldownSeconds) { _, _ in onSettingsFieldChanged() }
             .onChange(of: timerVM.set) { _, _ in onSettingsFieldChanged() }
             .onChange(of: timerVM.cycle) { _, _ in onSettingsFieldChanged() }
-            .onChange(of: timerVM.phaseColors) { _, _ in
-                timerVM.persistConfigurationToStorage()
-            }
     }
     
     private var settingsWithAlert: some View {
@@ -139,7 +136,6 @@ struct TimerSettingsView: View {
             VStack(spacing: 20) {
                 totalSummaryCard
                 durationCardsGroup
-                phaseColorsCard
                 countsCard
                 saveToFavoritesCard
             }
@@ -243,37 +239,6 @@ struct TimerSettingsView: View {
         guard section != .none else { return }
         withAnimation(.easeInOut(duration: 0.22)) {
             expandedSection = expandedSection == section ? .none : section
-        }
-    }
-    
-    private var phaseColorsCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Label("Timer colors", systemImage: "paintpalette.fill")
-                .font(.headline)
-            Text("Colors for the large countdown on the main timer screen.")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .minimumScaleFactor(0.6)
-            
-            VStack(alignment: .leading, spacing: 12) {
-                ForEach(TimerPhaseColorKey.allCases) { key in
-                    HStack {
-                        Text(key.settingsTitle)
-                            .font(.subheadline)
-                            .foregroundStyle(.primary)
-                            .minimumScaleFactor(0.6)
-                        Spacer(minLength: 12)
-                        ColorPicker("", selection: timerVM.colorPickerBinding(for: key), supportsOpacity: true)
-                            .labelsHidden()
-                            .accessibilityLabel(key.settingsTitle)
-                    }
-                }
-            }
-        }
-        .padding(16)
-        .background {
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(Color(UIColor.secondarySystemGroupedBackground))
         }
     }
     

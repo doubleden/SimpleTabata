@@ -11,7 +11,6 @@ import StoreKit
 struct TimerView: View {
     @State private var timerVM = TimerViewModel()
     @Environment(\.scenePhase) private var scenePhase
-    @Environment(\.requestReview) var requestReview
     
     /// Settings are only available on «Ready» or while paused — not during an active interval.
     private var isTimerRunning: Bool {
@@ -45,12 +44,12 @@ struct TimerView: View {
                 .opacity(isTimerRunning ? 0.35 : 1)
             }
             
-            ToolbarItem(placement: .topBarLeading) {
+            ToolbarItem(placement: .topBarTrailing) {
                 Button(action: {
                     HapticService.shared.impact()
-                    timerVM.showFavoriteTimer()
+                    timerVM.showProfile()
                 }) {
-                    Image(systemName: "heart.fill")
+                    Image(systemName: "person")
                         .foregroundColor(.white)
                 }
                 .disabled(isTimerRunning)
@@ -60,20 +59,24 @@ struct TimerView: View {
             ToolbarItem(placement: .topBarLeading) {
                 Button(action: {
                     HapticService.shared.impact()
-                    requestReview()
+                    timerVM.showFavoriteTimer()
                 }) {
-                    Image(systemName: "hand.thumbsup")
+                    Image(systemName: "heart")
                         .foregroundColor(.white)
                 }
                 .disabled(isTimerRunning)
                 .opacity(isTimerRunning ? 0.35 : 1)
             }
+            
         }
         .sheet(isPresented: $timerVM.isShowSettings) {
             TimerSettingsView(timerVM: timerVM)
         }
         .sheet(isPresented: $timerVM.isShowFavoriteTimer) {
             FavoriteTimerView(timerVM: timerVM)
+        }
+        .navigationDestination(isPresented: $timerVM.isShowProfile) {
+            ProfileView(timerVM: timerVM)
         }
         .onChange(of: scenePhase) { _, newPhase in
             if newPhase == .background {

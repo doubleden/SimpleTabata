@@ -31,6 +31,8 @@
 		059545DA2F6F100100D871C3 /* WorkoutHistoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545DB2F6F100100D871C3 /* WorkoutHistoryService.swift */; };
 		059545DC2F6F100100D871C3 /* SaveFavoriteParametersSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545DD2F6F100100D871C3 /* SaveFavoriteParametersSheet.swift */; };
 		059545EA2F6F300100D871C3 /* PhaseAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545EB2F6F300100D871C3 /* PhaseAppearance.swift */; };
+		05C8073A2F72B56700C5E8E0 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C807392F72B56700C5E8E0 /* ProfileView.swift */; };
+		05C8073B2F72C10000C5E8E0 /* TimerColorEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C8073C2F72C10000C5E8E0 /* TimerColorEditorView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,6 +61,8 @@
 		059545DB2F6F100100D871C3 /* WorkoutHistoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutHistoryService.swift; sourceTree = "<group>"; };
 		059545DD2F6F100100D871C3 /* SaveFavoriteParametersSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveFavoriteParametersSheet.swift; sourceTree = "<group>"; };
 		059545EB2F6F300100D871C3 /* PhaseAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhaseAppearance.swift; sourceTree = "<group>"; };
+		05C807392F72B56700C5E8E0 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		05C8073C2F72C10000C5E8E0 /* TimerColorEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerColorEditorView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,9 +123,11 @@
 			isa = PBXGroup;
 			children = (
 				059545B32F6ED7F000D871C3 /* TimerView.swift */,
+				05C807392F72B56700C5E8E0 /* ProfileView.swift */,
 				059545C92F6F03F400D871C3 /* FavoriteTimerView.swift */,
 				059545DD2F6F100100D871C3 /* SaveFavoriteParametersSheet.swift */,
 				059545B52F6ED7FD00D871C3 /* TimerSettingsView.swift */,
+				05C8073C2F72C10000C5E8E0 /* TimerColorEditorView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -261,6 +267,8 @@
 				059545D82F6F100100D871C3 /* WorkoutHistoryEntry.swift in Sources */,
 				059545DA2F6F100100D871C3 /* WorkoutHistoryService.swift in Sources */,
 				059545DC2F6F100100D871C3 /* SaveFavoriteParametersSheet.swift in Sources */,
+				05C8073A2F72B56700C5E8E0 /* ProfileView.swift in Sources */,
+				05C8073B2F72C10000C5E8E0 /* TimerColorEditorView.swift in Sources */,
 				059545CC2F6F087400D871C3 /* HapticService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -95,6 +95,7 @@ final class TimerViewModel {
     
     var isShowSettings = false
     var isShowFavoriteTimer = false
+    var isShowProfile = false
     
     /// Saved favorites (newest first).
     var workoutHistory: [WorkoutHistoryEntry] = []
@@ -183,6 +184,40 @@ final class TimerViewModel {
     
     func showFavoriteTimer() {
         isShowFavoriteTimer.toggle()
+    }
+    
+    func showProfile() {
+        isShowProfile.toggle()
+    }
+    
+    /// Resets saved configuration, colors, and favorites to defaults.
+    /// Intended for a "Clear data" action from Profile.
+    func clearAllUserData() {
+        timerCancellable?.cancel()
+        timerCancellable = nil
+        AudioService.shared.stopSound()
+        
+        let defaults = AppData()
+        prepareSeconds = defaults.prepareSeconds
+        workSeconds = defaults.workSeconds
+        workToRestTransitionSeconds = defaults.workToRestTransitionSeconds
+        restSeconds = defaults.restSeconds
+        cycleRestSeconds = defaults.cycleRestSeconds
+        cooldownSeconds = defaults.cooldownSeconds
+        set = defaults.setsPerCycle
+        cycle = defaults.cycles
+        phaseColors = defaults.phaseColors
+        
+        workoutHistory.removeAll()
+        WorkoutHistoryService.shared.save(items: [])
+        
+        pendingPhaseAdvance = false
+        phase = .begin
+        currentSetIndex = 0
+        currentCycleIndex = 0
+        currentPhaseRemainingSeconds = prepareSeconds
+        remainingTotalSeconds = totalWorkoutDurationSeconds
+        persistConfigurationToStorage()
     }
     
     func makeSettingsSnapshot() -> WorkoutSettingsSnapshot {
