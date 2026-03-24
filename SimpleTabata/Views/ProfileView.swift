@@ -47,7 +47,7 @@ struct ProfileView: View {
         VStack(alignment: .leading, spacing: 12) {
             Label("Support the app", systemImage: "star.bubble.fill")
                 .font(.headline)
-            Text("If you enjoy SimpleTabata, please leave a short review in the App Store.")
+            Text("If you enjoy this app, please leave a short review in the App Store.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .minimumScaleFactor(0.6)
@@ -141,8 +141,7 @@ struct ProfileView: View {
     
     private var appVersionString: String {
         let short = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0"
-        let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "1"
-        return "\(short) (\(build))"
+        return "\(short)"
     }
     
     private func rowLabel(title: String, systemImage: String) -> some View {
