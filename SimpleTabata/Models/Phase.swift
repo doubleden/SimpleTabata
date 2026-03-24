@@ -16,6 +16,7 @@ enum Phase {
     case rest
     case pause
     case cycleRest
+    case cooldown
     
     var title: String {
         switch self {
@@ -26,6 +27,7 @@ enum Phase {
         case .rest: "Rest"
         case .pause: "Pause"
         case .cycleRest: "Cycle Rest"
+        case .cooldown: "Cooldown"
         }
     }
 }

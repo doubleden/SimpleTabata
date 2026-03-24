@@ -55,6 +55,7 @@ struct TimerPhaseColors: Codable, Equatable {
     var rest: PhaseColorComponents
     var pause: PhaseColorComponents
     var cycleRest: PhaseColorComponents
+    var cooldown: PhaseColorComponents
     
     static let appDefault = TimerPhaseColors(
         begin: PhaseColorComponents(red: 1, green: 1, blue: 1),
@@ -63,7 +64,8 @@ struct TimerPhaseColors: Codable, Equatable {
         workToRestTransition: PhaseColorComponents(red: 1, green: 1, blue: 1),
         rest: PhaseColorComponents(red: 0.25, green: 0.52, blue: 1),
         pause: PhaseColorComponents(red: 1, green: 0.58, blue: 0),
-        cycleRest: PhaseColorComponents(red: 0.35, green: 0.88, blue: 0.95)
+        cycleRest: PhaseColorComponents(red: 0.35, green: 0.88, blue: 0.95),
+        cooldown: PhaseColorComponents(red: 0.78, green: 0.49, blue: 1)
     )
 }
 
@@ -75,6 +77,7 @@ enum TimerPhaseColorKey: String, CaseIterable, Identifiable, Hashable {
     case rest
     case pause
     case cycleRest
+    case cooldown
     
     var id: String { rawValue }
     
@@ -86,6 +89,7 @@ enum TimerPhaseColorKey: String, CaseIterable, Identifiable, Hashable {
         case .rest: "Rest"
         case .pause: "Pause"
         case .cycleRest: "Cycle rest"
+        case .cooldown: "Cooldown"
         }
     }
 }

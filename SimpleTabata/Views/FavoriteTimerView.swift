@@ -86,6 +86,7 @@ private struct FavoriteWorkoutRow: View {
             workToRestTransition: entry.plan.workToRestTransitionSeconds,
             rest: entry.plan.restSeconds,
             cycleRest: entry.plan.cycleRestSeconds,
+            cooldown: entry.plan.cooldownSeconds,
             sets: entry.plan.setsPerCycle,
             cycles: entry.plan.cycles
         )

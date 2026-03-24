@@ -10,7 +10,7 @@ import UIKit
 
 private enum SettingsExpandedSection: Equatable {
     case none
-    case prepare, work, workToRestTransition, rest, cycleRest, sets, cycles
+    case prepare, work, workToRestTransition, rest, cycleRest, cooldown, sets, cycles
 }
 
 struct TimerSettingsView: View {
@@ -55,6 +55,7 @@ struct TimerSettingsView: View {
             .onChange(of: timerVM.workToRestTransitionSeconds) { _, _ in onSettingsFieldChanged() }
             .onChange(of: timerVM.restSeconds) { _, _ in onSettingsFieldChanged() }
             .onChange(of: timerVM.cycleRestSeconds) { _, _ in onSettingsFieldChanged() }
+            .onChange(of: timerVM.cooldownSeconds) { _, _ in onSettingsFieldChanged() }
             .onChange(of: timerVM.set) { _, _ in onSettingsFieldChanged() }
             .onChange(of: timerVM.cycle) { _, _ in onSettingsFieldChanged() }
             .onChange(of: timerVM.phaseColors) { _, _ in
@@ -188,6 +189,14 @@ struct TimerSettingsView: View {
             systemImage: "pause.circle.fill",
             tint: timerVM.intervalCardTint(for: .cycleRest),
             binding: $timerVM.cycleRestSeconds
+        )
+        durationCard(
+            section: .cooldown,
+            title: "Cooldown",
+            subtitle: "Final recovery after all cycles",
+            systemImage: "wind",
+            tint: timerVM.intervalCardTint(for: .cooldown),
+            binding: $timerVM.cooldownSeconds
         )
     }
     
@@ -544,6 +553,8 @@ extension TimerViewModel {
             phaseColors.rest.swiftUIColor
         case .cycleRest:
             phaseColors.cycleRest.swiftUIColor
+        case .cooldown:
+            phaseColors.cooldown.swiftUIColor
         }
     }
 }

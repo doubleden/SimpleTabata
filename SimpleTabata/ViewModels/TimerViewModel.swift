@@ -16,6 +16,7 @@ struct WorkoutSettingsSnapshot: Equatable {
     var workToRestTransitionSeconds: Int
     var restSeconds: Int
     var cycleRestSeconds: Int
+    var cooldownSeconds: Int
     var set: Int
     var cycle: Int
     var phaseColors: TimerPhaseColors
@@ -45,6 +46,8 @@ final class TimerViewModel {
     var restSeconds: Int = 10
     /// Pause between cycles (seconds).
     var cycleRestSeconds: Int = 60
+    /// Final cooldown after all cycles are completed (seconds).
+    var cooldownSeconds: Int = 30
     
     /// Sets (rounds) per cycle.
     var set: Int = 8
@@ -84,6 +87,7 @@ final class TimerViewModel {
             workToRestTransition: workToRestTransitionSeconds,
             rest: restSeconds,
             cycleRest: cycleRestSeconds,
+            cooldown: cooldownSeconds,
             sets: set,
             cycles: cycle
         )
@@ -114,6 +118,7 @@ final class TimerViewModel {
             workSeconds: workSeconds,
             restSeconds: restSeconds,
             cycleRestSeconds: cycleRestSeconds,
+            cooldownSeconds: cooldownSeconds,
             setsPerCycle: set,
             cycles: cycle,
             workToRestTransitionSeconds: workToRestTransitionSeconds,
@@ -143,6 +148,7 @@ final class TimerViewModel {
         workToRestTransitionSeconds = data.workToRestTransitionSeconds
         restSeconds = data.restSeconds
         cycleRestSeconds = data.cycleRestSeconds
+        cooldownSeconds = data.cooldownSeconds
         set = data.setsPerCycle
         cycle = data.cycles
         phaseColors = data.phaseColors
@@ -155,6 +161,7 @@ final class TimerViewModel {
             workSeconds: workSeconds,
             restSeconds: restSeconds,
             cycleRestSeconds: cycleRestSeconds,
+            cooldownSeconds: cooldownSeconds,
             setsPerCycle: set,
             cycles: cycle,
             workToRestTransitionSeconds: workToRestTransitionSeconds,
@@ -185,6 +192,7 @@ final class TimerViewModel {
             workToRestTransitionSeconds: workToRestTransitionSeconds,
             restSeconds: restSeconds,
             cycleRestSeconds: cycleRestSeconds,
+            cooldownSeconds: cooldownSeconds,
             set: set,
             cycle: cycle,
             phaseColors: phaseColors
@@ -197,6 +205,7 @@ final class TimerViewModel {
         workToRestTransitionSeconds = snapshot.workToRestTransitionSeconds
         restSeconds = snapshot.restSeconds
         cycleRestSeconds = snapshot.cycleRestSeconds
+        cooldownSeconds = snapshot.cooldownSeconds
         set = snapshot.set
         cycle = snapshot.cycle
         phaseColors = snapshot.phaseColors
@@ -208,6 +217,7 @@ final class TimerViewModel {
             || workToRestTransitionSeconds != snapshot.workToRestTransitionSeconds
             || restSeconds != snapshot.restSeconds
             || cycleRestSeconds != snapshot.cycleRestSeconds
+            || cooldownSeconds != snapshot.cooldownSeconds
             || set != snapshot.set
             || cycle != snapshot.cycle
     }
@@ -230,6 +240,7 @@ final class TimerViewModel {
         workToRestTransitionSeconds = plan.workToRestTransitionSeconds
         restSeconds = plan.restSeconds
         cycleRestSeconds = plan.cycleRestSeconds
+        cooldownSeconds = plan.cooldownSeconds
         set = plan.setsPerCycle
         cycle = plan.cycles
         phaseColors = plan.phaseColors
@@ -346,7 +357,9 @@ final class TimerViewModel {
                 currentPhaseRemainingSeconds = cycleRestSeconds
                 if playTransitionSound { AudioService.shared.playStart() }
             } else {
-                finishWorkout()
+                phase = .cooldown
+                currentPhaseRemainingSeconds = cooldownSeconds
+                if playTransitionSound { AudioService.shared.playStart() }
             }
             
         case .workToRestTransition:
@@ -366,6 +379,9 @@ final class TimerViewModel {
             currentSetIndex = 1
             currentPhaseRemainingSeconds = workSeconds
             if playTransitionSound { AudioService.shared.playStart() }
+            
+        case .cooldown:
+            finishWorkout()
             
         case .begin, .pause:
             break
@@ -402,6 +418,7 @@ final class TimerViewModel {
         workToRestTransition: Int,
         rest: Int,
         cycleRest: Int,
+        cooldown: Int,
         sets: Int,
         cycles: Int
     ) -> Int {
@@ -410,7 +427,7 @@ final class TimerViewModel {
         let t = max(0, workToRestTransition)
         let betweenPairs = max(0, s - 1) * (t + rest)
         let workRestInCycle = s * work + betweenPairs
-        return prepare + c * workRestInCycle + max(0, c - 1) * cycleRest
+        return prepare + c * workRestInCycle + max(0, c - 1) * cycleRest + max(0, cooldown)
     }
     
     /// Full workout length for UI and `remainingTotalSeconds` — phase durations only (no extra seconds for transitions).
@@ -420,6 +437,7 @@ final class TimerViewModel {
         workToRestTransition: Int,
         rest: Int,
         cycleRest: Int,
+        cooldown: Int,
         sets: Int,
         cycles: Int
     ) -> Int {
@@ -429,6 +447,7 @@ final class TimerViewModel {
             workToRestTransition: workToRestTransition,
             rest: rest,
             cycleRest: cycleRest,
+            cooldown: cooldown,
             sets: sets,
             cycles: cycles
         )
@@ -445,6 +464,7 @@ extension TimerViewModel {
         case .rest: phaseColors.rest.swiftUIColor
         case .pause: phaseColors.pause.swiftUIColor
         case .cycleRest: phaseColors.cycleRest.swiftUIColor
+        case .cooldown: phaseColors.cooldown.swiftUIColor
         }
     }
     
@@ -479,6 +499,11 @@ extension TimerViewModel {
             Binding(
                 get: { self.phaseColors.cycleRest.swiftUIColor },
                 set: { v in var pc = self.phaseColors; pc.cycleRest = PhaseColorComponents(v); self.phaseColors = pc }
+            )
+        case .cooldown:
+            Binding(
+                get: { self.phaseColors.cooldown.swiftUIColor },
+                set: { v in var pc = self.phaseColors; pc.cooldown = PhaseColorComponents(v); self.phaseColors = pc }
             )
         }
     }
