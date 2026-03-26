@@ -285,7 +285,7 @@ struct TimerSettingsView: View {
         if !isPrepareEnabled && !SubscriptionService.shared.isPro {
             showPaywall = true; return
         }
-        withAnimation(.easeInOut(duration: 0.3)) {
+        withAnimation {
             if isPrepareEnabled {
                 lastPrepareSeconds = timerVM.prepareSeconds
                 timerVM.prepareSeconds = 0
@@ -300,7 +300,7 @@ struct TimerSettingsView: View {
         if !isTransitionEnabled && !SubscriptionService.shared.isPro {
             showPaywall = true; return
         }
-        withAnimation(.easeInOut(duration: 0.3)) {
+        withAnimation {
             if isTransitionEnabled {
                 lastTransitionSeconds = timerVM.workToRestTransitionSeconds
                 timerVM.workToRestTransitionSeconds = 0
@@ -315,7 +315,7 @@ struct TimerSettingsView: View {
         if !isCycleRestEnabled && !SubscriptionService.shared.isPro {
             showPaywall = true; return
         }
-        withAnimation(.easeInOut(duration: 0.3)) {
+        withAnimation {
             if isCycleRestEnabled {
                 lastCycleRestSeconds = timerVM.cycleRestSeconds
                 timerVM.cycleRestSeconds = 0
@@ -330,7 +330,7 @@ struct TimerSettingsView: View {
         if !isCooldownEnabled && !SubscriptionService.shared.isPro {
             showPaywall = true; return
         }
-        withAnimation(.easeInOut(duration: 0.3)) {
+        withAnimation {
             if isCooldownEnabled {
                 lastCooldownSeconds = timerVM.cooldownSeconds
                 timerVM.cooldownSeconds = 0
