@@ -26,5 +26,7 @@ struct MainTimeView: View {
 }
 
 #Preview {
-    MainTimeView(time: "00:00", textColor: .cyan)
+    GeometryReader { g in
+        MainTimeView(time: "00:00", textColor: .cyan)
+    }
 }

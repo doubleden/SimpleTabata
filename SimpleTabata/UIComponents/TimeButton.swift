@@ -12,10 +12,11 @@ struct TimeButton: View {
     let color: Color
     let action: () -> Void
     
-    let screen = UIScreen.main.bounds.size
-    
     var body: some View {
         GeometryReader { geo in
+            let area = geo.size.width * geo.size.height
+            let fontSize = sqrt(area) / 2
+            
             Button(action: {
                 withAnimation {
                     HapticService.shared.impact()
@@ -23,7 +24,7 @@ struct TimeButton: View {
                 }
             }) {
                 Image(systemName: systemImage)
-                    .font(.system(size: geo.size.width * 0.5))
+                    .font(.system(size: fontSize))
                     .shadow(radius: 2)
                     .padding()
                     .foregroundStyle(.white)

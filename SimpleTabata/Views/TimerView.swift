@@ -104,12 +104,16 @@ fileprivate struct VerticalView: View {
     let geometry: GeometryProxy
     
     var body: some View {
+        let area = geometry.size.width * geometry.size.height
+        let fontSize = sqrt(area) / 3.5
+        
         VStack {
             VStack(spacing: 10) {
                 PhaseTitleView(phase: timerVM.phase.title)
                 MainTimeView(
                     time: timerVM.currentTime,
-                    textColor: timerVM.timerTextColor(for: timerVM.phase)
+                    textColor: timerVM.timerTextColor(for: timerVM.phase),
+                    fontSize: fontSize
                 )
                 
                 InfoSectionView(
@@ -165,13 +169,15 @@ fileprivate struct HorizontalView: View {
                 }
                 Spacer()
             }
-            .padding(.top, 40)
+            .padding(.top, 50)
             .overlay(
                 GeometryReader { geo in
+                    let area = geo.size.width * geo.size.height
+                    let fontSize = sqrt(area) / 3.1
                     MainTimeView(
                         time: timerVM.currentTime,
                         textColor: timerVM.timerTextColor(for: timerVM.phase),
-                        fontSize: geo.size.height * 0.6
+                        fontSize: fontSize
                     )
                         .position(x: geo.size.width * 0.5, y: geo.size.height * 0.6)
                     
