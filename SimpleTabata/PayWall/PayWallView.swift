@@ -173,10 +173,12 @@ struct PayWallView: View {
     
     private func planCard(_ product: Product) -> some View {
         let isSelected = vm.selectedProductID == product.id
-        let savings = vm.savingsLabel(for: product)
+        let discount = vm.savingsLabel(for: product)
         let badge = vm.badgeLabel(for: product)
         let perMonth = vm.monthlyEquivalentLabel(for: product)
         let trial = vm.freeTrialLabel(for: product)
+        let fakeOld = vm.fakePreviousPrice(for: product)
+        let subtitle = vm.subtitleLabel(for: product)
         
         return Button {
             HapticService.shared.selectionChanged()
@@ -198,40 +200,51 @@ struct PayWallView: View {
                     }
                     
                     VStack(alignment: .leading, spacing: 3) {
+                        Text(vm.periodLabel(for: product))
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.white)
+                            .minimumScaleFactor(0.6)
+                        
                         HStack(spacing: 6) {
-                            Text(vm.periodLabel(for: product).capitalized)
-                                .font(.subheadline.weight(.semibold))
-                                .foregroundStyle(.white)
+                            if let fakeOld {
+                                Text(fakeOld)
+                                    .font(.caption.weight(.medium))
+                                    .foregroundStyle(.white.opacity(0.35))
+                                    .strikethrough(true, color: .white.opacity(0.35))
+                                    .minimumScaleFactor(0.6)
+                            }
+                            Text(product.displayPrice)
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(.white.opacity(0.8))
                                 .minimumScaleFactor(0.6)
-                            if let savings {
-                                Text(savings)
+                            if let discount {
+                                Text(discount)
                                     .font(.caption2.weight(.bold))
                                     .foregroundStyle(.white)
                                     .padding(.horizontal, 6)
                                     .padding(.vertical, 2)
-                                    .background(Color.green.opacity(0.8), in: Capsule())
+                                    .background(Color.green.opacity(0.85), in: Capsule())
                             }
                         }
                         
-                        HStack(spacing: 4) {
-                            Text(product.displayPrice)
-                                .font(.caption.weight(.medium))
-                                .foregroundStyle(.white.opacity(0.7))
+                        if let perMonth {
+                            Text(perMonth)
+                                .font(.caption2.weight(.semibold))
+                                .foregroundStyle(.orange)
                                 .minimumScaleFactor(0.6)
-                            if let perMonth {
-                                Text("·")
-                                    .foregroundStyle(.white.opacity(0.3))
-                                Text(perMonth)
-                                    .font(.caption.weight(.semibold))
-                                    .foregroundStyle(.orange)
-                                    .minimumScaleFactor(0.6)
-                            }
                         }
                         
                         if let trial {
                             Text(trial)
                                 .font(.caption2.weight(.semibold))
-                                .foregroundStyle(.white.opacity(0.85))
+                                .foregroundStyle(.green)
+                                .minimumScaleFactor(0.6)
+                        }
+                        
+                        if !subtitle.isEmpty {
+                            Text(subtitle)
+                                .font(.caption2)
+                                .foregroundStyle(.white.opacity(0.4))
                                 .minimumScaleFactor(0.6)
                         }
                     }
@@ -239,30 +252,31 @@ struct PayWallView: View {
                     Spacer()
                 }
                 .padding(.horizontal, 16)
-                .padding(.vertical, badge != nil ? 10 : 16)
-                .padding(.bottom, badge != nil ? 4 : 0)
+                .padding(.vertical, badge != nil ? 8 : 16)
+                .padding(.bottom, badge != nil ? 6 : 0)
             }
             .overlay(
-                GeometryReader { geometry in
+                ZStack {
                     if let badge {
-                        HStack {
+                        VStack {
+                            HStack {
+                                Spacer()
+                                Text(badge)
+                                    .font(.caption2.weight(.heavy))
+                                    .textCase(.uppercase)
+                                    .foregroundStyle(.white)
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 4)
+                                    .background(
+                                        product.id == "tabata.lifetime"
+                                        ? LinearGradient(colors: [.purple, .pink], startPoint: .leading, endPoint: .trailing)
+                                        : LinearGradient(colors: [.orange, Color(red: 1, green: 0.35, blue: 0.1)], startPoint: .leading, endPoint: .trailing),
+                                        in: Capsule()
+                                    )
+                            }
                             Spacer()
-                            Text(badge)
-                                .font(.caption2.weight(.heavy))
-                                .textCase(.uppercase)
-                                .foregroundStyle(.white)
-                                .padding(.horizontal, 10)
-                                .padding(.vertical, 4)
-                                .background(
-                                    product.id == "tabata.year"
-                                        ? LinearGradient(colors: [.orange, Color(red: 1, green: 0.35, blue: 0.1)], startPoint: .leading, endPoint: .trailing)
-                                        : LinearGradient(colors: [.purple, .blue], startPoint: .leading, endPoint: .trailing),
-                                    in: Capsule()
-                                )
                         }
-                        .padding(.trailing, 12)
-                        .padding(.top, 10)
-                        .padding(.bottom, 6)
+                        .padding()
                     }
                 }
             )
@@ -282,8 +296,9 @@ struct PayWallView: View {
     
     private var purchaseButton: some View {
         let selected = vm.products.first(where: { $0.id == vm.selectedProductID })
+        let isLifetime = selected?.id == "tabata.lifetime"
         let trial = selected.flatMap { vm.freeTrialLabel(for: $0) }
-        let title = trial != nil ? "Start free trial" : "Continue"
+        let title = isLifetime ? "Purchase" : (trial != nil ? "Start free trial" : "Continue")
         
         return Button {
             HapticService.shared.impact()

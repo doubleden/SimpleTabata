@@ -14,7 +14,21 @@
 
   ],
   "products" : [
-
+    {
+      "displayPrice" : "39.99",
+      "familyShareable" : false,
+      "internalID" : "6761221717",
+      "localizations" : [
+        {
+          "description" : "LifeTime access: timer customization  & other benefits ",
+          "displayName" : "LifiTime Pro",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "tabata.lifetime",
+      "referenceName" : "LifiTime Pro",
+      "type" : "NonConsumable"
+    }
   ],
   "settings" : {
     "_applicationInternalID" : "6760946483",
@@ -24,7 +38,7 @@
     "_developerTeamID" : "AM64M5A8BU",
     "_disableDialogs" : false,
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 796229685.79469395,
+    "_lastSynchronizedDate" : 796252835.43638897,
     "_locale" : "en_US",
     "_renewalBillingIssuesEnabled" : false,
     "_storefront" : "USA",
@@ -76,40 +90,12 @@
           "codeOffers" : [
 
           ],
-          "displayPrice" : "11.99",
-          "familyShareable" : false,
-          "groupNumber" : 3,
-          "internalID" : "6761187933",
-          "introductoryOffer" : null,
-          "localizations" : [
-            {
-              "description" : "Access to additional timer settings.",
-              "displayName" : "Pro Six Month",
-              "locale" : "en_US"
-            }
-          ],
-          "productID" : "tabata.six",
-          "recurringSubscriptionPeriod" : "P6M",
-          "referenceName" : "SixMonth",
-          "subscriptionGroupID" : "21998383",
-          "type" : "RecurringSubscription",
-          "winbackOffers" : [
-
-          ]
-        },
-        {
-          "adHocOffers" : [
-
-          ],
-          "codeOffers" : [
-
-          ],
           "displayPrice" : "17.99",
           "familyShareable" : false,
-          "groupNumber" : 2,
+          "groupNumber" : 1,
           "internalID" : "6761187683",
           "introductoryOffer" : {
-            "internalID" : "15C8AC91",
+            "internalID" : "AF8A66DD",
             "numberOfPeriods" : 1,
             "paymentMode" : "free",
             "subscriptionPeriod" : "P3D"

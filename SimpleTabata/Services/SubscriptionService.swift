@@ -37,14 +37,20 @@ final class SubscriptionService {
         var expDate: Date?
         for await result in Transaction.currentEntitlements {
             if case .verified(let tx) = result,
-               tx.productType == .autoRenewable,
                tx.revocationDate == nil {
-                if let exp = tx.expirationDate, exp <= Date() {
-                    continue
+                if tx.productType == .nonConsumable {
+                    active = true
+                    expDate = nil
+                    break
                 }
-                active = true
-                expDate = tx.expirationDate
-                break
+                if tx.productType == .autoRenewable {
+                    if let exp = tx.expirationDate, exp <= Date() {
+                        continue
+                    }
+                    active = true
+                    expDate = tx.expirationDate
+                    break
+                }
             }
         }
         expirationDate = expDate

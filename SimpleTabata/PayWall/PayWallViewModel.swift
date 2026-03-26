@@ -13,13 +13,13 @@ import Observation
 @Observable
 final class PayWallViewModel {
     var products: [Product] = []
-    var selectedProductID: String = "tabata.year"
+    var selectedProductID: String = "tabata.lifetime"
     var isLoading = false
     var isPurchasing = false
     var errorMessage: String?
     var didPurchase = false
     
-    private static let productIDs: Set<String> = ["tabata.pro", "tabata.six", "tabata.year"]
+    private static let productIDs: Set<String> = ["tabata.pro", "tabata.year", "tabata.lifetime"]
     
     func loadProducts() async {
         guard products.isEmpty else { return }
@@ -27,7 +27,7 @@ final class PayWallViewModel {
         defer { isLoading = false }
         do {
             let fetched = try await Product.products(for: Self.productIDs)
-            let order = ["tabata.year", "tabata.six", "tabata.pro"]
+            let order = ["tabata.lifetime", "tabata.year", "tabata.pro"]
             products = fetched.sorted { (order.firstIndex(of: $0.id) ?? 99) < (order.firstIndex(of: $1.id) ?? 99) }
         } catch {
             errorMessage = error.localizedDescription
@@ -68,7 +68,7 @@ final class PayWallViewModel {
             if SubscriptionService.shared.isPro {
                 didPurchase = true
             } else {
-                errorMessage = "No active subscription found."
+                errorMessage = "No active purchase found."
             }
         } catch {
             errorMessage = error.localizedDescription
@@ -76,22 +76,42 @@ final class PayWallViewModel {
     }
     
     func periodLabel(for product: Product) -> String {
+        if product.id == "tabata.lifetime" { return "Lifetime" }
         guard let sub = product.subscription else { return "" }
         switch sub.subscriptionPeriod.unit {
         case .month:
-            return sub.subscriptionPeriod.value == 1 ? "month" : "\(sub.subscriptionPeriod.value) months"
+            return sub.subscriptionPeriod.value == 1 ? "Month" : "\(sub.subscriptionPeriod.value) months"
         case .year:
-            return sub.subscriptionPeriod.value == 1 ? "year" : "\(sub.subscriptionPeriod.value) years"
+            return sub.subscriptionPeriod.value == 1 ? "Year" : "\(sub.subscriptionPeriod.value) years"
         default:
             return ""
         }
     }
     
+    func subtitleLabel(for product: Product) -> String {
+        switch product.id {
+        case "tabata.lifetime": return "One-time purchase, forever yours"
+        case "tabata.year": return "Best for committed athletes"
+        case "tabata.pro": return "Try it out"
+        default: return ""
+        }
+    }
+    
     func savingsLabel(for product: Product) -> String? {
         guard let monthly = products.first(where: { $0.id == "tabata.pro" }),
-              let sub = product.subscription,
               product.id != "tabata.pro" else { return nil }
         let monthlyPrice = monthly.price
+        
+        if product.id == "tabata.lifetime" {
+            let equivalentFull = monthlyPrice * 24
+            guard equivalentFull > 0 else { return nil }
+            let saved = equivalentFull - product.price
+            let pct = (saved / equivalentFull) * 100
+            let rounded = NSDecimalNumber(decimal: pct).intValue
+            return rounded > 0 ? "-\(rounded)%" : nil
+        }
+        
+        guard let sub = product.subscription else { return nil }
         let totalMonths: Decimal
         switch sub.subscriptionPeriod.unit {
         case .month: totalMonths = Decimal(sub.subscriptionPeriod.value)
@@ -104,18 +124,46 @@ final class PayWallViewModel {
         let saved = equivalentFull - product.price
         let pct = (saved / equivalentFull) * 100
         let rounded = NSDecimalNumber(decimal: pct).intValue
-        return rounded > 0 ? "Save \(rounded)%" : nil
+        return rounded > 0 ? "-\(rounded)%" : nil
+    }
+    
+    func fakePreviousPrice(for product: Product) -> String? {
+        guard let monthly = products.first(where: { $0.id == "tabata.pro" }),
+              product.id != "tabata.pro" else { return nil }
+        let monthlyPrice = monthly.price
+        let equivalentMonths: Decimal
+        
+        if product.id == "tabata.lifetime" {
+            equivalentMonths = 24
+        } else if let sub = product.subscription {
+            switch sub.subscriptionPeriod.unit {
+            case .month: equivalentMonths = Decimal(sub.subscriptionPeriod.value)
+            case .year: equivalentMonths = Decimal(sub.subscriptionPeriod.value * 12)
+            default: return nil
+            }
+        } else {
+            return nil
+        }
+        
+        let fullPrice = monthlyPrice * equivalentMonths
+        guard fullPrice > product.price else { return nil }
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.currencyCode = product.priceFormatStyle.currencyCode
+        formatter.maximumFractionDigits = 2
+        return formatter.string(from: fullPrice as NSDecimalNumber)
     }
     
     func badgeLabel(for product: Product) -> String? {
         switch product.id {
-        case "tabata.year": return "Best value"
-        case "tabata.six": return "Popular"
+        case "tabata.lifetime": return "Best value"
+        case "tabata.year": return "Convenient"
         default: return nil
         }
     }
     
     func monthlyEquivalentLabel(for product: Product) -> String? {
+        if product.id == "tabata.lifetime" { return nil }
         guard let sub = product.subscription else { return nil }
         let totalMonths: Decimal
         switch sub.subscriptionPeriod.unit {
@@ -138,21 +186,17 @@ final class PayWallViewModel {
     func freeTrialLabel(for product: Product) -> String? {
         guard let offer = product.subscription?.introductoryOffer,
               offer.paymentMode == .freeTrial else { return nil }
-        
         let period = offer.period
         let value = period.value
         guard value > 0 else { return nil }
-        
         let unitText: String
         switch period.unit {
         case .day: unitText = value == 1 ? "day" : "days"
         case .week: unitText = value == 1 ? "week" : "weeks"
         case .month: unitText = value == 1 ? "month" : "months"
         case .year: unitText = value == 1 ? "year" : "years"
-        @unknown default:
-            return nil
+        @unknown default: return nil
         }
-        
         return "\(value)-\(unitText) free trial"
     }
 }
