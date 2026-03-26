@@ -240,6 +240,15 @@ final class TimerViewModel {
         persistConfigurationToStorage()
     }
     
+    func stripProFeatures() {
+        prepareSeconds = 0
+        workToRestTransitionSeconds = 0
+        cycleRestSeconds = 0
+        cooldownSeconds = 0
+        phaseColors = .appDefault
+        persistConfigurationToStorage()
+    }
+    
     func makeSettingsSnapshot() -> WorkoutSettingsSnapshot {
         WorkoutSettingsSnapshot(
             prepareSeconds: prepareSeconds,

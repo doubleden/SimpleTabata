@@ -95,6 +95,11 @@ struct TimerView: View {
                 timerVM.persistConfigurationToStorage()
             }
         }
+        .onChange(of: SubscriptionService.shared.isPro) { _, isPro in
+            if !isPro {
+                timerVM.stripProFeatures()
+            }
+        }
     }
 }
 

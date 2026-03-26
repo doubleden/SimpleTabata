@@ -14,19 +14,11 @@ import Observation
 final class SubscriptionService {
     static let shared = SubscriptionService()
     
-    /// True when there is a verified, non-revoked auto-renewable entitlement
-    /// whose expiration date has not yet passed.
-    var isPro: Bool {
-        guard hasEntitlement else { return false }
-        if let exp = expirationDate, exp <= Date() {
-            return false
-        }
-        return true
-    }
+    private(set) var isPro = false
     
-    private var hasEntitlement = false
     private var expirationDate: Date?
     private var updateTask: Task<Void, Never>?
+    private var expirationTimer: Task<Void, Never>?
     
     private init() {
         updateTask = Task { [weak self] in
@@ -55,7 +47,23 @@ final class SubscriptionService {
                 break
             }
         }
-        hasEntitlement = active
         expirationDate = expDate
+        isPro = active
+        scheduleExpirationCheck()
+    }
+    
+    private func scheduleExpirationCheck() {
+        expirationTimer?.cancel()
+        guard isPro, let exp = expirationDate else { return }
+        let delay = exp.timeIntervalSinceNow
+        guard delay > 0 else {
+            isPro = false
+            return
+        }
+        expirationTimer = Task { [weak self] in
+            try? await Task.sleep(for: .seconds(delay))
+            guard !Task.isCancelled else { return }
+            await self?.refreshStatus()
+        }
     }
 }
