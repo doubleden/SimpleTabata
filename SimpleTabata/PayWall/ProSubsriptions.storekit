@@ -24,7 +24,7 @@
     "_developerTeamID" : "AM64M5A8BU",
     "_disableDialogs" : false,
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 796226338.03567696,
+    "_lastSynchronizedDate" : 796229685.79469395,
     "_locale" : "en_US",
     "_renewalBillingIssuesEnabled" : false,
     "_storefront" : "USA",
@@ -108,7 +108,12 @@
           "familyShareable" : false,
           "groupNumber" : 2,
           "internalID" : "6761187683",
-          "introductoryOffer" : null,
+          "introductoryOffer" : {
+            "internalID" : "15C8AC91",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P3D"
+          },
           "localizations" : [
             {
               "description" : "Access to additional timer settings.",

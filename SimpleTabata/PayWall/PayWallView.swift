@@ -150,48 +150,98 @@ struct PayWallView: View {
     private func planCard(_ product: Product) -> some View {
         let isSelected = vm.selectedProductID == product.id
         let savings = vm.savingsLabel(for: product)
+        let badge = vm.badgeLabel(for: product)
+        let perMonth = vm.monthlyEquivalentLabel(for: product)
+        let trial = vm.freeTrialLabel(for: product)
+        
         return Button {
             HapticService.shared.selectionChanged()
             withAnimation(.easeInOut(duration: 0.2)) {
                 vm.selectedProductID = product.id
             }
         } label: {
-            HStack(spacing: 14) {
-                ZStack {
-                    Circle()
-                        .strokeBorder(isSelected ? Color.orange : Color.white.opacity(0.25), lineWidth: 2)
-                        .frame(width: 24, height: 24)
-                    if isSelected {
+            VStack(spacing: 0) {
+                HStack(spacing: 14) {
+                    ZStack {
                         Circle()
-                            .fill(Color.orange)
-                            .frame(width: 14, height: 14)
-                    }
-                }
-                
-                VStack(alignment: .leading, spacing: 2) {
-                    HStack(spacing: 6) {
-                        Text(product.displayName)
-                            .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(.white)
-                            .minimumScaleFactor(0.6)
-                        if let savings {
-                            Text(savings)
-                                .font(.caption2.weight(.bold))
-                                .foregroundStyle(.white)
-                                .padding(.horizontal, 6)
-                                .padding(.vertical, 2)
-                                .background(Color.orange, in: Capsule())
+                            .strokeBorder(isSelected ? Color.orange : Color.white.opacity(0.25), lineWidth: 2)
+                            .frame(width: 24, height: 24)
+                        if isSelected {
+                            Circle()
+                                .fill(Color.orange)
+                                .frame(width: 14, height: 14)
                         }
                     }
-                    Text(product.displayPrice + " / " + vm.periodLabel(for: product))
-                        .font(.caption)
-                        .foregroundStyle(.white.opacity(0.5))
-                        .minimumScaleFactor(0.6)
+                    
+                    VStack(alignment: .leading, spacing: 3) {
+                        HStack(spacing: 6) {
+                            Text(vm.periodLabel(for: product).capitalized)
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundStyle(.white)
+                                .minimumScaleFactor(0.6)
+                            if let savings {
+                                Text(savings)
+                                    .font(.caption2.weight(.bold))
+                                    .foregroundStyle(.white)
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 2)
+                                    .background(Color.green.opacity(0.8), in: Capsule())
+                            }
+                        }
+                        
+                        HStack(spacing: 4) {
+                            Text(product.displayPrice)
+                                .font(.caption.weight(.medium))
+                                .foregroundStyle(.white.opacity(0.7))
+                                .minimumScaleFactor(0.6)
+                            if let perMonth {
+                                Text("·")
+                                    .foregroundStyle(.white.opacity(0.3))
+                                Text(perMonth)
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundStyle(.orange)
+                                    .minimumScaleFactor(0.6)
+                            }
+                        }
+                        
+                        if let trial {
+                            Text(trial)
+                                .font(.caption2.weight(.semibold))
+                                .foregroundStyle(.white.opacity(0.85))
+                                .minimumScaleFactor(0.6)
+                        }
+                    }
+                    
+                    Spacer()
                 }
-                
-                Spacer()
+                .padding(.horizontal, 16)
+                .padding(.vertical, badge != nil ? 10 : 16)
+                .padding(.bottom, badge != nil ? 4 : 0)
             }
-            .padding(16)
+            .overlay(
+                GeometryReader { geometry in
+                    if let badge {
+                        HStack {
+                            Spacer()
+                            Text(badge)
+                                .font(.caption2.weight(.heavy))
+                                .textCase(.uppercase)
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 4)
+                                .background(
+                                    product.id == "tabata.year"
+                                        ? LinearGradient(colors: [.orange, Color(red: 1, green: 0.35, blue: 0.1)], startPoint: .leading, endPoint: .trailing)
+                                        : LinearGradient(colors: [.purple, .blue], startPoint: .leading, endPoint: .trailing),
+                                    in: Capsule()
+                                )
+                        }
+                        .padding(.trailing, 12)
+                        .padding(.top, 10)
+                        .padding(.bottom, 6)
+                    }
+                }
+            )
             .background {
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
                     .fill(isSelected ? Color.orange.opacity(0.12) : Color.white.opacity(0.05))
@@ -207,11 +257,15 @@ struct PayWallView: View {
     // MARK: - Purchase
     
     private var purchaseButton: some View {
-        Button {
+        let selected = vm.products.first(where: { $0.id == vm.selectedProductID })
+        let trial = selected.flatMap { vm.freeTrialLabel(for: $0) }
+        let title = trial != nil ? "Start free trial" : "Continue"
+        
+        return Button {
             HapticService.shared.impact()
             Task { await vm.purchase() }
         } label: {
-            Text("Continue")
+            Text(title)
                 .font(.headline)
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
@@ -238,9 +292,16 @@ struct PayWallView: View {
     
     private var legalFooter: some View {
         VStack(spacing: 4) {
-            Text("Recurring billing. Cancel anytime in Settings.")
+            Text("By continuing, you agree to the Terms of Use and Privacy Policy.")
+                .font(.caption2)
+                .foregroundStyle(.white.opacity(0.35))
+                .multilineTextAlignment(.center)
+                .minimumScaleFactor(0.6)
+            
+            Text("Subscriptions renew automatically unless cancelled at least 24 hours before the end of the current period. You can manage or cancel in Settings.")
                 .font(.caption2)
                 .foregroundStyle(.white.opacity(0.25))
+                .multilineTextAlignment(.center)
                 .minimumScaleFactor(0.6)
             HStack(spacing: 12) {
                 Link("Terms of Use", destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
@@ -250,7 +311,6 @@ struct PayWallView: View {
             .font(.caption2)
             .foregroundStyle(.white.opacity(0.25))
         }
-        .multilineTextAlignment(.center)
     }
     
     // MARK: - Purchasing overlay
