@@ -36,6 +36,7 @@
 		05C807852F75690B00C5E8E0 /* PayWallViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C807842F75690B00C5E8E0 /* PayWallViewModel.swift */; };
 		05C807882F756F0000C5E8E0 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C807872F756F0000C5E8E0 /* StoreKit.framework */; };
 		05C8078A2F75731E00C5E8E0 /* ProSubsriptions.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 05C807892F75731E00C5E8E0 /* ProSubsriptions.storekit */; };
+		05C8078D2F75852F00C5E8E0 /* OnBoardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C8078C2F75852F00C5E8E0 /* OnBoardingView.swift */; };
 		05C807902F75700000C5E8E0 /* SubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C807912F75700000C5E8E0 /* SubscriptionService.swift */; };
 /* End PBXBuildFile section */
 
@@ -70,6 +71,7 @@
 		05C807842F75690B00C5E8E0 /* PayWallViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayWallViewModel.swift; sourceTree = "<group>"; };
 		05C807872F756F0000C5E8E0 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		05C807892F75731E00C5E8E0 /* ProSubsriptions.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = ProSubsriptions.storekit; sourceTree = "<group>"; };
+		05C8078C2F75852F00C5E8E0 /* OnBoardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardingView.swift; sourceTree = "<group>"; };
 		05C807912F75700000C5E8E0 /* SubscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -105,9 +107,10 @@
 		059545AA2F6ED78F00D871C3 /* SimpleTabata */ = {
 			isa = PBXGroup;
 			children = (
+				059545A92F6ED78F00D871C3 /* SimpleTabataApp.swift */,
+				05C8078B2F7584BA00C5E8E0 /* OnBoarding */,
 				05C807812F7568EF00C5E8E0 /* PayWall */,
 				059545CD2F6F0D9D00D871C3 /* Sounds */,
-				059545A92F6ED78F00D871C3 /* SimpleTabataApp.swift */,
 				059545C22F6EE98E00D871C3 /* Services */,
 				059545B72F6ED8CD00D871C3 /* Models */,
 				059545B02F6ED7B900D871C3 /* ViewModels */,
@@ -202,6 +205,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		05C8078B2F7584BA00C5E8E0 /* OnBoarding */ = {
+			isa = PBXGroup;
+			children = (
+				05C8078C2F75852F00C5E8E0 /* OnBoardingView.swift */,
+			);
+			path = OnBoarding;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -281,6 +292,7 @@
 				059545B22F6ED7CB00D871C3 /* TimerViewModel.swift in Sources */,
 				059545BB2F6EDCC800D871C3 /* PhaseTitleView.swift in Sources */,
 				059545B62F6ED7FD00D871C3 /* TimerSettingsView.swift in Sources */,
+				05C8078D2F75852F00C5E8E0 /* OnBoardingView.swift in Sources */,
 				059545B42F6ED7F000D871C3 /* TimerView.swift in Sources */,
 				059545B92F6EDBB400D871C3 /* MainTimeView.swift in Sources */,
 				059545AC2F6ED78F00D871C3 /* SimpleTabataApp.swift in Sources */,

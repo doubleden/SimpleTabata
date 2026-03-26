@@ -9,12 +9,27 @@ import SwiftUI
 
 @main
 struct SimpleTabataApp: App {
+    @AppStorage("onboardingCompleted") var isOnboardingCompleted = false
+    
+    init() {
+        // Start StoreKit transaction observer at app launch.
+        _ = SubscriptionService.shared
+    }
+    
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                TimerView()
-                    .preferredColorScheme(.dark)
+            ZStack {
+                if !isOnboardingCompleted {
+                    OnBoardingView(isPresented: $isOnboardingCompleted)
+                        .transition(.move(edge: .bottom))
+                } else {
+                    NavigationStack {
+                        TimerView()
+                            .transition(.opacity)
+                    }
+                }
             }
+            .preferredColorScheme(.dark)
         }
     }
 }

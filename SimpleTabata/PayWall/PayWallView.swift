@@ -12,6 +12,14 @@ struct PayWallView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var vm = PayWallViewModel()
     
+    enum CloseButtonStyle: Equatable {
+        case xmark
+        case later
+    }
+    
+    var closeButtonStyle: CloseButtonStyle = .xmark
+    var onClose: (() -> Void)? = nil
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -36,7 +44,7 @@ struct PayWallView: View {
             }
             .task { await vm.loadProducts() }
             .onChange(of: vm.didPurchase) { _, purchased in
-                if purchased { dismiss() }
+                if purchased { close() }
             }
             .alert("Error", isPresented: .init(
                 get: { vm.errorMessage != nil },
@@ -50,13 +58,29 @@ struct PayWallView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         HapticService.shared.impact()
-                        dismiss()
+                        close()
                     } label: {
-                        Image(systemName: "xmark")
-                            .foregroundStyle(.white)
+                        switch closeButtonStyle {
+                        case .xmark:
+                            Image(systemName: "xmark")
+                                .foregroundStyle(.white)
+                        case .later:
+                            Text("Later")
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundStyle(.white.opacity(0.8))
+                                .minimumScaleFactor(0.6)
+                        }
                     }
                 }
             }
+        }
+    }
+    
+    private func close() {
+        if let onClose {
+            onClose()
+        } else {
+            dismiss()
         }
     }
     
