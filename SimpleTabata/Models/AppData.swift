@@ -19,6 +19,10 @@ struct AppData: Codable, Equatable {
     var workToRestTransitionSeconds: Int
     /// Custom colors for the main timer digits per phase.
     var phaseColors: TimerPhaseColors
+    /// 0…1 sound volume for beep/start.
+    var soundVolume: Double
+    /// If enabled, other audio (music/podcasts) will be ducked while playing app sounds.
+    var duckOtherAudio: Bool
     
     enum CodingKeys: String, CodingKey {
         case prepareSeconds
@@ -30,6 +34,8 @@ struct AppData: Codable, Equatable {
         case cycles
         case workToRestTransitionSeconds
         case phaseColors
+        case soundVolume
+        case duckOtherAudio
     }
     
     init(
@@ -41,7 +47,9 @@ struct AppData: Codable, Equatable {
         setsPerCycle: Int = 8,
         cycles: Int = 1,
         workToRestTransitionSeconds: Int = 0,
-        phaseColors: TimerPhaseColors = .appDefault
+        phaseColors: TimerPhaseColors = .appDefault,
+        soundVolume: Double = 1,
+        duckOtherAudio: Bool = false
     ) {
         self.prepareSeconds = prepareSeconds
         self.workSeconds = workSeconds
@@ -52,6 +60,8 @@ struct AppData: Codable, Equatable {
         self.cycles = cycles
         self.workToRestTransitionSeconds = workToRestTransitionSeconds
         self.phaseColors = phaseColors
+        self.soundVolume = min(1, max(0, soundVolume))
+        self.duckOtherAudio = duckOtherAudio
     }
     
     init(from decoder: Decoder) throws {
@@ -65,6 +75,8 @@ struct AppData: Codable, Equatable {
         cycles = try c.decodeIfPresent(Int.self, forKey: .cycles) ?? 1
         workToRestTransitionSeconds = try c.decodeIfPresent(Int.self, forKey: .workToRestTransitionSeconds) ?? 0
         phaseColors = try c.decodeIfPresent(TimerPhaseColors.self, forKey: .phaseColors) ?? .appDefault
+        soundVolume = min(1, max(0, (try c.decodeIfPresent(Double.self, forKey: .soundVolume) ?? 1)))
+        duckOtherAudio = try c.decodeIfPresent(Bool.self, forKey: .duckOtherAudio) ?? false
     }
     
     func encode(to encoder: Encoder) throws {
@@ -78,5 +90,7 @@ struct AppData: Codable, Equatable {
         try c.encode(cycles, forKey: .cycles)
         try c.encode(workToRestTransitionSeconds, forKey: .workToRestTransitionSeconds)
         try c.encode(phaseColors, forKey: .phaseColors)
+        try c.encode(min(1, max(0, soundVolume)), forKey: .soundVolume)
+        try c.encode(duckOtherAudio, forKey: .duckOtherAudio)
     }
 }

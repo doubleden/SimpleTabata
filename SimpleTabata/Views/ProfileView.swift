@@ -14,12 +14,14 @@ struct ProfileView: View {
     
     @State private var showClearDataAlert = false
     @State private var showColorEditor = false
+    @State private var volumePreviewWorkItem: DispatchWorkItem?
     
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
                 reviewCard
                 timerColorsCard
+                soundCard
                 actionsCard
                 appVersionFooter
             }
@@ -112,6 +114,62 @@ struct ProfileView: View {
                     .fill(timerVM.colorPickerBinding(for: key).wrappedValue)
                     .frame(width: 10, height: 10)
             }
+        }
+    }
+    
+    private var soundCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Label("Sound", systemImage: "speaker.wave.2.fill")
+                .font(.headline)
+            
+            HStack(spacing: 12) {
+                Image(systemName: "speaker.fill")
+                    .foregroundStyle(.secondary)
+                Slider(value: $timerVM.soundVolume, in: 0...1, step: 0.01)
+                Image(systemName: "speaker.wave.3.fill")
+                    .foregroundStyle(.secondary)
+            }
+            
+            Text("\(Int((timerVM.soundVolume * 100).rounded()))%")
+                .font(.caption)
+                .foregroundStyle(.tertiary)
+                .minimumScaleFactor(0.6)
+            
+            Divider()
+                .padding(.top, 4)
+            
+            Toggle(isOn: $timerVM.duckOtherAudio) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Ducking other audio")
+                        .font(.subheadline.weight(.medium))
+                        .minimumScaleFactor(0.6)
+                    Text("Temporarily lower music and other sounds while beeps play.")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .minimumScaleFactor(0.6)
+                }
+            }
+        }
+        .padding(16)
+        .background {
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(Color(UIColor.secondarySystemGroupedBackground))
+        }
+        .onChange(of: timerVM.soundVolume) { _, newValue in
+            AudioService.shared.setVolume(newValue)
+            timerVM.persistConfigurationToStorage()
+            
+            volumePreviewWorkItem?.cancel()
+            let work = DispatchWorkItem {
+                AudioService.shared.playBeep()
+            }
+            volumePreviewWorkItem = work
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: work)
+        }
+        .onChange(of: timerVM.duckOtherAudio) { _, newValue in
+            AudioService.shared.setDuckOtherAudio(newValue)
+            timerVM.persistConfigurationToStorage()
+            AudioService.shared.playBeep()
         }
     }
     

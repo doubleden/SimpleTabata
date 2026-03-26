@@ -37,8 +37,9 @@ struct TimerView: View {
                     HapticService.shared.impact()
                     timerVM.showSettings()
                 }) {
-                    Image(systemName: "gear")
+                    Image(systemName: "clock")
                         .foregroundColor(.white)
+                    
                 }
                 .disabled(isTimerRunning)
                 .opacity(isTimerRunning ? 0.35 : 1)
@@ -49,7 +50,7 @@ struct TimerView: View {
                     HapticService.shared.impact()
                     timerVM.showProfile()
                 }) {
-                    Image(systemName: "person")
+                    Image(systemName: "gear")
                         .foregroundColor(.white)
                 }
                 .disabled(isTimerRunning)

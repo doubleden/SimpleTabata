@@ -15,9 +15,28 @@ final class AudioService {
     private var isSessionConfigured = false
     private var soundDataCache: [String: Data] = [:]
     private var activePlayers: [AVAudioPlayer] = []
+    private var volume: Float = 1
+    private var duckOtherAudio = false
 
     private init() {
         preloadSounds()
+    }
+    
+    func setVolume(_ value: Double) {
+        let v = Float(min(1, max(0, value)))
+        queue.async { [weak self] in
+            guard let self else { return }
+            self.volume = v
+            self.activePlayers.forEach { $0.volume = v }
+        }
+    }
+    
+    func setDuckOtherAudio(_ enabled: Bool) {
+        queue.async { [weak self] in
+            guard let self else { return }
+            self.duckOtherAudio = enabled
+            self.reconfigureAudioSession()
+        }
     }
 
     func playAlarm(title: String) {
@@ -56,9 +75,13 @@ final class AudioService {
     
     private func configureAudioSessionIfNeeded() {
         guard !isSessionConfigured else { return }
+        reconfigureAudioSession()
+    }
+    
+    private func reconfigureAudioSession() {
         do {
-            // Mix with system music instead of interrupting it.
-            try AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default, options: [.mixWithOthers])
+            let options: AVAudioSession.CategoryOptions = duckOtherAudio ? [.mixWithOthers, .duckOthers] : [.mixWithOthers]
+            try AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default, options: options)
             try AVAudioSession.sharedInstance().setActive(true, options: [])
             isSessionConfigured = true
         } catch {
@@ -86,6 +109,7 @@ final class AudioService {
         guard let data = loadSoundData(for: title) else { return nil }
         do {
             let player = try AVAudioPlayer(data: data)
+            player.volume = volume
             player.prepareToPlay()
             return player
         } catch {

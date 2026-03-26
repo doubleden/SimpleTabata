@@ -20,6 +20,8 @@ struct WorkoutSettingsSnapshot: Equatable {
     var set: Int
     var cycle: Int
     var phaseColors: TimerPhaseColors
+    var soundVolume: Double
+    var duckOtherAudio: Bool
 }
 
 @Observable
@@ -56,6 +58,12 @@ final class TimerViewModel {
     
     /// Custom colors for the main countdown (per phase).
     var phaseColors: TimerPhaseColors = .appDefault
+    
+    /// 0…1 sound volume for beep/start.
+    var soundVolume: Double = 1
+    
+    /// If enabled, other audio will be ducked while app sounds play.
+    var duckOtherAudio: Bool = false
     
     // MARK: - Progress (main timer)
     
@@ -123,7 +131,9 @@ final class TimerViewModel {
             setsPerCycle: set,
             cycles: cycle,
             workToRestTransitionSeconds: workToRestTransitionSeconds,
-            phaseColors: phaseColors
+            phaseColors: phaseColors,
+            soundVolume: soundVolume,
+            duckOtherAudio: duckOtherAudio
         )
         let entry = WorkoutHistoryEntry(
             id: UUID(),
@@ -153,6 +163,10 @@ final class TimerViewModel {
         set = data.setsPerCycle
         cycle = data.cycles
         phaseColors = data.phaseColors
+        soundVolume = data.soundVolume
+        duckOtherAudio = data.duckOtherAudio
+        AudioService.shared.setVolume(soundVolume)
+        AudioService.shared.setDuckOtherAudio(duckOtherAudio)
     }
     
     /// Writes the current plan to `UserDefaults` (same storage as `AppStorage("storage")`).
@@ -166,7 +180,9 @@ final class TimerViewModel {
             setsPerCycle: set,
             cycles: cycle,
             workToRestTransitionSeconds: workToRestTransitionSeconds,
-            phaseColors: phaseColors
+            phaseColors: phaseColors,
+            soundVolume: soundVolume,
+            duckOtherAudio: duckOtherAudio
         )
         StorageService.shared.save(storage: data)
     }
@@ -207,6 +223,10 @@ final class TimerViewModel {
         set = defaults.setsPerCycle
         cycle = defaults.cycles
         phaseColors = defaults.phaseColors
+        soundVolume = defaults.soundVolume
+        duckOtherAudio = defaults.duckOtherAudio
+        AudioService.shared.setVolume(soundVolume)
+        AudioService.shared.setDuckOtherAudio(duckOtherAudio)
         
         workoutHistory.removeAll()
         WorkoutHistoryService.shared.save(items: [])
@@ -230,7 +250,9 @@ final class TimerViewModel {
             cooldownSeconds: cooldownSeconds,
             set: set,
             cycle: cycle,
-            phaseColors: phaseColors
+            phaseColors: phaseColors,
+            soundVolume: soundVolume,
+            duckOtherAudio: duckOtherAudio
         )
     }
     
@@ -244,6 +266,10 @@ final class TimerViewModel {
         set = snapshot.set
         cycle = snapshot.cycle
         phaseColors = snapshot.phaseColors
+        soundVolume = snapshot.soundVolume
+        duckOtherAudio = snapshot.duckOtherAudio
+        AudioService.shared.setVolume(soundVolume)
+        AudioService.shared.setDuckOtherAudio(duckOtherAudio)
     }
     
     func settingsDiffer(from snapshot: WorkoutSettingsSnapshot) -> Bool {
@@ -279,6 +305,10 @@ final class TimerViewModel {
         set = plan.setsPerCycle
         cycle = plan.cycles
         phaseColors = plan.phaseColors
+        soundVolume = plan.soundVolume
+        AudioService.shared.setVolume(soundVolume)
+        duckOtherAudio = plan.duckOtherAudio
+        AudioService.shared.setDuckOtherAudio(duckOtherAudio)
         remainingTotalSeconds = totalWorkoutDurationSeconds
         currentPhaseRemainingSeconds = prepareSeconds
         currentSetIndex = 0
