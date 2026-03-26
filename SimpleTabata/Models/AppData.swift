@@ -39,11 +39,11 @@ struct AppData: Codable, Equatable {
     }
     
     init(
-        prepareSeconds: Int = 10,
+        prepareSeconds: Int = 0,
         workSeconds: Int = 20,
         restSeconds: Int = 10,
-        cycleRestSeconds: Int = 60,
-        cooldownSeconds: Int = 30,
+        cycleRestSeconds: Int = 0,
+        cooldownSeconds: Int = 0,
         setsPerCycle: Int = 8,
         cycles: Int = 1,
         workToRestTransitionSeconds: Int = 0,
@@ -66,11 +66,11 @@ struct AppData: Codable, Equatable {
     
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
-        prepareSeconds = try c.decodeIfPresent(Int.self, forKey: .prepareSeconds) ?? 10
+        prepareSeconds = try c.decodeIfPresent(Int.self, forKey: .prepareSeconds) ?? 0
         workSeconds = try c.decodeIfPresent(Int.self, forKey: .workSeconds) ?? 20
         restSeconds = try c.decodeIfPresent(Int.self, forKey: .restSeconds) ?? 10
-        cycleRestSeconds = try c.decodeIfPresent(Int.self, forKey: .cycleRestSeconds) ?? 60
-        cooldownSeconds = try c.decodeIfPresent(Int.self, forKey: .cooldownSeconds) ?? 30
+        cycleRestSeconds = try c.decodeIfPresent(Int.self, forKey: .cycleRestSeconds) ?? 0
+        cooldownSeconds = try c.decodeIfPresent(Int.self, forKey: .cooldownSeconds) ?? 0
         setsPerCycle = try c.decodeIfPresent(Int.self, forKey: .setsPerCycle) ?? 8
         cycles = try c.decodeIfPresent(Int.self, forKey: .cycles) ?? 1
         workToRestTransitionSeconds = try c.decodeIfPresent(Int.self, forKey: .workToRestTransitionSeconds) ?? 0

@@ -14,6 +14,7 @@ struct ProfileView: View {
     
     @State private var showClearDataAlert = false
     @State private var showColorEditor = false
+    @State private var showPaywall = false
     @State private var volumePreviewWorkItem: DispatchWorkItem?
     
     var body: some View {
@@ -33,6 +34,9 @@ struct ProfileView: View {
         .navigationBarTitleDisplayMode(.large)
         .fullScreenCover(isPresented: $showColorEditor) {
             TimerColorEditorView(timerVM: timerVM)
+        }
+        .sheet(isPresented: $showPaywall) {
+            PayWallView()
         }
         .alert("Clear all data?", isPresented: $showClearDataAlert) {
             Button("Cancel", role: .cancel) {}
@@ -74,7 +78,11 @@ struct ProfileView: View {
     private var timerColorsCard: some View {
         Button {
             HapticService.shared.impact()
-            showColorEditor = true
+            if SubscriptionService.shared.isPro {
+                showColorEditor = true
+            } else {
+                showPaywall = true
+            }
         } label: {
             HStack(spacing: 12) {
                 Image(systemName: "paintpalette.fill")

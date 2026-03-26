@@ -22,6 +22,7 @@ struct TimerSettingsView: View {
     @State private var expandedSection: SettingsExpandedSection = .none
     @State private var showSaveFavoriteSheet = false
     @State private var showSavedBanner = false
+    @State private var showPaywall = false
     @State private var lastPrepareSeconds: Int = 10
     @State private var lastTransitionSeconds: Int = 5
     @State private var lastCycleRestSeconds: Int = 30
@@ -106,6 +107,9 @@ struct TimerSettingsView: View {
     
     private var settingsWithSheets: some View {
         settingsWithAlert
+            .sheet(isPresented: $showPaywall) {
+                PayWallView()
+            }
             .sheet(isPresented: $showSaveFavoriteSheet) {
                 SaveFavoriteParametersSheet(
                     onCancel: { showSaveFavoriteSheet = false },
@@ -278,6 +282,9 @@ struct TimerSettingsView: View {
     // MARK: - Optional phase toggles
     
     private func togglePrepare() {
+        if !isPrepareEnabled && !SubscriptionService.shared.isPro {
+            showPaywall = true; return
+        }
         withAnimation(.easeInOut(duration: 0.3)) {
             if isPrepareEnabled {
                 lastPrepareSeconds = timerVM.prepareSeconds
@@ -290,6 +297,9 @@ struct TimerSettingsView: View {
     }
     
     private func toggleTransition() {
+        if !isTransitionEnabled && !SubscriptionService.shared.isPro {
+            showPaywall = true; return
+        }
         withAnimation(.easeInOut(duration: 0.3)) {
             if isTransitionEnabled {
                 lastTransitionSeconds = timerVM.workToRestTransitionSeconds
@@ -302,6 +312,9 @@ struct TimerSettingsView: View {
     }
     
     private func toggleCycleRest() {
+        if !isCycleRestEnabled && !SubscriptionService.shared.isPro {
+            showPaywall = true; return
+        }
         withAnimation(.easeInOut(duration: 0.3)) {
             if isCycleRestEnabled {
                 lastCycleRestSeconds = timerVM.cycleRestSeconds
@@ -314,6 +327,9 @@ struct TimerSettingsView: View {
     }
     
     private func toggleCooldown() {
+        if !isCooldownEnabled && !SubscriptionService.shared.isPro {
+            showPaywall = true; return
+        }
         withAnimation(.easeInOut(duration: 0.3)) {
             if isCooldownEnabled {
                 lastCooldownSeconds = timerVM.cooldownSeconds
@@ -374,28 +390,12 @@ struct TimerSettingsView: View {
         systemImage: String,
         onToggle: @escaping () -> Void
     ) -> some View {
-        HStack(spacing: 12) {
-            Image(systemName: systemImage)
-                .font(.title3)
-                .foregroundStyle(.secondary)
-                .frame(width: 28, height: 28)
-            VStack(alignment: .leading, spacing: 1) {
-                Text(title)
-                    .font(.subheadline.weight(.medium))
-                    .foregroundStyle(.secondary)
-                Text(subtitle)
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
-                    .minimumScaleFactor(0.6)
-            }
-            Spacer()
-            Toggle("", isOn: Binding(
-                get: { false },
-                set: { _ in onToggle() }
-            ))
-            .labelsHidden()
-        }
-        .padding(.vertical, 6)
+        DisabledPhaseToggleRow(
+            title: title,
+            subtitle: subtitle,
+            systemImage: systemImage,
+            onToggle: onToggle
+        )
     }
     
     private var totalSummaryCard: some View {
@@ -548,7 +548,11 @@ struct TimerSettingsView: View {
                 .minimumScaleFactor(0.6)
             Button {
                 HapticService.shared.impact()
-                showSaveFavoriteSheet = true
+                if SubscriptionService.shared.isPro {
+                    showSaveFavoriteSheet = true
+                } else {
+                    showPaywall = true
+                }
             } label: {
                 HStack {
                     Text("Save parameters to favorites")
@@ -626,6 +630,50 @@ struct TimerSettingsView: View {
                 .transition(.opacity.combined(with: .move(edge: .top)))
             }
         }
+    }
+}
+
+// MARK: - Disabled phase toggle row
+
+private struct DisabledPhaseToggleRow: View {
+    let title: String
+    let subtitle: String
+    let systemImage: String
+    let onToggle: () -> Void
+    
+    @State private var isAnimatingOn = false
+    
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: systemImage)
+                .font(.title3)
+                .foregroundStyle(.secondary)
+                .frame(width: 28, height: 28)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(title)
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.secondary)
+                Text(subtitle)
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+                    .minimumScaleFactor(0.6)
+            }
+            Spacer()
+            Toggle("", isOn: Binding(
+                get: { isAnimatingOn },
+                set: { _ in
+                    withAnimation(.easeInOut(duration: 0.25)) {
+                        isAnimatingOn = true
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+                        onToggle()
+                        isAnimatingOn = false
+                    }
+                }
+            ))
+            .labelsHidden()
+        }
+        .padding(.vertical, 6)
     }
 }
 

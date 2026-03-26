@@ -10,6 +10,7 @@ import StoreKit
 
 struct TimerView: View {
     @State private var timerVM = TimerViewModel()
+    @State private var showPaywall = false
     @Environment(\.scenePhase) private var scenePhase
     
     /// Settings are only available on «Ready» or while paused — not during an active interval.
@@ -60,7 +61,11 @@ struct TimerView: View {
             ToolbarItem(placement: .topBarLeading) {
                 Button(action: {
                     HapticService.shared.impact()
-                    timerVM.showFavoriteTimer()
+                    if SubscriptionService.shared.isPro {
+                        timerVM.showFavoriteTimer()
+                    } else {
+                        showPaywall = true
+                    }
                 }) {
                     Image(systemName: "heart")
                         .foregroundColor(.white)
@@ -78,6 +83,9 @@ struct TimerView: View {
         }
         .navigationDestination(isPresented: $timerVM.isShowProfile) {
             ProfileView(timerVM: timerVM)
+        }
+        .sheet(isPresented: $showPaywall) {
+            PayWallView()
         }
         .onChange(of: scenePhase) { _, newPhase in
             if newPhase == .background {

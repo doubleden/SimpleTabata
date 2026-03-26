@@ -39,7 +39,7 @@ final class TimerViewModel {
     // MARK: - Configuration (settings)
     
     /// Prepare phase duration (seconds).
-    var prepareSeconds: Int = 10
+    var prepareSeconds: Int = 0
     /// Work duration (seconds).
     var workSeconds: Int = 20
     /// Move / setup time between work and the next rest (seconds); skipped when duration is 0.
@@ -47,9 +47,9 @@ final class TimerViewModel {
     /// Rest duration (seconds).
     var restSeconds: Int = 10
     /// Pause between cycles (seconds).
-    var cycleRestSeconds: Int = 60
+    var cycleRestSeconds: Int = 0
     /// Final cooldown after all cycles are completed (seconds).
-    var cooldownSeconds: Int = 30
+    var cooldownSeconds: Int = 0
     
     /// Sets (rounds) per cycle.
     var set: Int = 8

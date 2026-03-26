@@ -34,6 +34,9 @@
 		05C8073B2F72C10000C5E8E0 /* TimerColorEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C8073C2F72C10000C5E8E0 /* TimerColorEditorView.swift */; };
 		05C807832F7568FA00C5E8E0 /* PayWallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C807822F7568FA00C5E8E0 /* PayWallView.swift */; };
 		05C807852F75690B00C5E8E0 /* PayWallViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C807842F75690B00C5E8E0 /* PayWallViewModel.swift */; };
+		05C807882F756F0000C5E8E0 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C807872F756F0000C5E8E0 /* StoreKit.framework */; };
+		05C8078A2F75731E00C5E8E0 /* ProSubsriptions.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 05C807892F75731E00C5E8E0 /* ProSubsriptions.storekit */; };
+		05C807902F75700000C5E8E0 /* SubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C807912F75700000C5E8E0 /* SubscriptionService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -65,6 +68,9 @@
 		05C8073C2F72C10000C5E8E0 /* TimerColorEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerColorEditorView.swift; sourceTree = "<group>"; };
 		05C807822F7568FA00C5E8E0 /* PayWallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayWallView.swift; sourceTree = "<group>"; };
 		05C807842F75690B00C5E8E0 /* PayWallViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayWallViewModel.swift; sourceTree = "<group>"; };
+		05C807872F756F0000C5E8E0 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		05C807892F75731E00C5E8E0 /* ProSubsriptions.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = ProSubsriptions.storekit; sourceTree = "<group>"; };
+		05C807912F75700000C5E8E0 /* SubscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05C807882F756F0000C5E8E0 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				059545AA2F6ED78F00D871C3 /* SimpleTabata */,
+				05C807862F756F0000C5E8E0 /* Frameworks */,
 				0595459A2F6ED77A00D871C3 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -162,6 +170,7 @@
 				059545DB2F6F100100D871C3 /* WorkoutHistoryService.swift */,
 				059545C52F6EE99D00D871C3 /* AudioService.swift */,
 				059545CB2F6F087400D871C3 /* HapticService.swift */,
+				05C807912F75700000C5E8E0 /* SubscriptionService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -180,8 +189,17 @@
 			children = (
 				05C807822F7568FA00C5E8E0 /* PayWallView.swift */,
 				05C807842F75690B00C5E8E0 /* PayWallViewModel.swift */,
+				05C807892F75731E00C5E8E0 /* ProSubsriptions.storekit */,
 			);
 			path = PayWall;
+			sourceTree = "<group>";
+		};
+		05C807862F756F0000C5E8E0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				05C807872F756F0000C5E8E0 /* StoreKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -248,6 +266,7 @@
 				059545AD2F6ED78F00D871C3 /* Assets.xcassets in Resources */,
 				059545D32F6F13B200D871C3 /* launchScreen.storyboard in Resources */,
 				059545CF2F6F0DE800D871C3 /* start.mp3 in Resources */,
+				05C8078A2F75731E00C5E8E0 /* ProSubsriptions.storekit in Resources */,
 				059545D12F6F0E0400D871C3 /* beep.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -281,6 +300,7 @@
 				05C8073A2F72B56700C5E8E0 /* ProfileView.swift in Sources */,
 				05C8073B2F72C10000C5E8E0 /* TimerColorEditorView.swift in Sources */,
 				05C807832F7568FA00C5E8E0 /* PayWallView.swift in Sources */,
+				05C807902F75700000C5E8E0 /* SubscriptionService.swift in Sources */,
 				059545CC2F6F087400D871C3 /* HapticService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
