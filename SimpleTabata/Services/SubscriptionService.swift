@@ -14,8 +14,18 @@ import Observation
 final class SubscriptionService {
     static let shared = SubscriptionService()
     
-    private(set) var isPro = false
+    /// True when there is a verified, non-revoked auto-renewable entitlement
+    /// whose expiration date has not yet passed.
+    var isPro: Bool {
+        guard hasEntitlement else { return false }
+        if let exp = expirationDate, exp <= Date() {
+            return false
+        }
+        return true
+    }
     
+    private var hasEntitlement = false
+    private var expirationDate: Date?
     private var updateTask: Task<Void, Never>?
     
     private init() {
@@ -32,14 +42,20 @@ final class SubscriptionService {
     
     func refreshStatus() async {
         var active = false
+        var expDate: Date?
         for await result in Transaction.currentEntitlements {
             if case .verified(let tx) = result,
                tx.productType == .autoRenewable,
                tx.revocationDate == nil {
+                if let exp = tx.expirationDate, exp <= Date() {
+                    continue
+                }
                 active = true
+                expDate = tx.expirationDate
                 break
             }
         }
-        isPro = active
+        hasEntitlement = active
+        expirationDate = expDate
     }
 }

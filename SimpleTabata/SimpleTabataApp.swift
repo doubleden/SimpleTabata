@@ -10,9 +10,9 @@ import SwiftUI
 @main
 struct SimpleTabataApp: App {
     @AppStorage("onboardingCompleted") var isOnboardingCompleted = false
+    @Environment(\.scenePhase) private var scenePhase
     
     init() {
-        // Start StoreKit transaction observer at app launch.
         _ = SubscriptionService.shared
     }
     
@@ -30,6 +30,13 @@ struct SimpleTabataApp: App {
                 }
             }
             .preferredColorScheme(.dark)
+            .onChange(of: scenePhase) { _, newPhase in
+                if newPhase == .active {
+                    Task {
+                        await SubscriptionService.shared.refreshStatus()
+                    }
+                }
+            }
         }
     }
 }
