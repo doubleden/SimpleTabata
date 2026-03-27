@@ -329,27 +329,48 @@ struct PayWallView: View {
     
     // MARK: - Legal
     
+    private static let termsURL = URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!
+    private static let privacyURL = URL(string: "https://github.com/doubleden/SimpleTabata/blob/subsription/SimpleTabata/PrivacyPolicy.md")!
+    
     private var legalFooter: some View {
-        VStack(spacing: 4) {
-            Text("By continuing, you agree to the Terms of Use and Privacy Policy.")
+        VStack(spacing: 8) {
+            subscriptionTermsText
                 .font(.caption2)
-                .foregroundStyle(.white.opacity(0.35))
+                .foregroundStyle(.white.opacity(0.3))
                 .multilineTextAlignment(.center)
                 .minimumScaleFactor(0.6)
             
-            Text("Subscriptions renew automatically unless cancelled at least 24 hours before the end of the current period. You can manage or cancel in Settings.")
+            Text("Payment will be charged to your Apple ID account at confirmation of purchase. Subscriptions automatically renew unless cancelled at least 24 hours before the end of the current period. Your account will be charged for renewal within 24 hours prior to the end of the current period. You can manage and cancel your subscriptions in your App Store account settings after purchase.")
                 .font(.caption2)
                 .foregroundStyle(.white.opacity(0.25))
                 .multilineTextAlignment(.center)
                 .minimumScaleFactor(0.6)
+            
             HStack(spacing: 12) {
-                Link("Terms of Use", destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
+                Link("Terms of Use (EULA)", destination: Self.termsURL)
                 Text("•").foregroundStyle(.white.opacity(0.15))
-                Link("Privacy Policy", destination: URL(string: "https://www.apple.com/legal/privacy/")!)
+                Link("Privacy Policy", destination: Self.privacyURL)
             }
             .font(.caption2)
-            .foregroundStyle(.white.opacity(0.25))
+            .foregroundStyle(.white.opacity(0.35))
         }
+    }
+    
+    private var subscriptionTermsText: some View {
+        let subs = vm.products.filter { $0.subscription != nil }
+        if subs.isEmpty {
+            return Text("")
+        }
+        let parts = subs.map { product -> String in
+            let name = product.displayName
+            let period = vm.periodLabel(for: product)
+            let price = product.displayPrice
+            let trial = vm.freeTrialLabel(for: product)
+            var line = "\(name): \(price)/\(period.lowercased())"
+            if let trial { line += " (includes \(trial))" }
+            return line
+        }
+        return Text("Available subscriptions: " + parts.joined(separator: ". ") + ".")
     }
     
     // MARK: - Purchasing overlay

@@ -1,4 +1,4 @@
-# Privacy Policy (SimpleTabata)
+# Privacy Policy Tabata Timer: Simple HIIT
 
 **Last updated:** 2026-03-27
 
