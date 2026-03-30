@@ -184,6 +184,10 @@ final class TimerViewModel {
     
     /// Writes the current plan to `UserDefaults` (same storage as `AppStorage("storage")`).
     func persistConfigurationToStorage() {
+        if !SubscriptionService.shared.isPro, midWorkCueEnabled {
+            midWorkCueEnabled = false
+            cancelMidWorkCueTracking()
+        }
         let data = AppData(
             prepareSeconds: prepareSeconds,
             workSeconds: workSeconds,
@@ -262,6 +266,8 @@ final class TimerViewModel {
         cycleRestSeconds = 0
         cooldownSeconds = 0
         phaseColors = .appDefault
+        midWorkCueEnabled = false
+        cancelMidWorkCueTracking()
         persistConfigurationToStorage()
     }
     
@@ -294,7 +300,7 @@ final class TimerViewModel {
         phaseColors = snapshot.phaseColors
         soundVolume = snapshot.soundVolume
         duckOtherAudio = snapshot.duckOtherAudio
-        midWorkCueEnabled = snapshot.midWorkCueEnabled
+        midWorkCueEnabled = snapshot.midWorkCueEnabled && SubscriptionService.shared.isPro
         AudioService.shared.setVolume(soundVolume)
         AudioService.shared.setDuckOtherAudio(duckOtherAudio)
     }
@@ -337,7 +343,7 @@ final class TimerViewModel {
         AudioService.shared.setVolume(soundVolume)
         duckOtherAudio = plan.duckOtherAudio
         AudioService.shared.setDuckOtherAudio(duckOtherAudio)
-        midWorkCueEnabled = plan.midWorkCueEnabled
+        midWorkCueEnabled = plan.midWorkCueEnabled && SubscriptionService.shared.isPro
         remainingTotalSeconds = totalWorkoutDurationSeconds
         currentPhaseRemainingSeconds = prepareSeconds
         currentSetIndex = 0
@@ -514,7 +520,7 @@ final class TimerViewModel {
     
     private func beginMidWorkCueForCurrentInterval() {
         cancelMidWorkCueTracking()
-        guard midWorkCueEnabled, workSeconds > 0 else { return }
+        guard SubscriptionService.shared.isPro, midWorkCueEnabled, workSeconds > 0 else { return }
         let half = Double(workSeconds) / 2.0
         midWorkCueWallDeadline = Date().addingTimeInterval(half)
         midWorkCueDidFire = false
@@ -525,7 +531,8 @@ final class TimerViewModel {
     private func scheduleMidWorkCueIfNeeded() {
         midWorkCueWorkItem?.cancel()
         midWorkCueWorkItem = nil
-        guard midWorkCueEnabled,
+        guard SubscriptionService.shared.isPro,
+              midWorkCueEnabled,
               phase == .work,
               !midWorkCueDidFire,
               let deadline = midWorkCueWallDeadline else { return }

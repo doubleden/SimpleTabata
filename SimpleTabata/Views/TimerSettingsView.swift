@@ -237,12 +237,21 @@ struct TimerSettingsView: View {
     
     private var midWorkCueCard: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Toggle(isOn: $timerVM.midWorkCueEnabled) {
+            Toggle(isOn: Binding(
+                get: { timerVM.midWorkCueEnabled },
+                set: { newValue in
+                    if newValue && !SubscriptionService.shared.isPro {
+                        showPaywall = true
+                        return
+                    }
+                    timerVM.midWorkCueEnabled = newValue
+                }
+            )) {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Mid-work cue")
                         .font(.subheadline.weight(.medium))
                         .minimumScaleFactor(0.6)
-                    Text("Play a sound at the exact halfway point of each Work interval (e.g. 10s → at 5.0s, 11s → at 5.5s).")
+                    Text("Pro · bell cue at the exact halfway point of each Work interval (e.g. 10s → 5.0s, 11s → 5.5s).")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                         .minimumScaleFactor(0.6)
