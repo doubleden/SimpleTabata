@@ -23,6 +23,8 @@ struct AppData: Codable, Equatable {
     var soundVolume: Double
     /// If enabled, other audio (music/podcasts) will be ducked while playing app sounds.
     var duckOtherAudio: Bool
+    /// If enabled, plays a cue sound at the midpoint of each Work interval.
+    var midWorkCueEnabled: Bool
     
     enum CodingKeys: String, CodingKey {
         case prepareSeconds
@@ -36,6 +38,7 @@ struct AppData: Codable, Equatable {
         case phaseColors
         case soundVolume
         case duckOtherAudio
+        case midWorkCueEnabled
     }
     
     init(
@@ -49,7 +52,8 @@ struct AppData: Codable, Equatable {
         workToRestTransitionSeconds: Int = 0,
         phaseColors: TimerPhaseColors = .appDefault,
         soundVolume: Double = 1,
-        duckOtherAudio: Bool = false
+        duckOtherAudio: Bool = false,
+        midWorkCueEnabled: Bool = false
     ) {
         self.prepareSeconds = prepareSeconds
         self.workSeconds = workSeconds
@@ -62,6 +66,7 @@ struct AppData: Codable, Equatable {
         self.phaseColors = phaseColors
         self.soundVolume = min(1, max(0, soundVolume))
         self.duckOtherAudio = duckOtherAudio
+        self.midWorkCueEnabled = midWorkCueEnabled
     }
     
     init(from decoder: Decoder) throws {
@@ -77,6 +82,7 @@ struct AppData: Codable, Equatable {
         phaseColors = try c.decodeIfPresent(TimerPhaseColors.self, forKey: .phaseColors) ?? .appDefault
         soundVolume = min(1, max(0, (try c.decodeIfPresent(Double.self, forKey: .soundVolume) ?? 1)))
         duckOtherAudio = try c.decodeIfPresent(Bool.self, forKey: .duckOtherAudio) ?? false
+        midWorkCueEnabled = try c.decodeIfPresent(Bool.self, forKey: .midWorkCueEnabled) ?? false
     }
     
     func encode(to encoder: Encoder) throws {
@@ -92,5 +98,6 @@ struct AppData: Codable, Equatable {
         try c.encode(phaseColors, forKey: .phaseColors)
         try c.encode(min(1, max(0, soundVolume)), forKey: .soundVolume)
         try c.encode(duckOtherAudio, forKey: .duckOtherAudio)
+        try c.encode(midWorkCueEnabled, forKey: .midWorkCueEnabled)
     }
 }

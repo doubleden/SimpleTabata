@@ -176,6 +176,8 @@ struct TimerSettingsView: View {
                     tint: timerVM.intervalCardTint(for: .work),
                     binding: $timerVM.workSeconds
                 )
+                
+                midWorkCueCard
                 if isTransitionEnabled {
                     durationCard(
                         section: .workToRestTransition,
@@ -231,6 +233,28 @@ struct TimerSettingsView: View {
             .padding(.horizontal, 16)
             .padding(.bottom, 24)
         }
+    }
+    
+    private var midWorkCueCard: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Toggle(isOn: $timerVM.midWorkCueEnabled) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Mid-work cue")
+                        .font(.subheadline.weight(.medium))
+                        .minimumScaleFactor(0.6)
+                    Text("Play a sound at the exact halfway point of each Work interval (e.g. 10s → at 5.0s, 11s → at 5.5s).")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .minimumScaleFactor(0.6)
+                }
+            }
+        }
+        .padding(16)
+        .background {
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(Color(UIColor.secondarySystemGroupedBackground))
+        }
+        .onChange(of: timerVM.midWorkCueEnabled) { _, _ in onSettingsFieldChanged() }
     }
     
     private var savedBannerContent: some View {

@@ -56,6 +56,14 @@ final class AudioService {
     func playStart() {
         playAlarm(title: "start")
     }
+    
+    func playBell() {
+        playAlarm(title: "bell")
+    }
+    
+    func playTimeFinish() {
+        playAlarm(title: "timeFin")
+    }
 
     func stopSound() {
         queue.async { [weak self] in
@@ -70,6 +78,8 @@ final class AudioService {
             guard let self else { return }
             _ = self.loadSoundData(for: "beep")
             _ = self.loadSoundData(for: "start")
+            _ = self.loadSoundData(for: "bell")
+            _ = self.loadSoundData(for: "timeFin")
         }
     }
     

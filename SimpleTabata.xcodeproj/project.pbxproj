@@ -30,6 +30,8 @@
 		059545DA2F6F100100D871C3 /* WorkoutHistoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545DB2F6F100100D871C3 /* WorkoutHistoryService.swift */; };
 		059545DC2F6F100100D871C3 /* SaveFavoriteParametersSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545DD2F6F100100D871C3 /* SaveFavoriteParametersSheet.swift */; };
 		059545EA2F6F300100D871C3 /* PhaseAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059545EB2F6F300100D871C3 /* PhaseAppearance.swift */; };
+		05BC1E652F7AC88500D0618E /* timeFin.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 05BC1E642F7AC88500D0618E /* timeFin.mp3 */; };
+		05BC1E672F7ACDCE00D0618E /* bell.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 05BC1E662F7ACDCE00D0618E /* bell.mp3 */; };
 		05C8073A2F72B56700C5E8E0 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C807392F72B56700C5E8E0 /* ProfileView.swift */; };
 		05C8073B2F72C10000C5E8E0 /* TimerColorEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C8073C2F72C10000C5E8E0 /* TimerColorEditorView.swift */; };
 		05C807832F7568FA00C5E8E0 /* PayWallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C807822F7568FA00C5E8E0 /* PayWallView.swift */; };
@@ -65,6 +67,8 @@
 		059545DB2F6F100100D871C3 /* WorkoutHistoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutHistoryService.swift; sourceTree = "<group>"; };
 		059545DD2F6F100100D871C3 /* SaveFavoriteParametersSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveFavoriteParametersSheet.swift; sourceTree = "<group>"; };
 		059545EB2F6F300100D871C3 /* PhaseAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhaseAppearance.swift; sourceTree = "<group>"; };
+		05BC1E642F7AC88500D0618E /* timeFin.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = timeFin.mp3; sourceTree = "<group>"; };
+		05BC1E662F7ACDCE00D0618E /* bell.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bell.mp3; sourceTree = "<group>"; };
 		05C807392F72B56700C5E8E0 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		05C8073C2F72C10000C5E8E0 /* TimerColorEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerColorEditorView.swift; sourceTree = "<group>"; };
 		05C807822F7568FA00C5E8E0 /* PayWallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayWallView.swift; sourceTree = "<group>"; };
@@ -182,6 +186,8 @@
 			isa = PBXGroup;
 			children = (
 				059545CE2F6F0DE800D871C3 /* start.mp3 */,
+				05BC1E662F7ACDCE00D0618E /* bell.mp3 */,
+				05BC1E642F7AC88500D0618E /* timeFin.mp3 */,
 				059545D02F6F0E0400D871C3 /* beep.mp3 */,
 			);
 			path = Sounds;
@@ -277,8 +283,10 @@
 				059545AD2F6ED78F00D871C3 /* Assets.xcassets in Resources */,
 				059545D32F6F13B200D871C3 /* launchScreen.storyboard in Resources */,
 				059545CF2F6F0DE800D871C3 /* start.mp3 in Resources */,
+				05BC1E672F7ACDCE00D0618E /* bell.mp3 in Resources */,
 				05C8078A2F75731E00C5E8E0 /* ProSubsriptions.storekit in Resources */,
 				059545D12F6F0E0400D871C3 /* beep.mp3 in Resources */,
+				05BC1E652F7AC88500D0618E /* timeFin.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

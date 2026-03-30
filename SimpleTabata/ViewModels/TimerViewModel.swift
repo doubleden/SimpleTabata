@@ -22,6 +22,7 @@ struct WorkoutSettingsSnapshot: Equatable {
     var phaseColors: TimerPhaseColors
     var soundVolume: Double
     var duckOtherAudio: Bool
+    var midWorkCueEnabled: Bool
 }
 
 @Observable
@@ -64,6 +65,16 @@ final class TimerViewModel {
     
     /// If enabled, other audio will be ducked while app sounds play.
     var duckOtherAudio: Bool = false
+    
+    /// If enabled, plays a cue sound at the midpoint of each Work interval.
+    var midWorkCueEnabled: Bool = false
+    
+    private var midWorkCueWorkItem: DispatchWorkItem?
+    /// Wall-clock time when the mid-work cue should fire for the current Work interval.
+    private var midWorkCueWallDeadline: Date?
+    /// Set when pausing during Work; used to push `midWorkCueWallDeadline` forward on resume.
+    private var midWorkCuePauseBeganAt: Date?
+    private var midWorkCueDidFire: Bool = false
     
     // MARK: - Progress (main timer)
     
@@ -133,7 +144,8 @@ final class TimerViewModel {
             workToRestTransitionSeconds: workToRestTransitionSeconds,
             phaseColors: phaseColors,
             soundVolume: soundVolume,
-            duckOtherAudio: duckOtherAudio
+            duckOtherAudio: duckOtherAudio,
+            midWorkCueEnabled: midWorkCueEnabled
         )
         let entry = WorkoutHistoryEntry(
             id: UUID(),
@@ -165,6 +177,7 @@ final class TimerViewModel {
         phaseColors = data.phaseColors
         soundVolume = data.soundVolume
         duckOtherAudio = data.duckOtherAudio
+        midWorkCueEnabled = data.midWorkCueEnabled
         AudioService.shared.setVolume(soundVolume)
         AudioService.shared.setDuckOtherAudio(duckOtherAudio)
     }
@@ -182,7 +195,8 @@ final class TimerViewModel {
             workToRestTransitionSeconds: workToRestTransitionSeconds,
             phaseColors: phaseColors,
             soundVolume: soundVolume,
-            duckOtherAudio: duckOtherAudio
+            duckOtherAudio: duckOtherAudio,
+            midWorkCueEnabled: midWorkCueEnabled
         )
         StorageService.shared.save(storage: data)
     }
@@ -211,6 +225,7 @@ final class TimerViewModel {
     func clearAllUserData() {
         timerCancellable?.cancel()
         timerCancellable = nil
+        cancelMidWorkCueTracking()
         AudioService.shared.stopSound()
         
         let defaults = AppData()
@@ -225,6 +240,7 @@ final class TimerViewModel {
         phaseColors = defaults.phaseColors
         soundVolume = defaults.soundVolume
         duckOtherAudio = defaults.duckOtherAudio
+        midWorkCueEnabled = defaults.midWorkCueEnabled
         AudioService.shared.setVolume(soundVolume)
         AudioService.shared.setDuckOtherAudio(duckOtherAudio)
         
@@ -261,7 +277,8 @@ final class TimerViewModel {
             cycle: cycle,
             phaseColors: phaseColors,
             soundVolume: soundVolume,
-            duckOtherAudio: duckOtherAudio
+            duckOtherAudio: duckOtherAudio,
+            midWorkCueEnabled: midWorkCueEnabled
         )
     }
     
@@ -277,6 +294,7 @@ final class TimerViewModel {
         phaseColors = snapshot.phaseColors
         soundVolume = snapshot.soundVolume
         duckOtherAudio = snapshot.duckOtherAudio
+        midWorkCueEnabled = snapshot.midWorkCueEnabled
         AudioService.shared.setVolume(soundVolume)
         AudioService.shared.setDuckOtherAudio(duckOtherAudio)
     }
@@ -290,6 +308,7 @@ final class TimerViewModel {
             || cooldownSeconds != snapshot.cooldownSeconds
             || set != snapshot.set
             || cycle != snapshot.cycle
+            || midWorkCueEnabled != snapshot.midWorkCueEnabled
     }
     
     /// Call after changing durations or set/cycle counts so totals and idle display stay in sync.
@@ -318,6 +337,7 @@ final class TimerViewModel {
         AudioService.shared.setVolume(soundVolume)
         duckOtherAudio = plan.duckOtherAudio
         AudioService.shared.setDuckOtherAudio(duckOtherAudio)
+        midWorkCueEnabled = plan.midWorkCueEnabled
         remainingTotalSeconds = totalWorkoutDurationSeconds
         currentPhaseRemainingSeconds = prepareSeconds
         currentSetIndex = 0
@@ -328,6 +348,7 @@ final class TimerViewModel {
     
     deinit {
         timerCancellable?.cancel()
+        cancelMidWorkCueTracking()
     }
     
     /// Starts the workout from the «Ready» screen.
@@ -349,6 +370,14 @@ final class TimerViewModel {
         guard phase == .pause else { return }
         phase = phaseBeforePause
         subscribeToTicks()
+        if phase == .work, let pauseStart = midWorkCuePauseBeganAt {
+            let pauseSeconds = Date().timeIntervalSince(pauseStart)
+            if let d = midWorkCueWallDeadline {
+                midWorkCueWallDeadline = d.addingTimeInterval(pauseSeconds)
+            }
+            midWorkCuePauseBeganAt = nil
+            scheduleMidWorkCueIfNeeded()
+        }
     }
     
     func pauseTimer() {
@@ -357,12 +386,15 @@ final class TimerViewModel {
         phase = .pause
         timerCancellable?.cancel()
         timerCancellable = nil
+        if phaseBeforePause == .work { midWorkCuePauseBeganAt = Date() }
+        cancelMidWorkCueScheduleOnly()
         AudioService.shared.stopSound()
     }
     
     func resetTimer() {
         timerCancellable?.cancel()
         timerCancellable = nil
+        cancelMidWorkCueTracking()
         AudioService.shared.stopSound()
         pendingPhaseAdvance = false
         phase = .begin
@@ -420,8 +452,10 @@ final class TimerViewModel {
             currentSetIndex = 1
             currentPhaseRemainingSeconds = workSeconds
             if playTransitionSound { AudioService.shared.playStart() }
+            beginMidWorkCueForCurrentInterval()
             
         case .work:
+            cancelMidWorkCueTracking()
             if currentSetIndex < set {
                 phase = .workToRestTransition
                 currentPhaseRemainingSeconds = workToRestTransitionSeconds
@@ -446,6 +480,7 @@ final class TimerViewModel {
             phase = .work
             currentPhaseRemainingSeconds = workSeconds
             if playTransitionSound { AudioService.shared.playStart() }
+            beginMidWorkCueForCurrentInterval()
             
         case .cycleRest:
             currentCycleIndex += 1
@@ -453,6 +488,7 @@ final class TimerViewModel {
             currentSetIndex = 1
             currentPhaseRemainingSeconds = workSeconds
             if playTransitionSound { AudioService.shared.playStart() }
+            beginMidWorkCueForCurrentInterval()
             
         case .cooldown:
             finishWorkout()
@@ -465,13 +501,60 @@ final class TimerViewModel {
     private func finishWorkout() {
         timerCancellable?.cancel()
         timerCancellable = nil
+        cancelMidWorkCueTracking()
         AudioService.shared.stopSound()
+        AudioService.shared.playTimeFinish()
         pendingPhaseAdvance = false
         phase = .begin
         currentSetIndex = 0
         currentCycleIndex = 0
         currentPhaseRemainingSeconds = prepareSeconds
         remainingTotalSeconds = totalWorkoutDurationSeconds
+    }
+    
+    private func beginMidWorkCueForCurrentInterval() {
+        cancelMidWorkCueTracking()
+        guard midWorkCueEnabled, workSeconds > 0 else { return }
+        let half = Double(workSeconds) / 2.0
+        midWorkCueWallDeadline = Date().addingTimeInterval(half)
+        midWorkCueDidFire = false
+        midWorkCuePauseBeganAt = nil
+        scheduleMidWorkCueIfNeeded()
+    }
+    
+    private func scheduleMidWorkCueIfNeeded() {
+        midWorkCueWorkItem?.cancel()
+        midWorkCueWorkItem = nil
+        guard midWorkCueEnabled,
+              phase == .work,
+              !midWorkCueDidFire,
+              let deadline = midWorkCueWallDeadline else { return }
+        let delay = deadline.timeIntervalSinceNow
+        if delay <= 0 {
+            midWorkCueDidFire = true
+            AudioService.shared.playBell()
+            return
+        }
+        let item = DispatchWorkItem { [weak self] in
+            guard let self else { return }
+            guard self.phase == .work, !self.midWorkCueDidFire else { return }
+            self.midWorkCueDidFire = true
+            AudioService.shared.playBell()
+        }
+        midWorkCueWorkItem = item
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: item)
+    }
+    
+    private func cancelMidWorkCueScheduleOnly() {
+        midWorkCueWorkItem?.cancel()
+        midWorkCueWorkItem = nil
+    }
+    
+    private func cancelMidWorkCueTracking() {
+        cancelMidWorkCueScheduleOnly()
+        midWorkCueWallDeadline = nil
+        midWorkCuePauseBeganAt = nil
+        midWorkCueDidFire = false
     }
     
     func formattedTime(_ seconds: Int) -> String {

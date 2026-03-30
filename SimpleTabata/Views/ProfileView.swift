@@ -11,11 +11,15 @@ import StoreKit
 struct ProfileView: View {
     @Bindable var timerVM: TimerViewModel
     @Environment(\.requestReview) private var requestReview
+    @Environment(\.openURL) private var openURL
     
     @State private var showClearDataAlert = false
     @State private var showColorEditor = false
     @State private var showPaywall = false
+    @State private var showReviewFallback = false
     @State private var volumePreviewWorkItem: DispatchWorkItem?
+    
+    private let appStoreAppID = "6760946483"
     
     var body: some View {
         ScrollView {
@@ -60,6 +64,9 @@ struct ProfileView: View {
             Button {
                 HapticService.shared.impact()
                 requestReview()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
+                    showReviewFallback = true
+                }
             } label: {
                 Label("Leave a review", systemImage: "square.and.pencil")
                     .font(.body.weight(.semibold))
@@ -72,6 +79,20 @@ struct ProfileView: View {
         .background {
             RoundedRectangle(cornerRadius: 16, style: .continuous)
                 .fill(Color(UIColor.secondarySystemGroupedBackground))
+        }
+        .confirmationDialog(
+            "Review",
+            isPresented: $showReviewFallback,
+            titleVisibility: .hidden
+        ) {
+            Button("Open App Store review page") {
+                guard let url = URL(string: "https://apps.apple.com/app/id\(appStoreAppID)?action=write-review") else { return }
+                openURL(url)
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Apple may not always show the in-app review prompt. You can leave a review via the App Store page.")
+                .minimumScaleFactor(0.6)
         }
     }
     

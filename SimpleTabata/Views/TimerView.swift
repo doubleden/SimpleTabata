@@ -11,6 +11,7 @@ import StoreKit
 struct TimerView: View {
     @State private var timerVM = TimerViewModel()
     @State private var showPaywall = false
+    @State private var showTimerRunningAlert = false
     @Environment(\.scenePhase) private var scenePhase
     
     /// Settings are only available on «Ready» or while paused — not during an active interval.
@@ -32,35 +33,54 @@ struct TimerView: View {
         .background {
             Color.black
         }
+        .alert("Timer is running", isPresented: $showTimerRunningAlert) {
+            Button("Cancel", role: .cancel) {}
+            Button("Pause timer") {
+                timerVM.pauseTimer()
+            }
+        } message: {
+            Text("While the timer is running, these buttons are disabled. Pause the timer to open settings.")
+                .minimumScaleFactor(0.6)
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: {
                     HapticService.shared.impact()
-                    timerVM.showSettings()
+                    if isTimerRunning {
+                        showTimerRunningAlert = true
+                    } else {
+                        timerVM.showSettings()
+                    }
                 }) {
                     Image(systemName: "clock")
                         .foregroundColor(.white)
                     
                 }
-                .disabled(isTimerRunning)
                 .opacity(isTimerRunning ? 0.35 : 1)
             }
             
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: {
                     HapticService.shared.impact()
-                    timerVM.showProfile()
+                    if isTimerRunning {
+                        showTimerRunningAlert = true
+                    } else {
+                        timerVM.showProfile()
+                    }
                 }) {
                     Image(systemName: "gear")
                         .foregroundColor(.white)
                 }
-                .disabled(isTimerRunning)
                 .opacity(isTimerRunning ? 0.35 : 1)
             }
             
             ToolbarItem(placement: .topBarLeading) {
                 Button(action: {
                     HapticService.shared.impact()
+                    if isTimerRunning {
+                        showTimerRunningAlert = true
+                        return
+                    }
                     if SubscriptionService.shared.isPro {
                         timerVM.showFavoriteTimer()
                     } else {
@@ -70,7 +90,6 @@ struct TimerView: View {
                     Image(systemName: "heart")
                         .foregroundColor(.white)
                 }
-                .disabled(isTimerRunning)
                 .opacity(isTimerRunning ? 0.35 : 1)
             }
             
