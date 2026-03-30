@@ -10,7 +10,6 @@ import StoreKit
 
 struct ProfileView: View {
     @Bindable var timerVM: TimerViewModel
-    @Environment(\.requestReview) private var requestReview
     @Environment(\.openURL) private var openURL
     
     @State private var showClearDataAlert = false
@@ -63,10 +62,7 @@ struct ProfileView: View {
                 .minimumScaleFactor(0.6)
             Button {
                 HapticService.shared.impact()
-                requestReview()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
-                    showReviewFallback = true
-                }
+                showReviewFallback = true
             } label: {
                 Label("Leave a review", systemImage: "square.and.pencil")
                     .font(.body.weight(.semibold))
@@ -91,7 +87,7 @@ struct ProfileView: View {
             }
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("Apple may not always show the in-app review prompt. You can leave a review via the App Store page.")
+            Text("If you enjoy this app, please leave a short review in the App Store.")
                 .minimumScaleFactor(0.6)
         }
     }
