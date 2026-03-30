@@ -40,6 +40,7 @@
 		05C8078A2F75731E00C5E8E0 /* ProSubsriptions.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 05C807892F75731E00C5E8E0 /* ProSubsriptions.storekit */; };
 		05C8078D2F75852F00C5E8E0 /* OnBoardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C8078C2F75852F00C5E8E0 /* OnBoardingView.swift */; };
 		05C807902F75700000C5E8E0 /* SubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C807912F75700000C5E8E0 /* SubscriptionService.swift */; };
+		05DE00012F89000000AAAAAA /* ReviewService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DE00002F89000000AAAAAA /* ReviewService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -77,6 +78,7 @@
 		05C807892F75731E00C5E8E0 /* ProSubsriptions.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = ProSubsriptions.storekit; sourceTree = "<group>"; };
 		05C8078C2F75852F00C5E8E0 /* OnBoardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardingView.swift; sourceTree = "<group>"; };
 		05C807912F75700000C5E8E0 /* SubscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionService.swift; sourceTree = "<group>"; };
+		05DE00002F89000000AAAAAA /* ReviewService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,6 +180,7 @@
 				059545C52F6EE99D00D871C3 /* AudioService.swift */,
 				059545CB2F6F087400D871C3 /* HapticService.swift */,
 				05C807912F75700000C5E8E0 /* SubscriptionService.swift */,
+				05DE00002F89000000AAAAAA /* ReviewService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -322,6 +325,7 @@
 				05C807832F7568FA00C5E8E0 /* PayWallView.swift in Sources */,
 				05C807902F75700000C5E8E0 /* SubscriptionService.swift in Sources */,
 				059545CC2F6F087400D871C3 /* HapticService.swift in Sources */,
+				05DE00012F89000000AAAAAA /* ReviewService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

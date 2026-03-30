@@ -13,6 +13,7 @@ struct TimerView: View {
     @State private var showPaywall = false
     @State private var showTimerRunningAlert = false
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.requestReview) private var requestReview
     
     /// Settings are only available on «Ready» or while paused — not during an active interval.
     private var isTimerRunning: Bool {
@@ -117,6 +118,13 @@ struct TimerView: View {
         .onChange(of: SubscriptionService.shared.isPro) { _, isPro in
             if !isPro {
                 timerVM.stripProFeatures()
+            }
+        }
+        .onChange(of: timerVM.finishedWorkoutCounter) { _, _ in
+            guard ReviewService.shared.shouldRequestReview else { return }
+            ReviewService.shared.markPromptShown()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                requestReview()
             }
         }
     }

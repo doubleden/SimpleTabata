@@ -504,6 +504,9 @@ final class TimerViewModel {
         }
     }
     
+    /// Incremented each time a full workout finishes. Observed in TimerView.
+    var finishedWorkoutCounter: Int = 0
+
     private func finishWorkout() {
         timerCancellable?.cancel()
         timerCancellable = nil
@@ -516,6 +519,9 @@ final class TimerViewModel {
         currentCycleIndex = 0
         currentPhaseRemainingSeconds = prepareSeconds
         remainingTotalSeconds = totalWorkoutDurationSeconds
+
+        ReviewService.shared.recordWorkoutCompletion()
+        finishedWorkoutCounter += 1
     }
     
     private func beginMidWorkCueForCurrentInterval() {
