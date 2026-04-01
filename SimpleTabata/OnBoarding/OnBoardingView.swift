@@ -125,7 +125,7 @@ private extension OnBoardingView {
                 withAnimation(.easeInOut(duration: 0.25)) { tab = next }
             }
         } label: {
-            Text(buttonTitle)
+            Text(LocalizedStringResource(stringLiteral: buttonTitle))
                 .font(.headline)
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
@@ -181,8 +181,8 @@ private struct WelcomePage: View {
                 .frame(width: 34, height: 34)
                 .background(.orange.opacity(0.14), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
             VStack(alignment: .leading, spacing: 2) {
-                Text(title).font(.subheadline.weight(.semibold)).foregroundStyle(.white).minimumScaleFactor(0.6)
-                Text(sub).font(.caption).foregroundStyle(.white.opacity(0.55)).minimumScaleFactor(0.6)
+                Text(LocalizedStringResource(stringLiteral:title)).font(.subheadline.weight(.semibold)).foregroundStyle(.white).minimumScaleFactor(0.6)
+                Text(LocalizedStringResource(stringLiteral:sub)).font(.caption).foregroundStyle(.white.opacity(0.55)).minimumScaleFactor(0.6)
             }
             Spacer()
         }
@@ -232,8 +232,8 @@ private struct ProBenefitsPage: View {
                 .frame(width: 34, height: 34)
                 .background(color.opacity(0.15), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
             VStack(alignment: .leading, spacing: 2) {
-                Text(title).font(.subheadline.weight(.semibold)).foregroundStyle(.white).minimumScaleFactor(0.6)
-                Text(sub).font(.caption).foregroundStyle(.white.opacity(0.55)).minimumScaleFactor(0.6)
+                Text(LocalizedStringResource(stringLiteral:title)).font(.subheadline.weight(.semibold)).foregroundStyle(.white).minimumScaleFactor(0.6)
+                Text(LocalizedStringResource(stringLiteral:sub)).font(.caption).foregroundStyle(.white.opacity(0.55)).minimumScaleFactor(0.6)
             }
             Spacer()
             Image(systemName: "checkmark").font(.caption.weight(.bold)).foregroundStyle(.green)
@@ -257,7 +257,7 @@ private struct CustomColorsPage: View {
                 Spacer(minLength: 14)
                 VStack(spacing: 10) {
                     Text("Custom Timer Colors")
-                        .font(.system(size: 26, weight: .bold, design: .rounded)).foregroundStyle(.white).minimumScaleFactor(0.6)
+                        .font(.system(size: 26, weight: .bold, design: .rounded)).foregroundStyle(.white).minimumScaleFactor(0.6).multilineTextAlignment(.center)
                     Text("Color-code each phase so you know where you are at a glance. Try it — tap a color below!")
                         .font(.subheadline).foregroundStyle(.white.opacity(0.65)).multilineTextAlignment(.center).minimumScaleFactor(0.6)
                 }.padding(.horizontal, 24)
@@ -275,12 +275,12 @@ private struct CustomColorsPage: View {
 
     private var timerPreview: some View {
         VStack(spacing: 6) {
-            Text(phaseNames[selectedPhase])
+            Text(LocalizedStringResource(stringLiteral:phaseNames[selectedPhase]))
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(colors[selectedPhase].opacity(0.8))
                 .textCase(.uppercase)
                 .minimumScaleFactor(0.6)
-            Text(defaultTimes[selectedPhase])
+            Text(LocalizedStringResource(stringLiteral:defaultTimes[selectedPhase]))
                 .font(.system(size: 64, weight: .bold, design: .rounded))
                 .monospacedDigit()
                 .foregroundStyle(colors[selectedPhase])
@@ -304,7 +304,7 @@ private struct CustomColorsPage: View {
                     Button {
                         withAnimation(.easeInOut(duration: 0.2)) { selectedPhase = i }
                     } label: {
-                        Text(phaseNames[i])
+                        Text(LocalizedStringResource(stringLiteral:phaseNames[i]))
                             .font(.caption.weight(.semibold))
                             .foregroundStyle(i == selectedPhase ? .black : .white.opacity(0.7))
                             .padding(.horizontal, 12).padding(.vertical, 8)
@@ -360,7 +360,7 @@ private struct SavePresetsPage: View {
                     Image(systemName: "heart.fill")
                         .font(.system(size: 36)).foregroundStyle(.pink)
                     Text("Save Your Presets")
-                        .font(.system(size: 26, weight: .bold, design: .rounded)).foregroundStyle(.white).minimumScaleFactor(0.6)
+                        .font(.system(size: 26, weight: .bold, design: .rounded)).foregroundStyle(.white).minimumScaleFactor(0.6).multilineTextAlignment(.center)
                     Text("Don't re-enter settings every time. Save different workouts and switch in one tap.")
                         .font(.subheadline).foregroundStyle(.white.opacity(0.65)).multilineTextAlignment(.center).minimumScaleFactor(0.6)
                 }.padding(.horizontal, 24)
@@ -389,7 +389,7 @@ private struct SavePresetsPage: View {
                 .frame(width: 40, height: 40)
                 .background(.orange.opacity(0.14), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
             VStack(alignment: .leading, spacing: 3) {
-                Text(p.name).font(.subheadline.weight(.semibold)).foregroundStyle(.white).minimumScaleFactor(0.6)
+                Text(LocalizedStringResource(stringLiteral:p.name)).font(.subheadline.weight(.semibold)).foregroundStyle(.white).minimumScaleFactor(0.6)
                 HStack(spacing: 10) {
                     miniTag("Work \(p.work)")
                     miniTag("Rest \(p.rest)")
@@ -403,12 +403,13 @@ private struct SavePresetsPage: View {
     }
 
     private func miniTag(_ text: String) -> some View {
-        Text(text)
+        Text(LocalizedStringResource(stringLiteral:text))
             .font(.caption2.weight(.medium))
             .foregroundStyle(.white.opacity(0.6))
             .padding(.horizontal, 6).padding(.vertical, 2)
             .background(Color.white.opacity(0.08), in: Capsule())
             .minimumScaleFactor(0.6)
+            .lineLimit(1)
     }
 }
 
@@ -464,8 +465,8 @@ private struct ExtraPhasesPage: View {
                         .background(p.color.opacity(0.15), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
 
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(p.name).font(.caption.weight(.semibold)).foregroundStyle(.white).minimumScaleFactor(0.6)
-                        Text(p.desc).font(.caption2).foregroundStyle(.white.opacity(0.5)).minimumScaleFactor(0.6)
+                        Text(LocalizedStringResource(stringLiteral:p.name)).font(.caption.weight(.semibold)).foregroundStyle(.white).minimumScaleFactor(0.6)
+                        Text(LocalizedStringResource(stringLiteral:p.desc)).font(.caption2).foregroundStyle(.white.opacity(0.5)).minimumScaleFactor(0.6)
                     }
                     Spacer()
                 }
@@ -542,7 +543,7 @@ private struct OnBoardingPayWall: View {
             Image(systemName: icon).font(.body.weight(.semibold)).foregroundStyle(color)
                 .frame(width: 32, height: 32)
                 .background(color.opacity(0.15), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
-            Text(text).font(.subheadline.weight(.medium)).foregroundStyle(.white).minimumScaleFactor(0.6)
+            Text(LocalizedStringResource(stringLiteral:text)).font(.subheadline.weight(.medium)).foregroundStyle(.white).minimumScaleFactor(0.6)
             Spacer()
             Image(systemName: "checkmark").font(.caption.weight(.bold)).foregroundStyle(.green)
         }
@@ -620,7 +621,7 @@ private struct OnBoardingPayWall: View {
                 if let badge {
                     HStack {
                         Spacer()
-                        Text(badge).font(.caption2.weight(.heavy)).textCase(.uppercase).foregroundStyle(.white)
+                        Text(LocalizedStringResource(stringLiteral:badge)).font(.caption2.weight(.heavy)).textCase(.uppercase).foregroundStyle(.white)
                             .padding(.horizontal, 10).padding(.vertical, 4)
                             .background(
                                 product.id == "tabata.lifetime"
