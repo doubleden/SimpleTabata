@@ -88,7 +88,7 @@ enum TimerPhaseColorKey: String, CaseIterable, Identifiable, Hashable {
         case .workToRestTransition: "Transition"
         case .rest: "Rest"
         case .pause: "Pause"
-        case .cycleRest: "Cycle rest"
+        case .cycleRest: "Cycle Rest"
         case .cooldown: "Cooldown"
         }
     }

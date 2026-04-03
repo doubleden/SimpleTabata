@@ -229,7 +229,7 @@ struct ProfileView: View {
     
     private func rowLabel(title: String, systemImage: String) -> some View {
         HStack {
-            Label(title, systemImage: systemImage)
+            Label(LocalizedStringResource(stringLiteral:title), systemImage: systemImage)
                 .font(.body.weight(.medium))
                 .minimumScaleFactor(0.6)
             Spacer()

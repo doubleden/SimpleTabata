@@ -13,7 +13,7 @@ struct InfoView: View {
     
     var body: some View {
         VStack(alignment: .trailing) {
-            Text(title)
+            Text(LocalizedStringResource(stringLiteral:title))
                 .font(.title3.bold())
                 .minimumScaleFactor(0.6)
 

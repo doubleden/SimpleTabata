@@ -71,7 +71,7 @@ struct TimerColorEditorView: View {
                             selectedPage = index
                         }
                     } label: {
-                        Text(phase.settingsTitle)
+                        Text(LocalizedStringResource(stringLiteral:phase.settingsTitle))
                             .font(.subheadline.weight(.semibold))
                             .foregroundStyle(selectedPage == index ? .white : .white.opacity(0.5))
                             .padding(.horizontal, 16)

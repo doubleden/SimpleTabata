@@ -10,7 +10,7 @@ import SwiftUI
 struct PhaseTitleView: View {
     let phase: String
     var body: some View {
-        Text(phase)
+        Text(LocalizedStringResource(stringLiteral:phase))
             .padding()
             .font(.largeTitle.italic())
             .foregroundStyle(Color.white)

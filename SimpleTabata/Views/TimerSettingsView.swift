@@ -171,7 +171,7 @@ struct TimerSettingsView: View {
                 durationCard(
                     section: .work,
                     title: "Work",
-                    subtitle: "High-intensity interval",
+                    subtitle: "High-intensity interval.",
                     systemImage: "flame.fill",
                     tint: timerVM.intervalCardTint(for: .work),
                     binding: $timerVM.workSeconds
@@ -201,7 +201,7 @@ struct TimerSettingsView: View {
                 if isCycleRestEnabled {
                     durationCard(
                         section: .cycleRest,
-                        title: "Cycle rest",
+                        title: "Cycle Rest",
                         subtitle: "Break between full cycles",
                         systemImage: "pause.circle.fill",
                         tint: timerVM.intervalCardTint(for: .cycleRest),
@@ -399,7 +399,7 @@ struct TimerSettingsView: View {
             var arr: [(String, String, String, String, () -> Void)] = []
             if !isPrepareEnabled { arr.append(("prepare", "Prepare", "Warm-up before work", "figure.cooldown", togglePrepare)) }
             if !isTransitionEnabled { arr.append(("transition", "Transition", "Move between work and rest", "figure.walk", toggleTransition)) }
-            if !isCycleRestEnabled { arr.append(("cycleRest", "Cycle rest", "Break between cycles", "pause.circle.fill", toggleCycleRest)) }
+            if !isCycleRestEnabled { arr.append(("cycleRest", "Cycle Rest", "Break between cycles", "pause.circle.fill", toggleCycleRest)) }
             if !isCooldownEnabled { arr.append(("cooldown", "Cooldown", "Recovery after workout", "wind", toggleCooldown)) }
             return arr
         }()
@@ -479,10 +479,10 @@ struct TimerSettingsView: View {
                     .frame(width: 36, height: 36)
                     .background(tint.opacity(0.15), in: Circle())
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(title)
+                    Text(LocalizedStringResource(stringLiteral:title))
                         .font(.headline)
                         .foregroundStyle(.primary)
-                    Text(subtitle)
+                    Text(LocalizedStringResource(stringLiteral:subtitle))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .minimumScaleFactor(0.6)
@@ -626,10 +626,10 @@ struct TimerSettingsView: View {
             } label: {
                 HStack(alignment: .center, spacing: 12) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(title)
+                        Text(LocalizedStringResource(stringLiteral:title))
                             .font(.subheadline.weight(.medium))
                             .foregroundStyle(.primary)
-                        Text(detail)
+                        Text(LocalizedStringResource(stringLiteral:detail))
                             .font(.caption2)
                             .foregroundStyle(.secondary)
                             .minimumScaleFactor(0.6)
