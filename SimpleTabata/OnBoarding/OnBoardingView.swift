@@ -423,7 +423,7 @@ private struct ExtraPhasesPage: View {
         ("Transition", "figure.walk", .white, "Walk to the next station between work & rest."),
         ("Rest", "leaf.fill", .blue, "Recover between work rounds."),
         ("Cycle Rest", "pause.circle.fill", .purple, "Longer break between full cycles."),
-        ("Cooldown", "wind", .yellow, "Stretch and cool down after all cycles."),
+        ("Cooldown", "wind", .yellow, "Cool down after all cycles."),
     ]
 
     var body: some View {
@@ -607,8 +607,8 @@ private struct OnBoardingPayWall: View {
                         }
                     }
                     if let perMonth { Text(perMonth).font(.caption2.weight(.semibold)).foregroundStyle(.orange).minimumScaleFactor(0.6) }
-                    if let trial { Text(trial).font(.caption2.weight(.semibold)).foregroundStyle(.green).minimumScaleFactor(0.6) }
-                    if !subtitle.isEmpty { Text(subtitle).font(.caption2).foregroundStyle(.white.opacity(0.4)).minimumScaleFactor(0.6) }
+                    if let trial { Text(LocalizedStringResource(stringLiteral:trial)).font(.caption2.weight(.semibold)).foregroundStyle(.green).minimumScaleFactor(0.6) }
+                    if !subtitle.isEmpty { Text(LocalizedStringResource(stringLiteral:subtitle)).font(.caption2).foregroundStyle(.white.opacity(0.4)).minimumScaleFactor(0.6) }
                 }
                 Spacer()
             }
