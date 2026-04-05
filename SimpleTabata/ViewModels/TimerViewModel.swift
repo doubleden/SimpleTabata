@@ -436,6 +436,20 @@ final class TimerViewModel {
         }
         
         currentPhaseRemainingSeconds -= 1
+        
+        // Even work durations: halfway matches a whole second on the countdown (e.g. 60 → bell at 0:30).
+        // Wall-clock `Date + half` races with 1 Hz ticks and often fired at 0:29.
+        if phase == .work,
+           SubscriptionService.shared.isPro,
+           midWorkCueEnabled,
+           !midWorkCueDidFire,
+           workSeconds > 0,
+           workSeconds.isMultiple(of: 2),
+           currentPhaseRemainingSeconds == workSeconds / 2 {
+            midWorkCueDidFire = true
+            AudioService.shared.playBell()
+        }
+        
         remainingTotalSeconds = max(0, remainingTotalSeconds - 1)
         
         if currentPhaseRemainingSeconds == 0 {
@@ -527,10 +541,15 @@ final class TimerViewModel {
     private func beginMidWorkCueForCurrentInterval() {
         cancelMidWorkCueTracking()
         guard SubscriptionService.shared.isPro, midWorkCueEnabled, workSeconds > 0 else { return }
-        let half = Double(workSeconds) / 2.0
-        midWorkCueWallDeadline = Date().addingTimeInterval(half)
         midWorkCueDidFire = false
         midWorkCuePauseBeganAt = nil
+        // Odd durations need sub-second halfway (e.g. 11 → 5.5s); even durations use tick alignment in `tick()`.
+        guard !workSeconds.isMultiple(of: 2) else {
+            midWorkCueWallDeadline = nil
+            return
+        }
+        let half = Double(workSeconds) / 2.0
+        midWorkCueWallDeadline = Date().addingTimeInterval(half)
         scheduleMidWorkCueIfNeeded()
     }
     
